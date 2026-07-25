@@ -40,8 +40,8 @@ def home():
     return "BlitzClanBot is running!"
 
 def run_web():
+    print("Starting Flask...")
     web.run(
-        print("Starting Flask...")
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 10000))
     )
