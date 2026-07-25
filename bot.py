@@ -1,8 +1,10 @@
 import os
 import requests
+from flask import Flask
+from threading import Thread
+from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
-from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -30,7 +32,20 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         f"🔎 Ищу игрока {nickname}..."
     )
+# Flask для Render
+web = Flask(__name__)
 
+@web.route("/")
+def home():
+    return "BlitzClanBot is running!"
+
+def run_web():
+    web.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 10000))
+    )
+
+Thread(target=run_web).start()
 
 app = Application.builder().token(BOT_TOKEN).build()
 
