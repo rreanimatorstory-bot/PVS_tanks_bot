@@ -27,12 +27,35 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    nickname = context.args[0]
+    nickname = " ".join(context.args)
 
     await update.message.reply_text(
         f"🔎 Ищу игрока {nickname}..."
     )
+
+    url = "https://api.worldoftanks.eu/wotb/account/list/"
+
+    params = {
+        "application_id": WG_APP_ID,
+        "search": nickname,
+        "limit": 1
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if data.get("status") != "ok" or not data.get("data"):
+        await update.message.reply_text("❌ Игрок не найден")
+        return
+
+    account_id = data["data"][0]["account_id"]
+    player_name = data["data"][0]["nickname"]
+
+    await update.message.reply_text(
+        f"✅ Найден игрок: {player_name}\nID: {account_id}"
+    )
 # Flask для Render
+
 web = Flask(__name__)
 
 @web.route("/")
