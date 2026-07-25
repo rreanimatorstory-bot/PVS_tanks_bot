@@ -39,24 +39,22 @@ web = Flask(__name__)
 def home():
     return "BlitzClanBot is running!"
 
-def run_web():
-    print("Starting Flask...")
-    web.run(
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 10000))
-    )
+def run_bot():
+    app = Application.builder().token(BOT_TOKEN).build()
 
-thread = Thread(target=run_web)
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("stats", stats))
+
+    print("Bot started")
+    app.run_polling()
+
+
+thread = Thread(target=run_bot)
 thread.start()
 
-import time
-time.sleep(3)
+print("Starting Flask...")
 
-app = Application.builder().token(BOT_TOKEN).build()
-
-app.add_handler(CommandHandler("start", start))
-app.add_handler(CommandHandler("stats", stats))
-
-print("Bot started")
-
-app.run_polling()
+web.run(
+    host="0.0.0.0",
+    port=int(os.environ.get("PORT", 10000))
+)
