@@ -41,11 +41,16 @@ def home():
 
 def run_web():
     web.run(
+        print("Starting Flask...")
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 10000))
     )
 
-Thread(target=run_web).start()
+thread = Thread(target=run_web)
+thread.start()
+
+import time
+time.sleep(3)
 
 app = Application.builder().token(BOT_TOKEN).build()
 
