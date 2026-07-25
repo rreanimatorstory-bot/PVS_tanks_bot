@@ -46,7 +46,7 @@ def run_bot():
     app.add_handler(CommandHandler("stats", stats))
 
     print("Bot started")
-   app.run_polling(stop_signals=None)
+    app.run_polling(stop_signals=None)
 
 
 thread = Thread(target=run_bot)
