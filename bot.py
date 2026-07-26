@@ -337,13 +337,13 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 }
             )
             
-       if battles < 1000:
-            low_activity.append(
-                {
-                    "name": nickname,
-                    "battles": battles
-                }
-            )
+            if battles < 1000:
+                low_activity.append(
+                    {
+                        "name": nickname,
+                        "battles": battles
+                    }
+                )
             
 
             total_battles += battles
