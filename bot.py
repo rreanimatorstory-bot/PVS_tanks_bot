@@ -59,7 +59,8 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
              "🏆 /top — ТОП клана по среднему урону\n"
              "📈 /clanreport — отчёт клана\n"
              "👥 /members — список игроков клана\n"
-             "⚙️ /setclan ID ТЕГ Название — настроить клан\n"
+             "⚙️ /setclan [тег] — привязать клан\n"
+             "     Пример: /setclan [1PVS]\n"
              "📋 /menu — это меню"
         )
     )  
@@ -740,7 +741,6 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     response = requests.get(url, params=params)
     data = response.json()
 
-    print(data)
 
     if data.get("status") != "ok" or not data.get("data"):
         await update.message.reply_text(
