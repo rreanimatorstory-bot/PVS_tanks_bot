@@ -69,6 +69,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     stats_params = {
         "application_id": WG_APP_ID,
         "account_id": account_id
+        "fields": "statistics.all,global_rating,created_at,clan_id"
     }
 
 
@@ -88,6 +89,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     player = stats_data["data"][str(account_id)]["statistics"]["all"]
+    account = stats_data["data"][str(account_id)]
+
+    rating = account.get("global_rating", 0)
+    clan_id = account.get("clan_id", "нет")
     
     
     battles = player.get("battles", 0)
@@ -131,7 +136,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🎮 {player_name}\n\n"
         f"⚔️ Бои: {battles:,}\n"
         f"🏆 Победы: {wins:,}\n"
-        f"📊 Винрейт: {winrate}%\n\n"
+        f"📊 Винрейт: {winrate}%\n"
+        f"🏅 Рейтинг: {rating}\n"
+        f"🏰 Клан ID: {clan_id}\n\n"
         f"💥 Средний урон: {avg_damage:,}\n"
         f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
         f"🎯 Точность: {accuracy}%\n"
