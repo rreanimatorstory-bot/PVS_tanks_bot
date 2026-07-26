@@ -17,6 +17,18 @@ def init_db():
     )
     """)
 
+    # Таблица истории игроков
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        account_id INTEGER,
+        nickname TEXT,
+        battles INTEGER,
+        damage INTEGER,
+        date TEXT
+    )
+    """)
+
     conn.commit()
     conn.close()
 
