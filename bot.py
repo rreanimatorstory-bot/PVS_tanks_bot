@@ -379,7 +379,20 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reverse=True
     )
 
+    low_activity.sort(
+        key=lambda x: x["battles"]
+    )
 
+
+    low_text = ""
+
+    for p in low_activity[:5]:
+        low_text += (
+            f"\n• {p['name']} — {p['battles']:,} боёв"
+        )
+
+    if not low_text:
+        low_text = "\nНет игроков"
 
     text = (
         "📊 Отчёт клана P=V=S\n\n"
@@ -393,8 +406,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🔥 ТОП по боям:\n"
         f"1. {players_activity[0]['name']} — {players_activity[0]['battles']:,}\n"
         f"2. {players_activity[1]['name']} — {players_activity[1]['battles']:,}\n"
-        f"3. {players_activity[2]['name']} — {players_activity[2]['battles']:,}"
-
+        f"3. {players_activity[2]['name']} — {players_activity[2]['battles']:,}\n\n"
         f"⚠️ Мало боёв:"
         f"{low_text}"
     )
