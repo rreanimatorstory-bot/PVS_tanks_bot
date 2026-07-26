@@ -149,6 +149,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    await update.message.reply_text(
+    "⏳ Считаю статистику 49 игроков клана..."
+    )
+
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
 
     clan_params = {
