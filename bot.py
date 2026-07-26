@@ -287,6 +287,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
 
     players_activity = []
+    low_activity = []
 
 
     for account_id in members_ids:
@@ -335,6 +336,15 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     "battles": battles
                 }
             )
+            
+       if battles < 1000:
+            low_activity.append(
+                {
+                    "name": nickname,
+                    "battles": battles
+                }
+            )
+            
 
             total_battles += battles
             total_wins += wins
@@ -382,6 +392,9 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"1. {players_activity[0]['name']} — {players_activity[0]['battles']:,}\n"
         f"2. {players_activity[1]['name']} — {players_activity[1]['battles']:,}\n"
         f"3. {players_activity[2]['name']} — {players_activity[2]['battles']:,}"
+
+        f"⚠️ Мало боёв:"
+        f"{low_text}"
     )
 
 
