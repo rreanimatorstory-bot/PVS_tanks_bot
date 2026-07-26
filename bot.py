@@ -94,9 +94,11 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         f"🎮 {player_name}\n\n"
-        f"⚔️ Бои: {battles}\n"
-        f"🏆 Победы: {wins}\n"
-        f"📊 Винрейт: {winrate}%"
+        f"⚔️ Бои: {battles:,}\n"
+        f"🏆 Победы: {wins:,}\n"
+        f"📊 Винрейт: {winrate}%\n\n"
+        f"💥 Средний урон: {avg_damage:,}\n"
+        f"⭐ Средний опыт: {avg_xp:,}"%"
     )
 # Flask для Render
 
