@@ -732,12 +732,14 @@ def run_bot():
     app = Application.builder().token(BOT_TOKEN).build()
     
     app.add_handler(CommandHandler("menu", menu))
+    app.add_handler(CommandHandler("myclan", myclan))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
     app.add_handler(CommandHandler("members", members))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
+    
 
 
     print("Bot started")
