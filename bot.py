@@ -21,6 +21,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "/stats ник — статистика игрока"
     )
 
+async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🤖 BlitzClanBot\n\n"
+        "📋 Доступные команды:\n\n"
+        "📊 /stats <ник> — статистика игрока\n"
+        "🏆 /top — ТОП клана по среднему урону\n"
+        "📋 /menu — это меню"
+    )
+
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "🤖 BlitzClanBot\n\n"
@@ -265,6 +274,7 @@ def run_bot():
     app = Application.builder().token(BOT_TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
