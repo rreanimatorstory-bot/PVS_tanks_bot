@@ -145,6 +145,99 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👁 Обнаружено: {spotted:,}\n"
         f"🛡 Выжил в боях: {survived:,}"
     )
+
+async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    try:
+        with open("players.txt", "r", encoding="utf-8") as file:
+            players = [
+                line.strip()
+                for line in file.readlines()
+                if line.strip()
+            ]
+
+    except:
+        await update.message.reply_text(
+            "❌ Не найден файл players.txt"
+        )
+        return
+
+
+    results = []
+
+    for nickname in players:
+
+        url = "https://api.wotblitz.eu/wotb/account/list/"
+
+        params = {
+            "application_id": WG_APP_ID,
+            "search": nickname,
+            "type": "exact",
+            "limit": 1
+        }
+
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        if data.get("status") != "ok" or not data.get("data"):
+            continue
+
+        account_id = data["data"][0]["account_id"]
+
+
+        stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        }
+
+        stats_response = requests.get(
+            stats_url,
+            params=stats_params
+        )
+
+        stats_data = stats_response.json()
+
+        if stats_data.get("status") != "ok":
+            continue
+
+
+        player = stats_data["data"][str(account_id)]["statistics"]["all"]
+
+        battles = player.get("battles", 0)
+        damage = player.get("damage_dealt", 0)
+
+        if battles:
+            avg_damage = round(damage / battles)
+
+            results.append(
+                {
+                    "name": nickname,
+                    "damage": avg_damage
+                }
+            )
+
+
+    results.sort(
+        key=lambda x: x["damage"],
+        reverse=True
+    )
+
+
+    text = "🏆 ТОП КЛАНА\n\n"
+
+    for i, player in enumerate(results[:10], start=1):
+
+        text += (
+            f"{i}. 🎮 {player['name']}\n"
+            f"💥 Средний урон: {player['damage']}\n\n"
+        )
+
+
+    await update.message.reply_text(text)
+
+
     
 
 # Flask для Render
