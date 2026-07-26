@@ -742,29 +742,34 @@ def home():
 
 
 def run_bot(): 
+
+    try:
     
-    print("RUN_BOT START")
+        print("RUN_BOT START")
 
-    init_db()
+        print("CALLING INIT DB")
+        init_db()
+        print("INIT DB FINISHED")
 
-    app = Application.builder().token(BOT_TOKEN).build()
+        app = Application.builder().token(BOT_TOKEN).build()
     
-    app.add_handler(CommandHandler("menu", menu))
-    app.add_handler(CommandHandler("myclan", myclan))
-    app.add_handler(CommandHandler("stats", stats))
-    app.add_handler(CommandHandler("top", top))
-    app.add_handler(CommandHandler("clanreport", report))
-    app.add_handler(CommandHandler("members", members))
-    app.add_handler(CommandHandler("history", history))
-    app.add_handler(CommandHandler("update", update_history))
+        app.add_handler(CommandHandler("menu", menu))
+        app.add_handler(CommandHandler("myclan", myclan))
+        app.add_handler(CommandHandler("stats", stats))
+        app.add_handler(CommandHandler("top", top))
+        app.add_handler(CommandHandler("clanreport", report))
+        app.add_handler(CommandHandler("members", members))
+        app.add_handler(CommandHandler("history", history))
+        app.add_handler(CommandHandler("update", update_history))
     
 
 
-    print("Bot started")
+        print("Bot started")
 
-    app.run_polling(
-        stop_signals=None
-    )
+        app.run_polling(stop_signals=None)
+        
+   except Exception as e:
+        print("BOT ERROR:", e)
 
 
 
