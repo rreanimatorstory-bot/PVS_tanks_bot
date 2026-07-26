@@ -720,13 +720,33 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not context.args:
         await update.message.reply_text(
-            "Использование:\n/setclan ID_клана ТЕГ Название"
+            "Использование:\n/setclan ТЕГ\nПример:\n/setclan 1PVS"
         )
         return
 
-    clan_id = context.args[0]
-    clan_tag = context.args[1]
-    clan_name = " ".join(context.args[2:])
+    clan_tag = context.args[0].upper()
+
+    url = "https://api.worldoftanks.eu/wot/clans/list/"
+
+    params = {
+        "application_id": WG_APP_ID,
+        "search": clan_tag
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if data.get("status") != "ok" or not data.get("data"):
+        await update.message.reply_text(
+            "❌ Клан с таким тегом не найден"
+        )
+        return
+
+    clan = data["data"][0]
+
+    clan_id = clan["clan_id"]
+    clan_name = clan["name"]
+    clan_tag = clan["tag"]
 
     save_clan(
         chat_id,
@@ -741,7 +761,6 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🔖 {clan_tag}\n"
         f"ID: {clan_id}"
     )
-
 def run_bot():
     
     print("=== RUN_BOT CALLED ===")
