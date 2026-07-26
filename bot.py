@@ -71,7 +71,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
              "👥 /members — список игроков клана\n"
              "📋 /menu — это меню"
         )
-
+    )  
     
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
