@@ -1,6 +1,8 @@
 import sqlite3
 import os
 
+print("DATABASE.PY LOADED")
+
 DB_NAME = os.path.join(os.path.dirname(__file__), "clans.db")
 
 
