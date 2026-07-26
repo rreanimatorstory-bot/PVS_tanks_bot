@@ -60,31 +60,35 @@ def save_player_history(account_id, nickname, battles, damage):
 
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "🤖 BlitzClanBot\n\n"
-        "📋 Доступные команды:\n\n"
-        "📊 /stats <ник> — статистика игрока\n"
-        "🏆 /top — ТОП клана по среднему урону\n"
-        "📈 /clanreport — отчёт клана\n"
-        "👥 /members — список игроков клана\n"
-        "📋 /menu — это меню"
-    )
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=(
+             "🤖 BlitzClanBot\n\n"
+             "📋 Доступные команды:\n\n"
+             "📊 /stats <ник> — статистика игрока\n"
+             "🏆 /top — ТОП клана по среднему урону\n"
+             "📈 /clanreport — отчёт клана\n"
+             "👥 /members — список игроков клана\n"
+             "📋 /menu — это меню"
+        )
 
-
+    
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not context.args:
-        await update.message.reply_text(
-            "Использование:\n/stats ник"
-        )
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Использование:\n/stats ник"
+       )
         return
 
 
     nickname = " ".join(context.args)
 
-    await update.message.reply_text(
-        f"🔎 Ищу игрока {nickname}..."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=f"🔎 Ищу игрока {nickname}..."
     )
 
 
@@ -104,9 +108,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     if data.get("status") != "ok" or not data.get("data"):
-        await update.message.reply_text(
-            "❌ Игрок не найден"
-        )
+       await context.bot.send_message(
+           chat_id=update.effective_chat.id,
+           text="❌ Игрок не найден"
+       )
         return
 
 
@@ -132,8 +137,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     if stats_data.get("status") != "ok":
-        await update.message.reply_text(
-            "❌ Ошибка получения статистики"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="❌ Ошибка получения статистики"
         )
         return
 
@@ -181,26 +187,30 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         xp / battles
     ) if battles else 0
 
-
-    await update.message.reply_text(
-        f"🎮 {player_name}\n\n"
-        f"⚔️ Бои: {battles:,}\n"
-        f"🏆 Победы: {wins:,}\n"
-        f"📊 Винрейт: {winrate}%\n"
-        f"🏅 Рейтинг: {rating}\n"
-        f"🏰 Клан ID: {clan_id}\n\n"
-        f"💥 Средний урон: {avg_damage:,}\n"
-        f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
-        f"🎯 Точность: {accuracy}%\n"
-        f"⭐ Средний опыт: {avg_xp:,}\n"
-        f"👁 Обнаружено: {spotted:,}\n"
-        f"🛡 Выжил в боях: {survived:,}"
+    
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=(
+            f"🎮 {player_name}\n\n"
+            f"⚔️ Бои: {battles:,}\n"
+            f"🏆 Победы: {wins:,}\n"
+            f"📊 Винрейт: {winrate}%\n"
+            f"🏅 Рейтинг: {rating}\n"
+            f"🏰 Клан ID: {clan_id}\n\n"
+            f"💥 Средний урон: {avg_damage:,}\n"
+            f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
+            f"🎯 Точность: {accuracy}%\n"
+            f"⭐ Средний опыт: {avg_xp:,}\n"
+            f"👁 Обнаружено: {spotted:,}\n"
+            f"🛡 Выжил в боях: {survived:,}"
     )
+)
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    await update.message.reply_text(
-    "⏳ Считаю статистику 49 игроков клана..."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="⏳ Считаю статистику 49 игроков клана..."
     )
 
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
@@ -218,8 +228,9 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clan_data = clan_response.json()
 
     if clan_data.get("status") != "ok":
-        await update.message.reply_text(
-            "❌ Не удалось получить клан"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="❌ Не удалось получить клан"
         )
         return
 
@@ -285,12 +296,16 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-    await update.message.reply_text(text)
+   await context.bot.send_message(
+       chat_id=update.effective_chat.id,
+       text=text
+   )
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    await update.message.reply_text(
-        "⏳ Собираю отчёт клана...\nЭто может занять немного времени."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="⏳ Собираю отчёт клана...\nЭто может занять немного времени."
     )
 
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
@@ -309,8 +324,9 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clan_data = clan_response.json()
 
     if clan_data.get("status") != "ok":
-        await update.message.reply_text(
-            "❌ Не удалось получить данные клана"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="❌ Не удалось получить данные клана"
         )
         return
 
@@ -457,12 +473,16 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-    await update.message.reply_text(text)
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=text
+    )
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    await update.message.reply_text(
-        "⏳ Загружаю состав клана..."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="⏳ Загружаю состав клана..."
     )
 
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
@@ -481,8 +501,9 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = response.json()
 
     if data.get("status") != "ok":
-        await update.message.reply_text(
-            "❌ Не удалось получить данные клана"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="❌ Не удалось получить данные клана"
         )
         return
 
@@ -529,12 +550,16 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text += f"{i}. {name}\n"
 
 
-    await update.message.reply_text(text)
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=text
+    )
 
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    await update.message.reply_text(
-        "⏳ Обновляю историю игроков..."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="⏳ Обновляю историю игроков..."
     )
 
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
@@ -553,8 +578,9 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clan_data = clan_response.json()
 
     if clan_data.get("status") != "ok":
-        await update.message.reply_text(
-            "❌ Не удалось получить клан"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="❌ Не удалось получить клан"
         )
         return
 
@@ -613,9 +639,12 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         saved += 1
 
 
-    await update.message.reply_text(
-        f"✅ История обновлена\n"
-        f"Сохранено игроков: {saved}"
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=(
+            f"✅ История обновлена\n"
+            f"Сохранено игроков: {saved}"
+        )
     )
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -631,8 +660,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     response = requests.get(url, params=params)
 
-    await update.message.reply_text(
-        str(response.json())[:4000]
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=str(response.json())[:4000]
     )
 
 
