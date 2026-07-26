@@ -59,6 +59,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
              "🏆 /top — ТОП клана по среднему урону\n"
              "📈 /clanreport — отчёт клана\n"
              "👥 /members — список игроков клана\n"
+             "⚙️ /setclan ID ТЕГ Название — настроить клан\n"
              "📋 /menu — это меню"
         )
     )  
