@@ -116,6 +116,26 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=f"🔎 Ищу игрока {nickname}..."
     )
 
+        url = "https://api.wotblitz.eu/wotb/account/list/"
+
+    params = {
+        "application_id": WG_APP_ID,
+        "search": nickname
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if data.get("status") != "ok" or not data.get("data"):
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
+            text="❌ Игрок не найден"
+        )
+        return
+
+    account_id = data["data"][0]["account_id"]
+
 
     # поиск игрока
     url = "https://api.wotblitz.eu/wotb/account/list/"
