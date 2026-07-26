@@ -1,7 +1,7 @@
 import sqlite3
+import os
 
-
-DB_NAME = "clans.db"
+DB_NAME = os.path.join(os.path.dirname(__file__), "clans.db")
 
 
 def init_db():
