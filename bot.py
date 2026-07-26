@@ -164,6 +164,7 @@ def run_bot():
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("stats", stats))
+    app.add_handler(CommandHandler("top", top))
 
 
     print("Bot started")
