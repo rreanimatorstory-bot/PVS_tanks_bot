@@ -730,7 +730,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     clan_tag = context.args[0].upper()
 
-    url = "https://api.worldoftanks.eu/wot/clans/list/"
+    https://api.wotblitz.eu/wotb/clans/list/
 
     params = {
         "application_id": WG_APP_ID,
