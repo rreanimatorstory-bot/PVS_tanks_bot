@@ -721,7 +721,10 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not context.args:
         await update.message.reply_text(
-            "Использование:\n/setclan ТЕГ\nПример:\n/setclan 1PVS"
+            "Использование:\n"
+            "/setclan [ТЕГ]\n\n"
+            "Пример:\n"
+            "/setclan [1PVS]"
         )
         return
 
