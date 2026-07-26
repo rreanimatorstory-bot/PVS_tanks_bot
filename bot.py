@@ -68,7 +68,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     stats_params = {
         "application_id": WG_APP_ID,
-        "account_id": account_id
+        "account_id": account_id,
         "fields": "statistics.all,global_rating,created_at,clan_id"
     }
 
