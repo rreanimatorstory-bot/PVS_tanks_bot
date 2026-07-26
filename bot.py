@@ -402,7 +402,9 @@ def home():
 
 
 
-def run_bot():
+def run_bot(): 
+    
+    print("RUN_BOT START")
 
     app = Application.builder().token(BOT_TOKEN).build()
     
