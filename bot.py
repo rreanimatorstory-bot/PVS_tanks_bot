@@ -728,7 +728,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    clan_tag = context.args[0].upper()
+    clan_tag = context.args[0].upper().replace("[", "").replace("]", "")
 
     url = "https://api.wotblitz.eu/wotb/clans/list/"
 
@@ -739,6 +739,8 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     response = requests.get(url, params=params)
     data = response.json()
+
+    print(data)
 
     if data.get("status") != "ok" or not data.get("data"):
         await update.message.reply_text(
