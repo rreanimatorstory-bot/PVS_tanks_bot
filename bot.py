@@ -80,7 +80,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             text="Использование:\n/stats ник"
-       )
+        )
         return
 
 
@@ -112,7 +112,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
            chat_id=update.effective_chat.id,
            text="❌ Игрок не найден"
        )
-        return
+       return
 
 
     account_id = data["data"][0]["account_id"]
