@@ -766,7 +766,10 @@ def run_bot():
 
     print("Bot started")
 
-    app.run_polling(stop_signals=None)
+    app.run_polling(
+        stop_signals=None,
+        drop_pending_updates=True
+    )
         
 
 
