@@ -22,7 +22,7 @@ WG_APP_ID = os.getenv("WG_APP_ID")
 CLAN_ID = "1336303"
 
 print("BOT PID:", os.getpid())
-print("TOKEN END:", BOT_TOKEN[-5:])
+
 
     
 def save_player_history(account_id, nickname, battles, damage):
@@ -716,7 +716,8 @@ def home():
 
 
 def run_bot():
-
+    
+    print("=== RUN_BOT CALLED ===")
     print("BOT PID:", os.getpid())
     print("RUN_BOT START")
 
