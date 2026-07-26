@@ -5,6 +5,8 @@ DB_NAME = "clans.db"
 
 
 def init_db():
+    print("INIT_DB CALLED")
+    
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
 
@@ -30,6 +32,10 @@ def init_db():
     """)
 
     conn.commit()
+
+    cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+    print("DATABASE TABLES:", cur.fetchall())
+    
     conn.close()
 
 
