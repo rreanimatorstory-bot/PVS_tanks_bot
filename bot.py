@@ -713,7 +713,34 @@ web = Flask(__name__)
 @web.route("/")
 def home():
     return "BlitzClanBot is running!"
+    
+async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    chat_id = update.effective_chat.id
+
+    if not context.args:
+        await update.message.reply_text(
+            "Использование:\n/setclan ID_клана ТЕГ Название"
+        )
+        return
+
+    clan_id = context.args[0]
+    clan_tag = context.args[1]
+    clan_name = " ".join(context.args[2:])
+
+    save_clan(
+        chat_id,
+        clan_id,
+        clan_tag,
+        clan_name
+    )
+
+    await update.message.reply_text(
+        f"✅ Клан настроен:\n"
+        f"🏰 {clan_name}\n"
+        f"🔖 {clan_tag}\n"
+        f"ID: {clan_id}"
+    )
 
 def run_bot():
     
@@ -728,7 +755,8 @@ def run_bot():
     print("CREATING TELEGRAM APP")
 
     app = Application.builder().token(BOT_TOKEN).build()
-
+    
+    app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
     app.add_handler(CommandHandler("stats", stats))
