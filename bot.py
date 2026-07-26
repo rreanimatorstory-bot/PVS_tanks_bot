@@ -35,6 +35,16 @@ def init_db():
     )
     """)
 
+     # Кланы для разных чатов
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS clans (
+        chat_id INTEGER PRIMARY KEY,
+        clan_id INTEGER,
+        clan_tag TEXT,
+        clan_name TEXT
+    )
+    """)
+
     conn.commit()
     conn.close()
 
