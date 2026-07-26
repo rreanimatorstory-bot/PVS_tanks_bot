@@ -257,7 +257,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     clan_response = requests.get(
         clan_url,
-        params=clan_params
+        params=clan_params,
+        timeout=10
     )
 
     clan_data = clan_response.json()
@@ -302,7 +303,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         stats_response = requests.get(
             stats_url,
-            params=stats_params
+            params=stats_params,
+            timeout=10
         )
 
         stats_data = stats_response.json()
