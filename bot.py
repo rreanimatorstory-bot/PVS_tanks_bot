@@ -80,6 +80,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     stats_data = stats_response.json()
 
+    await update.message.reply_text(str(stats_data))
+    return
+
 
     if stats_data.get("status") != "ok":
         await update.message.reply_text(
