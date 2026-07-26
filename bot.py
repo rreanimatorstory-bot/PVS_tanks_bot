@@ -88,7 +88,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     player = stats_data["data"][str(account_id)]["statistics"]["all"]
-
+    
+    await update.message.reply_text(str(player))
+    return
 
     battles = player.get("battles", 0)
     wins = player.get("wins", 0)
