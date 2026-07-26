@@ -745,6 +745,8 @@ def run_bot():
     
     print("RUN_BOT START")
 
+    init_db()
+
     app = Application.builder().token(BOT_TOKEN).build()
     
     app.add_handler(CommandHandler("menu", menu))
