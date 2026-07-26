@@ -748,8 +748,14 @@ def run_bot():
     print("TEST LINE 1")
 
     print("CALLING INIT DB")
-    init_db()
-    print("INIT DB FINISHED")
+
+    try:
+        init_db()
+        print("INIT DB FINISHED")
+    except Exception as e:
+        print("INIT DB ERROR:", e)
+
+    print("CREATING TELEGRAM APP")
 
     app = Application.builder().token(BOT_TOKEN).build()
     
