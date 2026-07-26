@@ -1,5 +1,8 @@
 import os
 import requests
+import sqlite3
+from datetime import datetime
+
 from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
@@ -12,6 +15,47 @@ load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 WG_APP_ID = os.getenv("WG_APP_ID")
 CLAN_ID = "1336303"
+
+DB_NAME = "player_history.db"
+
+def init_db():
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        account_id INTEGER,
+        nickname TEXT,
+        battles INTEGER,
+        damage INTEGER,
+        date TEXT
+    )
+    """)
+
+    conn.commit()
+    conn.close()
+
+def save_player_history(account_id, nickname, battles, damage):
+
+    conn = sqlite3.connect(DB_NAME)
+    cur = conn.cursor()
+
+    cur.execute("""
+    INSERT INTO history
+    (account_id, nickname, battles, damage, date)
+    VALUES (?, ?, ?, ?, ?)
+    """,
+    (
+        account_id,
+        nickname,
+        battles,
+        damage,
+        datetime.now().strftime("%Y-%m-%d")
+    ))
+
+    conn.commit()
+    conn.close()
 
 
 
@@ -414,6 +458,93 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(text)
 
+async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        "⏳ Обновляю историю игроков..."
+    )
+
+    clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
+
+    clan_params = {
+        "application_id": WG_APP_ID,
+        "clan_id": CLAN_ID
+    }
+
+    clan_response = requests.get(
+        clan_url,
+        params=clan_params,
+        timeout=10
+    )
+
+    clan_data = clan_response.json()
+
+    if clan_data.get("status") != "ok":
+        await update.message.reply_text(
+            "❌ Не удалось получить клан"
+        )
+        return
+
+
+    members_ids = clan_data["data"][str(CLAN_ID)]["members_ids"]
+
+
+    saved = 0
+
+
+    for account_id in members_ids:
+
+        stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        }
+
+
+        try:
+            stats_response = requests.get(
+                stats_url,
+                params=stats_params,
+                timeout=10
+            )
+
+            stats_data = stats_response.json()
+
+        except:
+            continue
+
+
+        if stats_data.get("status") != "ok":
+            continue
+
+
+        account = stats_data["data"][str(account_id)]
+
+        nickname = account["nickname"]
+
+        player = account["statistics"]["all"]
+
+
+        battles = player.get("battles", 0)
+        damage = player.get("damage_dealt", 0)
+
+
+        save_player_history(
+            account_id,
+            nickname,
+            battles,
+            damage
+        )
+
+        saved += 1
+
+
+    await update.message.reply_text(
+        f"✅ История обновлена\n"
+        f"Сохранено игроков: {saved}"
+    )
+
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     account_id = 726737026  # сюда потом поставим ID игрока
@@ -456,6 +587,7 @@ def run_bot():
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
     app.add_handler(CommandHandler("history", history))
+    app.add_handler(CommandHandler("update", update_history))
 
 
     print("Bot started")
