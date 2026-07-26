@@ -765,7 +765,7 @@ def run_bot():
 
 
     print("Bot started")
-    rint("BOT PID:", os.getpid())
+    print("BOT PID:", os.getpid())
 
     app.run_polling(
         stop_signals=None,
