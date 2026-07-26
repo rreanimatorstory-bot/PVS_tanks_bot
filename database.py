@@ -15,13 +15,31 @@ def init_db():
     print("SQLITE CONNECT OK")
 
     cur = conn.cursor()
-    print("CURSOR CREATED")
 
-    cur.execute("SELECT 1")
-    print("SELECT OK")
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS clans (
+        chat_id INTEGER PRIMARY KEY,
+        clan_id INTEGER,
+        clan_tag TEXT,
+        clan_name TEXT
+    )
+    """)
 
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS history (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        account_id INTEGER,
+        nickname TEXT,
+        battles INTEGER,
+        damage INTEGER,
+        date TEXT
+    )
+    """)
+
+    conn.commit()
     conn.close()
-    print("DB CLOSED")
+
+    print("DB READY")
 
 
 def save_clan(chat_id, clan_id, clan_tag, clan_name):
