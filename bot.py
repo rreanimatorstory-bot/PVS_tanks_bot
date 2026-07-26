@@ -11,6 +11,7 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 WG_APP_ID = os.getenv("WG_APP_ID")
+CLAN_ID = "1336303"
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -148,19 +149,28 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    try:
-        with open("players.txt", "r", encoding="utf-8") as file:
-            players = [
-                line.strip()
-                for line in file.readlines()
-                if line.strip()
-            ]
+    clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
 
-    except:
+    clan_params = {
+        "application_id": WG_APP_ID,
+        "clan_id": CLAN_ID
+    }
+
+    clan_response = requests.get(
+        clan_url,
+        params=clan_params
+    )
+
+    clan_data = clan_response.json()
+
+    if clan_data.get("status") != "ok":
         await update.message.reply_text(
-            "❌ Не найден файл players.txt"
+            "❌ Не удалось получить клан"
         )
         return
+
+
+    members_ids = clan_data["data"][CLAN_ID]["members_ids"]
 
 
     results = []
