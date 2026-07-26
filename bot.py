@@ -33,11 +33,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🔎 Ищу игрока {nickname}..."
     )
 
-    url = "https://api.worldoftanks.eu/wotb/account/list/"
+    url = "https://api.wotblitz.eu/wotb/account/list/"
 
     params = {
         "application_id": WG_APP_ID,
         "search": nickname,
+        "type": "exact",
         "limit": 1
     }
 
