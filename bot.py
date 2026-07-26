@@ -24,47 +24,6 @@ CLAN_ID = "1336303"
 print("BOT PID:", os.getpid())
 print("TOKEN END:", BOT_TOKEN[-5:])
 
-
-def init_db():
-    print("INIT_DB CALLED")
-
-    print("DB PATH:", DB_NAME)
-
-    conn = sqlite3.connect(DB_NAME, timeout=5)
-    print("SQLITE CONNECT OK")
-
-    cur = conn.cursor()
-    print("CURSOR CREATED")
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS clans (
-        chat_id INTEGER PRIMARY KEY,
-        clan_id INTEGER,
-        clan_tag TEXT,
-        clan_name TEXT
-    )
-    """)
-
-    print("CLANS CREATED")
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS history (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        account_id INTEGER,
-        nickname TEXT,
-        battles INTEGER,
-        damage INTEGER,
-        date TEXT
-    )
-    """)
-
-    print("HISTORY CREATED")
-
-    conn.commit()
-    print("COMMIT DONE")
-
-    conn.close()
-    print("DB CLOSED")
     
 def save_player_history(account_id, nickname, battles, damage):
 
