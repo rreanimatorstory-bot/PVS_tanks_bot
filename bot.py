@@ -286,6 +286,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "battles": 0
     }
 
+    players_activity = []
+
 
     for account_id in members_ids:
 
@@ -327,6 +329,13 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 damage / battles
             )
 
+            players_activity.append(
+                {
+                    "name": nickname,
+                    "battles": battles
+                }
+            )
+
             total_battles += battles
             total_wins += wins
             total_damage += damage
@@ -353,6 +362,11 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         total_damage / total_battles
     ) if total_battles else 0
 
+    players_activity.sort(
+        key=lambda x: x["battles"],
+        reverse=True
+    )
+
 
 
     text = (
@@ -364,8 +378,10 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"💥 Средний урон: {avg_damage_clan:,}\n\n"
         f"🥇 Лучший урон:\n"
         f"{best_damage['name']} — {best_damage['damage']}\n\n"
-        f"⚔️ Самый активный:\n"
-        f"{most_active['name']} — {most_active['battles']:,} боёв"
+        f"🔥 ТОП по боям:\n"
+        f"1. {players_activity[0]['name']} — {players_activity[0]['battles']:,}\n"
+        f"2. {players_activity[1]['name']} — {players_activity[1]['battles']:,}\n"
+        f"3. {players_activity[2]['name']} — {players_activity[2]['battles']:,}"
     )
 
 
