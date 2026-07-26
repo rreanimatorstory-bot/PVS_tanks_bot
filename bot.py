@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
+from database import init_db, save_clan, get_clan
+
 
 load_dotenv()
 
@@ -73,6 +75,31 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
              "📋 /menu — это меню"
         )
     )  
+
+async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    clan = get_clan(update.effective_chat.id)
+
+    if clan is None:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
+            text="🏰 Для этого чата клан пока не настроен."
+        )
+        return
+
+    clan_id, clan_tag, clan_name = clan
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
+        text=(
+            f"🏰 Текущий клан\n\n"
+            f"Название: {clan_name}\n"
+            f"Тег: {clan_tag}\n"
+            f"ID: {clan_id}"
+        )
+    )
     
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
