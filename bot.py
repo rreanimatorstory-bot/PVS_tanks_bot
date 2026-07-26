@@ -62,6 +62,7 @@ def save_player_history(account_id, nickname, battles, damage):
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=(
              "🤖 BlitzClanBot\n\n"
              "📋 Доступные команды:\n\n"
@@ -79,6 +80,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not context.args:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
             text="Использование:\n/stats ник"
         )
         return
@@ -88,6 +90,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=f"🔎 Ищу игрока {nickname}..."
     )
 
@@ -110,6 +113,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data.get("status") != "ok" or not data.get("data"):
        await context.bot.send_message(
            chat_id=update.effective_chat.id,
+           message_thread_id=update.message.message_thread_id,
            text="❌ Игрок не найден"
        )
        return
@@ -139,6 +143,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if stats_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
             text="❌ Ошибка получения статистики"
         )
         return
@@ -190,6 +195,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=(
             f"🎮 {player_name}\n\n"
             f"⚔️ Бои: {battles:,}\n"
@@ -210,6 +216,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text="⏳ Считаю статистику 49 игроков клана..."
     )
 
@@ -230,6 +237,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
             text="❌ Не удалось получить клан"
         )
         return
@@ -298,6 +306,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=text
     )
 
@@ -305,6 +314,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text="⏳ Собираю отчёт клана...\nЭто может занять немного времени."
     )
 
@@ -326,6 +336,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
             text="❌ Не удалось получить данные клана"
         )
         return
@@ -475,6 +486,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=text
     )
 
@@ -482,6 +494,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text="⏳ Загружаю состав клана..."
     )
 
@@ -503,6 +516,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
             text="❌ Не удалось получить данные клана"
         )
         return
@@ -552,6 +566,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=text
     )
 
@@ -559,6 +574,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text="⏳ Обновляю историю игроков..."
     )
 
@@ -580,6 +596,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
             text="❌ Не удалось получить клан"
         )
         return
@@ -641,6 +658,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=(
             f"✅ История обновлена\n"
             f"Сохранено игроков: {saved}"
@@ -662,6 +680,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text=str(response.json())[:4000]
     )
 
