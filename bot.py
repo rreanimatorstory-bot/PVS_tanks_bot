@@ -296,10 +296,10 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 
-   await context.bot.send_message(
-       chat_id=update.effective_chat.id,
-       text=text
-   )
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=text
+    )
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
