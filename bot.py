@@ -175,24 +175,8 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     results = []
 
-    for nickname in players:
+    for account_id in members_ids:
 
-        url = "https://api.wotblitz.eu/wotb/account/list/"
-
-        params = {
-            "application_id": WG_APP_ID,
-            "search": nickname,
-            "type": "exact",
-            "limit": 1
-        }
-
-        response = requests.get(url, params=params)
-        data = response.json()
-
-        if data.get("status") != "ok" or not data.get("data"):
-            continue
-
-        account_id = data["data"][0]["account_id"]
 
 
         stats_url = "https://api.wotblitz.eu/wotb/account/info/"
@@ -220,6 +204,8 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if battles:
             avg_damage = round(damage / battles)
+
+            nickname = stats_data["data"][str(account_id)]["nickname"]
 
             results.append(
                 {
