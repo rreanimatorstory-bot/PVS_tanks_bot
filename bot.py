@@ -768,8 +768,6 @@ def run_bot():
 
     app.run_polling(stop_signals=None)
         
-   except Exception as e:
-        print("BOT ERROR:", e)
 
 
 
