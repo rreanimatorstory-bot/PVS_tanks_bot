@@ -21,6 +21,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📋 Доступные команды:\n\n"
         "📊 /stats <ник> — статистика игрока\n"
         "🏆 /top — ТОП клана по среднему урону\n"
+        "📈 /clanreport — отчёт клана\n"
         "📋 /menu — это меню"
     )
 
@@ -391,7 +392,7 @@ def run_bot():
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
-    app.add_handler(CommandHandler("report", report))
+    app.add_handler(CommandHandler("clanreport", report))
 
 
     print("Bot started")
