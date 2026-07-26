@@ -689,7 +689,13 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    account_id = 726737026  # сюда потом поставим ID игрока
+    if not context.args:
+        await update.message.reply_text(
+            "Использование:\n/history ник"
+        )
+        return
+
+    nickname = context.args[0]
 
     url = "https://api.wotblitz.eu/wotb/account/info/"
 
