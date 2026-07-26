@@ -14,12 +14,6 @@ WG_APP_ID = os.getenv("WG_APP_ID")
 CLAN_ID = "1336303"
 
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "🚀 BlitzClanBot запущен!\n\n"
-        "Команды:\n"
-        "/stats ник — статистика игрока"
-    )
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -30,14 +24,6 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📋 /menu — это меню"
     )
 
-async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "🤖 BlitzClanBot\n\n"
-        "Доступные команды:\n\n"
-        "📊 /stats <ник> — статистика игрока\n"
-        "🏆 /top — ТОП клана по среднему урону\n"
-        "❓ /help — список команд"
-    )
 
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -255,6 +241,135 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(text)
 
+async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        "⏳ Собираю отчёт клана...\nЭто может занять немного времени."
+    )
+
+    clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
+
+    clan_params = {
+        "application_id": WG_APP_ID,
+        "clan_id": CLAN_ID
+    }
+
+    clan_response = requests.get(
+        clan_url,
+        params=clan_params
+    )
+
+    clan_data = clan_response.json()
+
+    if clan_data.get("status") != "ok":
+        await update.message.reply_text(
+            "❌ Не удалось получить данные клана"
+        )
+        return
+
+
+    members_ids = clan_data["data"][str(CLAN_ID)]["members_ids"]
+
+
+    total_battles = 0
+    total_wins = 0
+    total_damage = 0
+
+    best_damage = {
+        "name": "",
+        "damage": 0
+    }
+
+    most_active = {
+        "name": "",
+        "battles": 0
+    }
+
+
+    for account_id in members_ids:
+
+        stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        }
+
+
+        stats_response = requests.get(
+            stats_url,
+            params=stats_params
+        )
+
+        stats_data = stats_response.json()
+
+
+        if stats_data.get("status") != "ok":
+            continue
+
+
+        account = stats_data["data"][str(account_id)]
+
+        nickname = account["nickname"]
+
+        player = account["statistics"]["all"]
+
+
+        battles = player.get("battles", 0)
+        wins = player.get("wins", 0)
+        damage = player.get("damage_dealt", 0)
+
+
+        if battles:
+
+            avg_damage = round(
+                damage / battles
+            )
+
+            total_battles += battles
+            total_wins += wins
+            total_damage += damage
+
+
+            if avg_damage > best_damage["damage"]:
+                best_damage["name"] = nickname
+                best_damage["damage"] = avg_damage
+
+
+            if battles > most_active["battles"]:
+                most_active["name"] = nickname
+                most_active["battles"] = battles
+
+
+
+    winrate = round(
+        total_wins / total_battles * 100,
+        2
+    ) if total_battles else 0
+
+
+    avg_damage_clan = round(
+        total_damage / total_battles
+    ) if total_battles else 0
+
+
+
+    text = (
+        "📊 Отчёт клана P=V=S\n\n"
+        f"👥 Участников: {len(members_ids)}\n\n"
+        f"⚔️ Всего боёв: {total_battles:,}\n"
+        f"🏆 Побед: {total_wins:,}\n"
+        f"📊 Средний WR: {winrate}%\n"
+        f"💥 Средний урон: {avg_damage_clan:,}\n\n"
+        f"🥇 Лучший урон:\n"
+        f"{best_damage['name']} — {best_damage['damage']}\n\n"
+        f"⚔️ Самый активный:\n"
+        f"{most_active['name']} — {most_active['battles']:,} боёв"
+    )
+
+
+    await update.message.reply_text(text)
+
 
     
 
@@ -272,12 +387,11 @@ def home():
 def run_bot():
 
     app = Application.builder().token(BOT_TOKEN).build()
-
-    app.add_handler(CommandHandler("start", start))
+    
     app.add_handler(CommandHandler("menu", menu))
-    app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
+    app.add_handler(CommandHandler("report", report))
 
 
     print("Bot started")
