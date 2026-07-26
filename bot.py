@@ -74,12 +74,23 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     player = stats_data["data"][str(account_id)]["statistics"]["all"]
 
-    battles = player.get("battles", 0)
-    wins = player.get("wins", 0)
+   battles = player.get("battles", 0)
+   wins = player.get("wins", 0)
 
-    winrate = round(
-        (wins / battles) * 100, 2
-    ) if battles else 0
+   damage = player.get("damage_dealt", 0)
+   xp = player.get("xp", 0)
+
+   avg_damage = round(
+   damage / battles
+   ) if battles else 0
+
+avg_xp = round(
+    xp / battles
+) if battles else 0
+
+winrate = round(
+    (wins / battles) * 100, 2
+) if battles else 0
 
     await update.message.reply_text(
         f"🎮 {player_name}\n\n"
