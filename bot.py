@@ -89,11 +89,17 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     player = stats_data["data"][str(account_id)]["statistics"]["all"]
     
-    await update.message.reply_text(str(player))
-    return
-
+    
     battles = player.get("battles", 0)
     wins = player.get("wins", 0)
+
+    damage = player.get("damage_dealt", 0)
+    frags = player.get("frags", 0)
+    shots = player.get("shots", 0)
+    hits = player.get("hits", 0)
+    xp = player.get("xp", 0)
+    spotted = player.get("spotted", 0)
+    survived = player.get("survived_battles", 0)
 
 
     winrate = round(
@@ -101,14 +107,39 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     ) if battles else 0
 
 
+    avg_damage = round(
+        damage / battles
+    ) if battles else 0
+
+
+    avg_frags = round(
+        frags / battles, 2
+    ) if battles else 0
+
+
+    accuracy = round(
+        hits / shots * 100, 2
+    ) if shots else 0
+
+
+    avg_xp = round(
+        xp / battles
+    ) if battles else 0
+
+
     await update.message.reply_text(
         f"🎮 {player_name}\n\n"
         f"⚔️ Бои: {battles:,}\n"
         f"🏆 Победы: {wins:,}\n"
-        f"📊 Винрейт: {winrate}%"
+        f"📊 Винрейт: {winrate}%\n\n"
+        f"💥 Средний урон: {avg_damage:,}\n"
+        f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
+        f"🎯 Точность: {accuracy}%\n"
+        f"⭐ Средний опыт: {avg_xp:,}\n"
+        f"👁 Обнаружено: {spotted:,}\n"
+        f"🛡 Выжил в боях: {survived:,}"
     )
-
-
+    
 
 # Flask для Render
 
