@@ -10,7 +10,10 @@ def init_db():
     print("INIT_DB CALLED")
     
     conn = sqlite3.connect(DB_NAME)
+    print("SQLITE CONNECT OK")
+    
     cur = conn.cursor()
+    print("CURSOR OK")
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS clans (
@@ -20,6 +23,8 @@ def init_db():
         clan_name TEXT
     )
     """)
+
+    print("CLANS TABLE OK")
 
     # Таблица истории игроков
     cur.execute("""
@@ -33,12 +38,16 @@ def init_db():
     )
     """)
 
+    print("HISTORY TABLE OK")
+
     conn.commit()
+    print("COMMIT OK")
 
     cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
     print("DATABASE TABLES:", cur.fetchall())
     
     conn.close()
+    print("DB CLOSED")
 
 
 def save_clan(chat_id, clan_id, clan_tag, clan_name):
