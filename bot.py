@@ -66,6 +66,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "📊 /stats <ник> — статистика игрока\n"
         "🏆 /top — ТОП клана по среднему урону\n"
         "📈 /clanreport — отчёт клана\n"
+        "👥 /members — список игроков клана\n"
         "📋 /menu — это меню"
     )
 
@@ -458,6 +459,78 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(text)
 
+async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        "⏳ Загружаю состав клана..."
+    )
+
+    clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
+
+    clan_params = {
+        "application_id": WG_APP_ID,
+        "clan_id": CLAN_ID
+    }
+
+    response = requests.get(
+        clan_url,
+        params=clan_params,
+        timeout=10
+    )
+
+    data = response.json()
+
+    if data.get("status") != "ok":
+        await update.message.reply_text(
+            "❌ Не удалось получить данные клана"
+        )
+        return
+
+
+    members_ids = data["data"][str(CLAN_ID)]["members_ids"]
+
+    names = []
+
+
+    for account_id in members_ids:
+
+        url = "https://api.wotblitz.eu/wotb/account/info/"
+
+        params = {
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        }
+
+
+        player_response = requests.get(
+            url,
+            params=params,
+            timeout=10
+        )
+
+        player_data = player_response.json()
+
+
+        if player_data.get("status") == "ok":
+
+            nickname = player_data["data"][str(account_id)]["nickname"]
+
+            names.append(nickname)
+
+
+
+    text = (
+        "👥 Состав клана P=V=S\n\n"
+        f"Всего игроков: {len(names)}\n\n"
+    )
+
+
+    for i, name in enumerate(names, start=1):
+        text += f"{i}. {name}\n"
+
+
+    await update.message.reply_text(text)
+
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
@@ -586,6 +659,7 @@ def run_bot():
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
+    app.add_handler(CommandHandler("members", members))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
 
