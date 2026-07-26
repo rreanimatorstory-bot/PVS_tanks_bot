@@ -9,38 +9,16 @@ DB_NAME = os.path.join(os.path.dirname(__file__), "clans.db")
 def init_db():
     print("INIT_DB CALLED")
 
-    conn = sqlite3.connect(DB_NAME)
+    print("DB PATH:", DB_NAME)
+
+    conn = sqlite3.connect(DB_NAME, timeout=5)
     print("SQLITE CONNECT OK")
 
     cur = conn.cursor()
     print("CURSOR CREATED")
 
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS clans (
-        chat_id INTEGER PRIMARY KEY,
-        clan_id INTEGER,
-        clan_tag TEXT,
-        clan_name TEXT
-    )
-    """)
-
-    print("CLANS CREATED")
-
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS history (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        account_id INTEGER,
-        nickname TEXT,
-        battles INTEGER,
-        damage INTEGER,
-        date TEXT
-    )
-    """)
-
-    print("HISTORY CREATED")
-
-    conn.commit()
-    print("COMMIT DONE")
+    cur.execute("SELECT 1")
+    print("SELECT OK")
 
     conn.close()
     print("DB CLOSED")
