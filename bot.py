@@ -11,18 +11,41 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 
 from database import init_db, save_clan, get_clan
 
-
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+print("TOKEN EXISTS:", BOT_TOKEN is not None)
+print("TOKEN END:", BOT_TOKEN[-5:])
+
 WG_APP_ID = os.getenv("WG_APP_ID")
 CLAN_ID = "1336303"
 
-DB_NAME = "player_history.db"
+print("BOT PID:", os.getpid())
+print("TOKEN END:", BOT_TOKEN[-5:])
+
 
 def init_db():
-    conn = sqlite3.connect(DB_NAME)
+    print("INIT_DB CALLED")
+
+    print("DB PATH:", DB_NAME)
+
+    conn = sqlite3.connect(DB_NAME, timeout=5)
+    print("SQLITE CONNECT OK")
+
     cur = conn.cursor()
+    print("CURSOR CREATED")
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS clans (
+        chat_id INTEGER PRIMARY KEY,
+        clan_id INTEGER,
+        clan_tag TEXT,
+        clan_name TEXT
+    )
+    """)
+
+    print("CLANS CREATED")
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS history (
@@ -35,19 +58,14 @@ def init_db():
     )
     """)
 
-     # Кланы для разных чатов
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS clans (
-        chat_id INTEGER PRIMARY KEY,
-        clan_id INTEGER,
-        clan_tag TEXT,
-        clan_name TEXT
-    )
-    """)
+    print("HISTORY CREATED")
 
     conn.commit()
-    conn.close()
+    print("COMMIT DONE")
 
+    conn.close()
+    print("DB CLOSED")
+    
 def save_player_history(account_id, nickname, battles, damage):
 
     conn = sqlite3.connect(DB_NAME)
@@ -728,8 +746,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-    
-
 # Flask для Render
 
 web = Flask(__name__)
@@ -740,25 +756,19 @@ def home():
     return "BlitzClanBot is running!"
 
 
+def run_bot():
 
-def run_bot(): 
-    
+    print("BOT PID:", os.getpid())
     print("RUN_BOT START")
 
-    print("TEST LINE 1")
-
-    print("CALLING INIT DB")
-
-    try:
-        init_db()
-        print("INIT DB FINISHED")
-    except Exception as e:
-        print("INIT DB ERROR:", e)
+    print("BEFORE DB")
+    init_db()
+    print("AFTER DB")
 
     print("CREATING TELEGRAM APP")
 
     app = Application.builder().token(BOT_TOKEN).build()
-    
+
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
     app.add_handler(CommandHandler("stats", stats))
@@ -767,19 +777,14 @@ def run_bot():
     app.add_handler(CommandHandler("members", members))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
-    
 
-
-    print("Bot started")
-    print("BOT PID:", os.getpid())
+    print("BOT STARTED")
 
     app.run_polling(
         stop_signals=None,
         drop_pending_updates=True
     )
         
-
-
 
 thread = Thread(target=run_bot)
 thread.start()
