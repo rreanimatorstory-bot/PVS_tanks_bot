@@ -8,12 +8,12 @@ DB_NAME = os.path.join(os.path.dirname(__file__), "clans.db")
 
 def init_db():
     print("INIT_DB CALLED")
-    
+
     conn = sqlite3.connect(DB_NAME)
     print("SQLITE CONNECT OK")
-    
+
     cur = conn.cursor()
-    print("CURSOR OK")
+    print("CURSOR CREATED")
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS clans (
@@ -24,9 +24,8 @@ def init_db():
     )
     """)
 
-    print("CLANS TABLE OK")
+    print("CLANS CREATED")
 
-    # Таблица истории игроков
     cur.execute("""
     CREATE TABLE IF NOT EXISTS history (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -38,14 +37,11 @@ def init_db():
     )
     """)
 
-    print("HISTORY TABLE OK")
+    print("HISTORY CREATED")
 
     conn.commit()
-    print("COMMIT OK")
+    print("COMMIT DONE")
 
-    cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
-    print("DATABASE TABLES:", cur.fetchall())
-    
     conn.close()
     print("DB CLOSED")
 
