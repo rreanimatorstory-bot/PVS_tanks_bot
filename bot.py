@@ -371,6 +371,23 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(text)
 
+async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    account_id = 726737026  # сюда потом поставим ID игрока
+
+    url = "https://api.wotblitz.eu/wotb/account/info/"
+
+    params = {
+        "application_id": WG_APP_ID,
+        "account_id": account_id
+    }
+
+    response = requests.get(url, params=params)
+
+    await update.message.reply_text(
+        str(response.json())[:4000]
+    )
+
 
     
 
@@ -393,6 +410,7 @@ def run_bot():
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
+    app.add_handler(CommandHandler("history", history))
 
 
     print("Bot started")
