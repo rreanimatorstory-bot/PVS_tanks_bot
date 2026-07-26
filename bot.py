@@ -700,10 +700,34 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     response = requests.get(url, params=params)
 
+    data = response.json()
+
+    player = list(data["data"].values())[0]
+
+    stats = player["statistics"]["all"]
+
+    nickname = player["nickname"]
+    battles = stats["battles"]
+    wins = stats["wins"]
+    damage = stats["damage_dealt"]
+    frags = stats["frags"]
+
+    winrate = round(wins / battles * 100, 1) if battles else 0
+
+    text = (
+        f"📜 История игрока\n\n"
+        f"👤 {nickname}\n\n"
+        f"⚔️ Бои: {battles}\n"
+        f"🏆 Победы: {wins}\n"
+        f"📊 Винрейт: {winrate}%\n"
+        f"💥 Урон: {damage:,}\n"
+        f"☠️ Фраги: {frags}"
+    )
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=update.message.message_thread_id,
-        text=str(response.json())[:4000]
+        text=text
     )
 
 
