@@ -108,7 +108,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    nickname = " ".join(context.args)
+    nickname = context.args[0]
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
