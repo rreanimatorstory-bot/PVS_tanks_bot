@@ -78,6 +78,8 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("MYCLAN COMMAND RECEIVED")
+
     clan = get_clan(update.effective_chat.id)
 
     if clan is None:
