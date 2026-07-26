@@ -52,8 +52,40 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     account_id = data["data"][0]["account_id"]
     player_name = data["data"][0]["nickname"]
 
+    stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+    stats_params = {
+        "application_id": WG_APP_ID,
+        "account_id": account_id
+    }
+
+    stats_response = requests.get(
+        stats_url,
+        params=stats_params
+    )
+
+    stats_data = stats_response.json()
+
+    if stats_data.get("status") != "ok":
+        await update.message.reply_text(
+            "❌ Не удалось получить статистику"
+        )
+        return
+
+    player = stats_data["data"][str(account_id)]["statistics"]["all"]
+
+    battles = player.get("battles", 0)
+    wins = player.get("wins", 0)
+
+    winrate = round(
+        (wins / battles) * 100, 2
+    ) if battles else 0
+
     await update.message.reply_text(
-        f"✅ Найден игрок: {player_name}\nID: {account_id}"
+        f"🎮 {player_name}\n\n"
+        f"⚔️ Бои: {battles}\n"
+        f"🏆 Победы: {wins}\n"
+        f"📊 Винрейт: {winrate}%"
     )
 # Flask для Render
 
