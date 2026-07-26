@@ -80,7 +80,11 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("MYCLAN COMMAND RECEIVED")
 
+    print("BEFORE DATABASE")
+
     clan = get_clan(update.effective_chat.id)
+
+    print("AFTER DATABASE", clan)
 
     if clan is None:
         await context.bot.send_message(
