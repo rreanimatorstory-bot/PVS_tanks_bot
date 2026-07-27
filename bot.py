@@ -93,6 +93,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    raise Exception("I AM HERE")
 
     if not context.args:
         await update.message.reply_text(
