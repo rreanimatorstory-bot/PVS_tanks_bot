@@ -705,8 +705,6 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    account_id = 726737026
-
     if not context.args:
         await update.message.reply_text(
             "Использование:\n/history ник"
@@ -715,6 +713,25 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     nickname = context.args[0]
 
+    # Поиск игрока
+    url = "https://api.wotblitz.eu/wotb/account/list/"
+
+    params = {
+        "application_id": WG_APP_ID,
+        "search": nickname
+    }
+
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if data.get("status") != "ok" or not data.get("data"):
+        await update.message.reply_text("❌ Игрок не найден")
+        return
+
+    player = data["data"][0]
+    account_id = player["account_id"]
+
+    # Получение статистики
     url = "https://api.wotblitz.eu/wotb/account/info/"
 
     params = {
@@ -723,8 +740,11 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     }
 
     response = requests.get(url, params=params)
-
     data = response.json()
+
+    if data.get("status") != "ok":
+        await update.message.reply_text("❌ Ошибка получения статистики")
+        return
 
     player = list(data["data"].values())[0]
 
@@ -741,11 +761,11 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         f"📜 История игрока\n\n"
         f"👤 {nickname}\n\n"
-        f"⚔️ Бои: {battles}\n"
-        f"🏆 Победы: {wins}\n"
+        f"⚔️ Бои: {battles:,}\n"
+        f"🏆 Победы: {wins:,}\n"
         f"📊 Винрейт: {winrate}%\n"
         f"💥 Урон: {damage:,}\n"
-        f"☠️ Фраги: {frags}"
+        f"☠️ Фраги: {frags:,}"
     )
 
     await context.bot.send_message(
@@ -753,7 +773,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message_thread_id=update.message.message_thread_id,
         text=text
     )
-
 
 # Flask для Render
 
