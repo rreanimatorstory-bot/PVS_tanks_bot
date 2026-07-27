@@ -130,13 +130,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     response = requests.get(url, params=params)
     data = response.json()
 
-    print("SEARCH NICK:", nickname)
-    print("API RESULT:", data)
-
-    print("SEARCH RESULT:", data)
-
     print("STATS SEARCH:", nickname)
-    print("FOUND DATA:", data)
+    print("API RESULT:", data)
 
     if data.get("status") != "ok" or not data.get("data"):
         await context.bot.send_message(
