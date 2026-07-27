@@ -887,7 +887,13 @@ def run_bot():
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
 
+
+    thread = Thread(target=run_bot, daemon=True)
+    thread.start()
+
     print("BOT STARTED")
+
+    app.bot.delete_webhook()
 
     app.run_polling(
         stop_signals=None,
