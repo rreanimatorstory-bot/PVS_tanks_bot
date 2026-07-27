@@ -683,7 +683,14 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     saved = 0
 
 
-    for account_id in members_ids:
+    for index, account_id in enumerate(members_ids, start=1):
+
+        if index % 10 == 0:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                message_thread_id=update.message.message_thread_id,
+                text=f"⏳ Обработано {index}/{len(members_ids)} участников..."
+            )
 
         stats_url = "https://api.wotblitz.eu/wotb/account/info/"
 
