@@ -137,16 +137,13 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     account_id = data["data"][0]["account_id"]
 
 
-    # поиск игрока
-    url = "https://api.wotblitz.eu/wotb/account/list/"
+    
+    url = "https://api.wotblitz.eu/wotb/account/info/"
 
     params = {
         "application_id": WG_APP_ID,
-        "search": nickname,
-        "type": "exact",
-        "limit": 1
+        "account_id": account_id
     }
-
 
     response = requests.get(url, params=params)
     data = response.json()
