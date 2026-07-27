@@ -153,9 +153,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 return
 
-player_name = account["nickname"]
+            player_name = account["nickname"]
 
-        stats = account["statistics"]["all"]
+            stats = account["statistics"]["all"]
 
         battles = stats.get("battles", 0)
         wins = stats.get("wins", 0)
