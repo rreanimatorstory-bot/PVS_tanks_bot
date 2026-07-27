@@ -552,6 +552,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     clan_id, clan_tag, clan_name = clan
 
+    print("MEMBERS: clan from database", clan_id, clan_tag)
+
 
     # Получаем список игроков клана
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
@@ -570,6 +572,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     data = response.json()
 
+    print("MEMBERS: clan API response received")
+
 
     if data.get("status") != "ok":
         await context.bot.send_message(
@@ -581,6 +585,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     members_ids = data["data"][str(clan_id)]["members_ids"]
+    print("MEMBERS: players count", len(members_ids))
 
 
     # Один запрос вместо 50 запросов
@@ -602,7 +607,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "account_id": ids
         }
 
-
+        print("MEMBERS: requesting players info")
         players_response = requests.get(
             players_url,
             params=players_params,
@@ -611,6 +616,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
         players_data = players_response.json()
+        print("MEMBERS: players API response received")
 
 
         if players_data.get("status") != "ok":
