@@ -897,18 +897,18 @@ def run_bot():
     print("BOT STARTED")
     print("STARTING POLLING")
 
+    
     app.run_polling(
-        stop_signals=None,
         drop_pending_updates=True
-    )
+    ) 
 
 
-thread = Thread(target=run_bot, daemon=True)
+print("START BOT THREAD")
+
+thread = Thread(target=run_bot)
 thread.start()
 
-
 print("Starting Flask...")
-
 
 web.run(
     host="0.0.0.0",
