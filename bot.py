@@ -126,6 +126,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     response = requests.get(url, params=params)
     data = response.json()
 
+    print("STATS SEARCH:", nickname)
+    print("FOUND DATA:", data)
+
     if data.get("status") != "ok" or not data.get("data"):
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
@@ -135,6 +138,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     account_id = data["data"][0]["account_id"]
+
+    print("FOUND ID:", account_id)
 
 
     
