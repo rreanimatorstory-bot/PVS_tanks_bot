@@ -176,6 +176,21 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     account_id = player["account_id"]
     player_name = player["nickname"]
 
+    # получение статистики игрока
+    stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+    stats_params = {
+        "application_id": WG_APP_ID,
+        "account_id": account_id
+    }
+
+    stats_response = requests.get(
+        stats_url,
+        params=stats_params
+    )
+
+    stats_data = stats_response.json()
+
 
 
     if stats_data.get("status") != "ok":
