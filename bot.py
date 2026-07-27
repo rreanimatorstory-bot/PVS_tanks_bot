@@ -254,6 +254,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    clan = get_clan(update.effective_chat.id)
+
+    if clan is None:
+        await update.message.reply_text(
+            "❌ Сначала привяжите клан:\n/setclan [TAG]"
+        )
+        return
+
+    clan_id, clan_tag, clan_name = clan
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=update.message.message_thread_id,
@@ -264,7 +274,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     clan_params = {
         "application_id": WG_APP_ID,
-        "clan_id": CLAN_ID
+        "clan_id": clan_id
     }
 
     clan_response = requests.get(
@@ -283,7 +293,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    members_ids = clan_data["data"][CLAN_ID]["members_ids"]
+    members_ids = clan_data["data"][str(clan_id)]["members_ids"]
 
 
     results = []
