@@ -182,8 +182,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
                 clan_info = clan_data["data"].get(str(player_clan_id))
 
-                    if clan_info:
-                        clan_text = f"[{clan_info.get('tag', 'Без клана')}]"
+                if clan_info:
+                     clan_text = f"[{clan_info.get('tag', 'Без клана')}]"
 
         # ---------- Расчеты ----------
         winrate = round(
