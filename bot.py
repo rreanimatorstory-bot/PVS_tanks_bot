@@ -1,4 +1,7 @@
 import os
+
+print("PROCESS ID:", os.getpid())
+
 import requests
 import sqlite3
 from datetime import datetime
