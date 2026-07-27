@@ -138,6 +138,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         info_data = info_response.json()
 
+        print("INFO DATA:")
+        print(info_data)
+
         if info_data.get("status") != "ok":
             await update.message.reply_text(
                 "❌ Не удалось получить статистику"
