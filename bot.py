@@ -894,7 +894,7 @@ def run_bot():
     )
         
 
-thread = Thread(target=run_bot)
+thread = Thread(target=run_bot, daemon=True)
 thread.start()
 
 
