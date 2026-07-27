@@ -208,7 +208,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         clan_response = requests.get(
             clan_url,
-            params=clan_params
+            params=clan_params,
+            timeout=10
         )
 
         clan_data = clan_response.json()
