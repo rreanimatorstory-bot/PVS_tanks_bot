@@ -131,7 +131,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "https://api.wotblitz.eu/wotb/account/info/",
             params={
                 "application_id": WG_APP_ID,
-                "account_id": account_id
+                "account_id": account_id,
+                "fields": "clan,statistics.all"
             },
             timeout=10
         )
@@ -165,10 +166,14 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # ---------- Клан ----------
         clan_text = "Без клана"
-        
+
         player_clan = account.get("clan")
-        
+
         if player_clan:
+            clan_tag = player_clan.get("tag")
+
+            if clan_tag:
+                clan_text = f"[{clan_tag}]"
         
             clan_tag = player_clan.get("tag")
         
