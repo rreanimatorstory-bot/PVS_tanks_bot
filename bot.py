@@ -895,8 +895,7 @@ def run_bot():
     )
         
 
-thread = Thread(target=run_bot, daemon=True)
-thread.start()
+print("BOT THREAD DISABLED")
 
 
 print("Starting Flask...")
