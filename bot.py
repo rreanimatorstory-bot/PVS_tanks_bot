@@ -394,7 +394,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    members_ids = clan_data["data"][str(CLAN_ID)]["members_ids"]
+    members_ids = clan_data["data"][str(clan_id)]["members_ids"]
 
 
     total_battles = 0
