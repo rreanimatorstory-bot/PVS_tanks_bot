@@ -141,7 +141,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    account_id = data["data"][0]["account_id"]
+    player = list(data["data"].values())[0]
+
+    account_id = player["account_id"]
 
     print("FOUND ID:", account_id)
 
