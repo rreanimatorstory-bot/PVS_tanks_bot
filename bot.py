@@ -195,19 +195,11 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if clan_data.get("status") == "ok":
         
                 members_ids = clan_data["data"][str(clan_id)]["members_ids"]
-
-                print("===== CLAN CHECK =====")
-                print("ACCOUNT_ID:", account_id)
-                print("ACCOUNT TYPE:", type(account_id))
-                print("CLAN_ID:", clan_id)
-                print("MEMBERS COUNT:", len(members_ids))
-                print("FIRST IDS:", members_ids[:5])
-                print("ACCOUNT ID IN LIST:", account_id in members_ids)
-                print("STRING ID IN LIST:", str(account_id) in members_ids)
-                print("FOUND:", str(account_id) in members_ids)
-                print("======================")
         
-                if account_id in members_ids:
+                # приводим всё к строкам
+                members_ids = [str(x) for x in members_ids]
+        
+                if str(account_id) in members_ids:
                     clan_text = f"[{clan_tag}]"
         # ---------- Расчеты ----------
         winrate = round(
