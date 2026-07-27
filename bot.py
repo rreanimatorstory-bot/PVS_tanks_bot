@@ -872,8 +872,9 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"ID: {clan_id}"
     )
 def run_bot():
-    
 
+    print("RUN_BOT STARTED")
+    
     app = Application.builder().token(BOT_TOKEN).build()
     
     app.add_handler(CommandHandler("setclan", setclan))
