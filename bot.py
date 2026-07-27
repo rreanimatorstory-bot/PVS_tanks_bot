@@ -532,6 +532,16 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    clan = get_clan(update.effective_chat.id)
+
+    if clan is None:
+        await update.message.reply_text(
+            "❌ Сначала привяжите клан:\n/setclan [TAG]"
+        )
+        return
+
+    clan_id, clan_tag, clan_name = clan
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=update.message.message_thread_id,
@@ -542,7 +552,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     clan_params = {
         "application_id": WG_APP_ID,
-        "clan_id": CLAN_ID
+        "clan_id": clan_id
     }
 
     response = requests.get(
@@ -562,7 +572,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    members_ids = data["data"][str(CLAN_ID)]["members_ids"]
+    members_ids = data["data"][str(clan_id)]["members_ids"]
 
     names = []
 
