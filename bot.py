@@ -120,7 +120,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "search": nickname
     }
 
-    response = requests.get(url, params=params)
+    response = requests.get(
+        url,
+        params=params,
+        timeout=10
+    )
+    
     data = response.json()
 
 
@@ -197,8 +202,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     player = stats_data["data"][str(account_id)]["statistics"]["all"]
     account = stats_data["data"][str(account_id)]
 
-    rating = account.get("global_rating", 0)
-
     player_clan_id = account.get("clan_id")
     player_clan_tag = "нет"
 
@@ -225,30 +228,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             if clan_info:
                 player_clan_tag = clan_info.get("tag", "нет")
-
-    clan_text = "Без клана"
-
-    if clan_id:
-        clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
-
-        clan_params = {
-            "application_id": WG_APP_ID,
-            "clan_id": clan_id
-        }
-
-        clan_response = requests.get(
-            clan_url,
-            params=clan_params
-        )
-
-        clan_data = clan_response.json()
-
-        if clan_data.get("status") == "ok":
-            clan_info = clan_data["data"][str(clan_id)]
-
-            clan_text = (
-                f"{clan_info['name']} [{clan_info['tag']}]"
-            )
     
     
     battles = player.get("battles", 0)
@@ -296,8 +275,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"⚔️ Бои: {battles:,}\n"
             f"🏆 Победы: {wins:,}\n"
             f"📊 Винрейт: {winrate}%\n"
-            f"🏅 Рейтинг: {rating}\n"
-            f"🏰 Клан: [{player_clan_tag}]\n\n"
+            f"🏰 Клан: {player_clan_tag}\n\n"
             f"💥 Средний урон: {avg_damage:,}\n"
             f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
             f"🎯 Точность: {accuracy}%\n"
