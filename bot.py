@@ -875,7 +875,11 @@ def run_bot():
 
     print("RUN_BOT STARTED")
 
+    print("CREATING TELEGRAM APP")
+
     app = Application.builder().token(BOT_TOKEN).build()
+
+    print("TELEGRAM APP CREATED")
 
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
@@ -888,6 +892,7 @@ def run_bot():
     app.add_handler(CommandHandler("update", update_history))
 
     print("BOT STARTED")
+    print("STARTING POLLING")
 
     app.run_polling(
         stop_signals=None,
