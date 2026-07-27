@@ -403,7 +403,9 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     low_activity = []
 
 
-    for account_id in members_ids:
+    for index, account_id in enumerate(members_ids, start=1):
+
+        print(f"REPORT: processing {index}/{len(members_ids)}")
 
         stats_url = "https://api.wotblitz.eu/wotb/account/info/"
 
