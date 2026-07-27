@@ -242,7 +242,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(
             "❌ Произошла ошибка при получении статистики."
         )
-)
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
