@@ -169,8 +169,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
        return
 
 
-    account_id = data["data"][0]["account_id"]
-    player_name = data["data"][0]["nickname"]
+    player = list(data["data"].values())[0]
+
+    account_id = player["account_id"]
+    player_name = player["nickname"]
 
 
 
