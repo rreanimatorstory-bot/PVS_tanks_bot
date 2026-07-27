@@ -202,10 +202,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 print("CLAN_ID:", clan_id)
                 print("MEMBERS COUNT:", len(members_ids))
                 print("FIRST IDS:", members_ids[:5])
+                print("ACCOUNT ID IN LIST:", account_id in members_ids)
+                print("STRING ID IN LIST:", str(account_id) in members_ids)
                 print("FOUND:", str(account_id) in members_ids)
                 print("======================")
         
-                if str(account_id) in members_ids:
+                if account_id in members_ids:
                     clan_text = f"[{clan_tag}]"
         # ---------- Расчеты ----------
         winrate = round(
