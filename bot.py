@@ -193,14 +193,13 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             clan_data = clan_response.json()
         
             if clan_data.get("status") == "ok":
-        
+
                 members_ids = clan_data["data"][str(clan_id)]["members_ids"]
-        
-                # приводим всё к строкам
-                members_ids = [str(x) for x in members_ids]
-        
-                if str(account_id) in members_ids:
-                    clan_text = f"[{clan_tag}]"
+            
+                if str(account_id) in [str(x) for x in members_ids]:
+                    clan_text = f"[{clan_tag}]""
+                    print("CLAN RESULT:", clan_text)
+
         # ---------- Расчеты ----------
         winrate = round(
             wins / battles * 100,
