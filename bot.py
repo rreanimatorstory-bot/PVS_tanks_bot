@@ -15,13 +15,9 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-print("TOKEN EXISTS:", BOT_TOKEN is not None)
-print("TOKEN END:", BOT_TOKEN[-5:])
 
 WG_APP_ID = os.getenv("WG_APP_ID")
 CLAN_ID = "1336303"
-
-print("BOT PID:", os.getpid())
 
 
     
@@ -67,13 +63,10 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("MYCLAN COMMAND RECEIVED")
-
-    print("BEFORE DATABASE")
+    
 
     clan = get_clan(update.effective_chat.id)
 
-    print("AFTER DATABASE", clan)
 
     if clan is None:
         await context.bot.send_message(
@@ -99,9 +92,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("!!! NEW STATS CODE !!!")
 
-    print("=== STATS FUNCTION WORKS ===")
 
     if not context.args:
         await context.bot.send_message(
@@ -130,10 +121,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     response = requests.get(url, params=params)
     data = response.json()
 
-    print("ACCOUNT LIST:", data)
-
-    print("STATS SEARCH:", nickname)
-    print("API RESULT:", data)
 
     if data.get("status") != "ok" or not data.get("data"):
         await context.bot.send_message(
@@ -146,8 +133,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     player = data["data"][0]
 
     account_id = player["account_id"]
-
-    print("FOUND ID:", account_id)
 
 
     
@@ -832,15 +817,6 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 def run_bot():
     
-    print("=== RUN_BOT CALLED ===")
-    print("BOT PID:", os.getpid())
-    print("RUN_BOT START")
-
-    print("BEFORE DB")
-    init_db()
-    print("AFTER DB")
-
-    print("CREATING TELEGRAM APP")
 
     app = Application.builder().token(BOT_TOKEN).build()
     
