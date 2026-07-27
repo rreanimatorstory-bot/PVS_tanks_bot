@@ -99,6 +99,8 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("=== STATS FUNCTION WORKS ===")
+
     if not context.args:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
