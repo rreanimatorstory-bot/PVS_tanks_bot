@@ -202,6 +202,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     player = stats_data["data"][str(account_id)]["statistics"]["all"]
     account = stats_data["data"][str(account_id)]
 
+    print("ACCOUNT =", account)
+
     print("ACCOUNT:", account)
     print("PLAYER CLAN ID:", account.get("clan_id"))
 
