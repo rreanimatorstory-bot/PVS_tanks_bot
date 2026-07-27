@@ -145,7 +145,11 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "account_id": account_id
     }
 
-    response = requests.get(url, params=params)
+    response = requests.get(
+        url,
+        params=params,
+        timeout=10
+    )
     data = response.json()
 
 
@@ -173,7 +177,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     stats_response = requests.get(
         stats_url,
-        params=stats_params
+        params=stats_params,
+        timeout=10
     )
 
     stats_data = stats_response.json()
