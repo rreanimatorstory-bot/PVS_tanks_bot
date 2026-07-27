@@ -267,7 +267,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=update.message.message_thread_id,
-        text="⏳ Считаю статистику 49 игроков клана..."
+        text="⏳ Считаю статистику клана {clan_tag}..."
     )
 
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
