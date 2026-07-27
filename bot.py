@@ -162,29 +162,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # ---------- Клан ----------
         clan_text = "Без клана"
-
-        player_clan_id = account.get("clan_id")
         
-        if player_clan_id:
+        player_clan = account.get("clan")
         
-            clan_response = requests.get(
-                "https://api.wotblitz.eu/wotb/clans/info/",
-                params={
-                    "application_id": WG_APP_ID,
-                    "clan_id": player_clan_id
-                },
-                timeout=10
-            )
+        if player_clan:
         
-            clan_data = clan_response.json()
+            clan_tag = player_clan.get("tag")
         
-            if clan_data.get("status") == "ok":
-        
-                clan_info = clan_data["data"].get(str(player_clan_id))
-        
-                if clan_info:
-                    clan_text = f"[{clan_info.get('tag', 'Без клана')}]"
-
+            if clan_tag:
+                clan_text = f"[{clan_tag}]"
+                
         # ---------- Расчеты ----------
         winrate = round(
             wins / battles * 100,
