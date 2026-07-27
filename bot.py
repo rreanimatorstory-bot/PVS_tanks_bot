@@ -148,6 +148,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         account = info_data["data"].get(str(account_id))
+
+        print("PLAYER ACCOUNT:")
+        print(account)
     
         if account is None:
              await update.message.reply_text(
