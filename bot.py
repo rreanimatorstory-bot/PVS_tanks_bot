@@ -131,8 +131,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "https://api.wotblitz.eu/wotb/account/info/",
             params={
                 "application_id": WG_APP_ID,
-                "account_id": account_id,
-                "fields": "clan,statistics.all"
+                "account_id": account_id
             },
             timeout=10
         )
