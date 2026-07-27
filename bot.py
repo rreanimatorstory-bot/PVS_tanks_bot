@@ -22,9 +22,6 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
 WG_APP_ID = os.getenv("WG_APP_ID")
-CLAN_ID = "1336303"
-
-
     
 def save_player_history(account_id, nickname, battles, damage):
 
@@ -874,6 +871,22 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🔖 {clan_tag}\n"
         f"ID: {clan_id}"
     )
+
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        "🤖 Добро пожаловать в BlitzClanBot!\n\n"
+        "Я помогу следить за статистикой вашего клана.\n\n"
+        "📌 Сначала привяжите клан:\n"
+        "/setclan [TAG]\n\n"
+        "Команды:\n\n"
+        "📊 /stats ник — статистика любого игрока\n"
+        "🏆 /top — ТОП вашего клана\n"
+        "📈 /clanreport — отчёт клана\n"
+        "👥 /members — список игроков клана\n"
+        "🏰 /myclan — текущий клан"
+    )
+    
 def run_bot():
 
     print("RUN_BOT STARTED")
@@ -889,6 +902,7 @@ def run_bot():
 
     print("TELEGRAM APP CREATED")
 
+    app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
