@@ -882,6 +882,8 @@ def run_bot():
 
     print("TOKEN EXISTS:", bool(BOT_TOKEN))
     print("TOKEN LENGTH:", len(BOT_TOKEN) if BOT_TOKEN else 0)
+    print("TOKEN START:", BOT_TOKEN[:10])
+    print("TOKEN END:", BOT_TOKEN[-10:])
 
     app = Application.builder().token(BOT_TOKEN).build()
 
