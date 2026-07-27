@@ -874,9 +874,9 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def run_bot():
 
     print("RUN_BOT STARTED")
-    
+
     app = Application.builder().token(BOT_TOKEN).build()
-    
+
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
@@ -887,21 +887,16 @@ def run_bot():
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
 
-
-    thread = Thread(target=run_bot, daemon=True)
-    thread.start()
-
     print("BOT STARTED")
-
-    app.bot.delete_webhook()
 
     app.run_polling(
         stop_signals=None,
         drop_pending_updates=True
     )
-        
 
-print("BOT THREAD DISABLED")
+
+thread = Thread(target=run_bot, daemon=True)
+thread.start()
 
 
 print("Starting Flask...")
