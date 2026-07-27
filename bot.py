@@ -194,7 +194,31 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     rating = account.get("global_rating", 0)
 
-    clan_id = account.get("clan_id")
+    player_clan_id = account.get("clan_id")
+    player_clan_tag = "нет"
+
+    if player_clan_id:
+
+        clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
+
+        clan_params = {
+            "application_id": WG_APP_ID,
+            "clan_id": player_clan_id
+        }
+
+        clan_response = requests.get(
+            clan_url,
+            params=clan_params
+        )
+
+        clan_data = clan_response.json()
+
+        if clan_data.get("status") == "ok":
+
+            clan_info = clan_data["data"].get(str(player_clan_id))
+
+            if clan_info:
+                player_clan_tag = clan_info.get("tag", "нет")
 
     clan_text = "Без клана"
 
@@ -267,7 +291,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"🏆 Победы: {wins:,}\n"
             f"📊 Винрейт: {winrate}%\n"
             f"🏅 Рейтинг: {rating}\n"
-            f"🏰 Клан ID: {clan_id}\n\n"
+            f"🏰 Клан: [{player_clan_tag}]\n\n"
             f"💥 Средний урон: {avg_damage:,}\n"
             f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
             f"🎯 Точность: {accuracy}%\n"
