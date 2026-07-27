@@ -145,13 +145,13 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
 
-        account = info_data["data"].get(str(account_id))
-
-        if account is None:
-            await update.message.reply_text(
-                "❌ В ответе API нет данных игрока"
-            )
-            return
+            account = info_data["data"].get(str(account_id))
+    
+            if account is None:
+                await update.message.reply_text(
+                    "❌ В ответе API нет данных игрока"
+                )
+                return
 
 player_name = account["nickname"]
 
