@@ -584,7 +584,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     # Один запрос вместо 50 запросов
-        names = []
+    names = []
 
     players_url = "https://api.wotblitz.eu/wotb/account/info/"
 
