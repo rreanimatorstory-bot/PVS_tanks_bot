@@ -164,6 +164,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         clan_text = "Без клана"
 
         player_clan_id = account.get("clan_id")
+        print("PLAYER CLAN ID:", player_clan_id)
 
         if player_clan_id:
 
@@ -177,6 +178,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
             clan_data = clan_response.json()
+            print("CLAN API:", clan_data)
 
             if clan_data.get("status") == "ok":
 
