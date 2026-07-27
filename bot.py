@@ -877,6 +877,9 @@ def run_bot():
 
     print("CREATING TELEGRAM APP")
 
+    print("TOKEN EXISTS:", bool(BOT_TOKEN))
+    print("TOKEN LENGTH:", len(BOT_TOKEN) if BOT_TOKEN else 0)
+
     app = Application.builder().token(BOT_TOKEN).build()
 
     print("TELEGRAM APP CREATED")
