@@ -193,13 +193,14 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
                 members_ids = clan_data["data"][str(clan_id)]["members_ids"]
 
-                print("STATS CLAN CHECK:")
-                print("ACCOUNT ID:", account_id)
-                print("TYPE:", type(account_id))
-                print("FIRST MEMBERS:", members_ids[:5])
+                print("===== CLAN CHECK =====")
+                print("ACCOUNT_ID:", account_id)
+                print("ACCOUNT TYPE:", type(account_id))
+                print("CLAN_ID:", clan_id)
+                print("MEMBERS COUNT:", len(members_ids))
+                print("FIRST IDS:", members_ids[:5])
                 print("FOUND:", str(account_id) in members_ids)
-
-                print("CHECK CLAN:", account_id, members_ids[:5])
+                print("======================")
         
                 if str(account_id) in members_ids:
                     clan_text = f"[{clan_tag}]"
