@@ -584,43 +584,41 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     # Один запрос вместо 50 запросов
-    ids = ",".join(map(str, members_ids))
-
+        names = []
 
     players_url = "https://api.wotblitz.eu/wotb/account/info/"
 
 
-    players_params = {
-        "application_id": WG_APP_ID,
-        "account_id": ids
-    }
+    # запрашиваем игроков группами по 10
+    for i in range(0, len(members_ids), 10):
+
+        batch = members_ids[i:i+10]
+
+        ids = ",".join(map(str, batch))
 
 
-    players_response = requests.get(
-        players_url,
-        params=players_params,
-        timeout=10
-    )
+        players_params = {
+            "application_id": WG_APP_ID,
+            "account_id": ids
+        }
 
 
-    players_data = players_response.json()
-
-
-    if players_data.get("status") != "ok":
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            message_thread_id=update.message.message_thread_id,
-            text="❌ Не удалось получить игроков"
+        players_response = requests.get(
+            players_url,
+            params=players_params,
+            timeout=10
         )
-        return
 
 
-    names = []
+        players_data = players_response.json()
 
 
-    for player in players_data["data"].values():
-        names.append(player["nickname"])
+        if players_data.get("status") != "ok":
+            continue
 
+
+        for player in players_data["data"].values():
+            names.append(player["nickname"])
 
     names.sort()
 
