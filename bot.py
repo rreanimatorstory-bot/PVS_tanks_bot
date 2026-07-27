@@ -92,202 +92,156 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
 
-async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE): 
-
-
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not context.args:
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            message_thread_id=update.message.message_thread_id,
-            text="Использование:\n/stats ник"
+        await update.message.reply_text(
+            "Использование:\n/stats ник"
         )
         return
-
 
     nickname = context.args[0]
 
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
-        text=f"🔎 Ищу игрока {nickname}..."
+    await update.message.reply_text(
+        f"🔎 Ищу игрока {nickname}..."
     )
 
-    url = "https://api.wotblitz.eu/wotb/account/list/"
+    try:
 
-    params = {
-        "application_id": WG_APP_ID,
-        "search": nickname
-    }
-
-    response = requests.get(
-        url,
-        params=params,
-        timeout=10
-    )
-    
-    data = response.json()
-
-
-    if data.get("status") != "ok" or not data.get("data"):
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            message_thread_id=update.message.message_thread_id,
-            text="❌ Игрок не найден"
-        )
-        return
-
-    player = data["data"][0]
-
-    account_id = player["account_id"]
-
-
-    
-    url = "https://api.wotblitz.eu/wotb/account/info/"
-
-    params = {
-        "application_id": WG_APP_ID,
-        "account_id": account_id
-    }
-
-    response = requests.get(
-        url,
-        params=params,
-        timeout=10
-    )
-    data = response.json()
-
-
-    if data.get("status") != "ok" or not data.get("data"):
-       await context.bot.send_message(
-           chat_id=update.effective_chat.id,
-           message_thread_id=update.message.message_thread_id,
-           text="❌ Игрок не найден"
-       )
-       return
-
-
-    player = list(data["data"].values())[0]
-
-    account_id = player["account_id"]
-    player_name = player["nickname"]
-
-    # получение статистики игрока
-    stats_url = "https://api.wotblitz.eu/wotb/account/info/"
-
-    stats_params = {
-        "application_id": WG_APP_ID,
-        "account_id": account_id
-    }
-
-    stats_response = requests.get(
-        stats_url,
-        params=stats_params,
-        timeout=10
-    )
-
-    stats_data = stats_response.json()
-
-
-
-    if stats_data.get("status") != "ok":
-        await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            message_thread_id=update.message.message_thread_id,
-            text="❌ Ошибка получения статистики"
-        )
-        return
-
-
-    player = stats_data["data"][str(account_id)]["statistics"]["all"]
-    account = stats_data["data"][str(account_id)]
-
-    print("ACCOUNT =", account)
-
-    print("ACCOUNT:", account)
-    print("PLAYER CLAN ID:", account.get("clan_id"))
-
-    player_clan_id = account.get("clan_id")
-    player_clan_tag = "нет"
-
-    if player_clan_id:
-
-        clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
-
-        clan_params = {
-            "application_id": WG_APP_ID,
-            "clan_id": player_clan_id
-        }
-
-        clan_response = requests.get(
-            clan_url,
-            params=clan_params,
+        # ---------- Поиск игрока ----------
+        search_response = requests.get(
+            "https://api.wotblitz.eu/wotb/account/list/",
+            params={
+                "application_id": WG_APP_ID,
+                "search": nickname
+            },
             timeout=10
         )
 
-        clan_data = clan_response.json()
+        search_data = search_response.json()
 
-        if clan_data.get("status") == "ok":
+        if search_data.get("status") != "ok" or not search_data.get("data"):
+            await update.message.reply_text("❌ Игрок не найден")
+            return
 
-            clan_info = clan_data["data"].get(str(player_clan_id))
+        account_id = search_data["data"][0]["account_id"]
 
-            if clan_info:
-                player_clan_tag = clan_info.get("tag", "нет")
-    
-    
-    battles = player.get("battles", 0)
-    wins = player.get("wins", 0)
+        # ---------- Статистика игрока ----------
+        info_response = requests.get(
+            "https://api.wotblitz.eu/wotb/account/info/",
+            params={
+                "application_id": WG_APP_ID,
+                "account_id": account_id
+            },
+            timeout=10
+        )
 
-    damage = player.get("damage_dealt", 0)
-    frags = player.get("frags", 0)
-    shots = player.get("shots", 0)
-    hits = player.get("hits", 0)
-    xp = player.get("xp", 0)
-    spotted = player.get("spotted", 0)
-    survived = player.get("survived_battles", 0)
+        info_data = info_response.json()
 
+        if info_data.get("status") != "ok":
+            await update.message.reply_text(
+                "❌ Не удалось получить статистику"
+            )
+            return
 
-    winrate = round(
-        wins / battles * 100, 2
-    ) if battles else 0
+        account = info_data["data"][str(account_id)]
 
+        player_name = account["nickname"]
 
-    avg_damage = round(
-        damage / battles
-    ) if battles else 0
+        stats = account["statistics"]["all"]
 
+        battles = stats.get("battles", 0)
+        wins = stats.get("wins", 0)
+        damage = stats.get("damage_dealt", 0)
+        frags = stats.get("frags", 0)
+        shots = stats.get("shots", 0)
+        hits = stats.get("hits", 0)
+        xp = stats.get("xp", 0)
+        spotted = stats.get("spotted", 0)
+        survived = stats.get("survived_battles", 0)
 
-    avg_frags = round(
-        frags / battles, 2
-    ) if battles else 0
+        # ---------- Клан ----------
+        clan_text = "Без клана"
 
+        player_clan_id = account.get("clan_id")
 
-    accuracy = round(
-        hits / shots * 100, 2
-    ) if shots else 0
+        if player_clan_id:
 
+            clan_response = requests.get(
+                "https://api.wotblitz.eu/wotb/clans/info/",
+                params={
+                    "application_id": WG_APP_ID,
+                    "clan_id": player_clan_id
+                },
+                timeout=10
+            )
 
-    avg_xp = round(
-        xp / battles
-    ) if battles else 0
+            clan_data = clan_response.json()
 
-    
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
-        text=(
+            if clan_data.get("status") == "ok":
+
+                clan_info = clan_data["data"].get(str(player_clan_id))
+
+                if clan_info:
+
+                    clan_text = f"[{clan_info['tag']}]"
+
+        # ---------- Расчеты ----------
+        winrate = round(
+            wins / battles * 100,
+            2
+        ) if battles else 0
+
+        avg_damage = round(
+            damage / battles
+        ) if battles else 0
+
+        avg_frags = round(
+            frags / battles,
+            2
+        ) if battles else 0
+
+        accuracy = round(
+            hits / shots * 100,
+            2
+        ) if shots else 0
+
+        avg_xp = round(
+            xp / battles
+        ) if battles else 0
+
+        # ---------- Ответ ----------
+        await update.message.reply_text(
+
             f"🎮 {player_name}\n\n"
+
             f"⚔️ Бои: {battles:,}\n"
             f"🏆 Победы: {wins:,}\n"
             f"📊 Винрейт: {winrate}%\n"
-            f"🏰 Клан: {player_clan_tag}\n\n"
+            f"🏰 Клан: {clan_text}\n\n"
+
             f"💥 Средний урон: {avg_damage:,}\n"
             f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
             f"🎯 Точность: {accuracy}%\n"
             f"⭐ Средний опыт: {avg_xp:,}\n"
             f"👁 Обнаружено: {spotted:,}\n"
             f"🛡 Выжил в боях: {survived:,}"
-    )
+
+        )
+
+    except requests.exceptions.Timeout:
+
+        await update.message.reply_text(
+            "⌛ Сервер Wargaming не ответил вовремя. Попробуйте позже."
+        )
+
+    except Exception as e:
+
+        print(e)
+
+        await update.message.reply_text(
+            "❌ Произошла ошибка при получении статистики."
+        )
 )
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
