@@ -13,6 +13,8 @@ from database import init_db, save_clan, get_clan
 
 load_dotenv()
 
+init_db()
+
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 
