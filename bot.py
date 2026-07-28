@@ -266,13 +266,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "⌛ Сервер Wargaming не ответил вовремя. Попробуйте позже."
         )
 
-    except Exception as e:
 
-        print(e)
+    except Exception as e:
+        import traceback
+
+        traceback.print_exc()
 
         await update.message.reply_text(
-            "❌ Произошла ошибка при получении статистики."
+            f"❌ Ошибка:\n{e}"
         )
+    
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
