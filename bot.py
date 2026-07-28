@@ -619,8 +619,6 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    
-    print("MEMBERS START", flush=True)
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -734,7 +732,6 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message_thread_id=update.message.message_thread_id,
         text=text
     )
-
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
