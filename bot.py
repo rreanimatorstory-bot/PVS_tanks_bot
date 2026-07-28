@@ -149,8 +149,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account = info_data["data"].get(str(account_id))
 
-        print("PLAYER ACCOUNT:")
-        print(account)
+        await update.message.reply_text(
+            f"DEBUG:\n{account}"
+        )
 
         if account is None:
              await update.message.reply_text(
