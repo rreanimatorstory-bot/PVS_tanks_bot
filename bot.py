@@ -145,10 +145,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             timeout=10
         )
 
+        print("STATUS CODE:", info_response.status_code, 
+        flush=True)
+        print("RAW RESPONSE:", info_response.text, flush=True)
+        
         info_data = info_response.json()
 
-        print("INFO DATA:", flush=True)
-        print(info_data, Flush=True)
 
         if info_data.get("status") != "ok":
             await update.message.reply_text(
