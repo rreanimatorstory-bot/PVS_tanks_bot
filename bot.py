@@ -298,7 +298,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # ---------- Ответ ----------
         await update.message.reply_text(
         
-            f"🎮 *{player_name}*\n"
+            f"🎮 *{player_name}*\n\n"
             f"🏰 Клан: {clan_name}\n"
             f"🏅 Статус: {status}\n\n"
         
