@@ -190,21 +190,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # ---------- Клан игрока ----------
         clan_text = "Без клана"
         
-        clan_response = requests.get(
-            "https://api.wotblitz.eu/wotb/clans/member/",
-            params={
-                "application_id": WG_APP_ID,
-                "account_id": account_id
-            },
-            timeout=10
-        )
-        
-        clan_data = clan_response.json()
-
-        await update.message.reply_text(
-            f"CLAN API:\n{clan_data}"
-        )
-        
         if clan_data.get("status") == "ok":
             
             data = clan_data.get("data")
