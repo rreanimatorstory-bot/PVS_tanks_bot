@@ -287,21 +287,23 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         # ---------- Ответ ----------
         await update.message.reply_text(
-
-            f"🎮 {player_name}\n\n"
-
-            f"⚔️ Бои: {battles:,}\n"
-            f"🏆 Победы: {wins:,}\n"
-            f"📊 Винрейт: {winrate}%\n"
-            f"🏰 Клан: {clan_name}\n\n"
-
+        
+            f"🎮 *{player_name}*\n"
+            f"🏰 Клан: {clan_name}\n"
+            f"🏅 Статус: {status}\n\n"
+        
+            f"⚔️ Боёв: {battles:,}\n"
+            f"🏆 Победы: {wins:,} ({winrate}%)\n\n"
+        
             f"💥 Средний урон: {avg_damage:,}\n"
-            f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
-            f"🎯 Точность: {accuracy}%\n"
+            f"💀 Фраги: {frags:,} ({avg_frags}/бой)\n"
+            f"🎯 Точность: {accuracy}%\n\n"
+        
             f"⭐ Средний опыт: {avg_xp:,}\n"
             f"👁 Обнаружено: {spotted:,}\n"
-            f"🛡 Выжил в боях: {survived:,}"
-
+            f"🛡 Выжил в боях: {survived:,}",
+        
+            parse_mode="Markdown"
         )
 
     except requests.exceptions.Timeout:
