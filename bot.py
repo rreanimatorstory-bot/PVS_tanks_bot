@@ -285,6 +285,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             xp / battles
         ) if battles else 0
 
+        # ---------- Оценка игрока ----------
+        if winrate >= 60 and avg_damage >= 2000:
+            status = "🔥 Элитный боец"
+        elif winrate >= 55 and avg_damage >= 1500:
+            status = "⚔️ Сильный игрок"
+        elif winrate >= 50:
+            status = "🎯 Уверенный игрок"
+        else:
+            status = "🛠 Развивается"
+
         # ---------- Ответ ----------
         await update.message.reply_text(
         
