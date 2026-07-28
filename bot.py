@@ -301,18 +301,18 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"🎮 *{player_name}*\n\n"
             f"🏰 Клан: {clan_name}\n"
             f"🏅 Статус: {status}\n\n"
-        
-            f"⚔️ Боёв: {battles:,}\n"
-            f"🏆 Победы: {wins:,} ({winrate}%)\n\n"
-        
-            f"💥 Средний урон: {avg_damage:,}\n"
-            f"💀 Фраги: {frags:,} ({avg_frags}/бой)\n"
+            
+            f"⚔️ Боёв: {f'{battles:,}'.replace(',', ' ')}\n"
+            f"🏆 Победы: {f'{wins:,}'.replace(',', ' ')} ({winrate}%)\n\n"
+            
+            f"💥 Средний урон: {f'{avg_damage:,}'.replace(',', ' ')}\n"
+            f"💀 Фраги: {f'{frags:,}'.replace(',', ' ')} ({avg_frags}/бой)\n"
             f"🎯 Точность: {accuracy}%\n\n"
-        
-            f"⭐ Средний опыт: {avg_xp:,}\n"
-            f"👁 Обнаружено: {spotted:,}\n"
-            f"🛡 Выжил в боях: {survived:,}",
-        
+            
+            f"⭐ Средний опыт: {f'{avg_xp:,}'.replace(',', ' ')}\n"
+            f"👁 Обнаружено: {f'{spotted:,}'.replace(',', ' ')}\n"
+            f"🛡 Выжил в боях: {f'{survived:,}'.replace(',', ' ')}",
+            
             parse_mode="Markdown"
         )
 
