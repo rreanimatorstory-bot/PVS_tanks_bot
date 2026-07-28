@@ -1,27 +1,26 @@
-import sqlite3
 import os
 import psycopg2
 
-print("DATABASE.PY LOADED")
+print("DATABASE.PY LOADED (POSTGRES)")
 
-DB_NAME = os.path.join(os.path.dirname(__file__), "clans.db")
+
 DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+def get_connection():
+    return psycopg2.connect(DATABASE_URL)
 
 
 def init_db():
     print("INIT_DB CALLED")
 
-    print("DB PATH:", DB_NAME)
-
-    conn = sqlite3.connect(DB_NAME, timeout=5)
-    print("SQLITE CONNECT OK")
-
+    conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS clans (
-        chat_id INTEGER PRIMARY KEY,
-        clan_id INTEGER,
+        chat_id BIGINT PRIMARY KEY,
+        clan_id BIGINT,
         clan_tag TEXT,
         clan_name TEXT
     )
@@ -29,8 +28,8 @@ def init_db():
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS history (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        account_id INTEGER,
+        id SERIAL PRIMARY KEY,
+        account_id BIGINT,
         nickname TEXT,
         battles INTEGER,
         damage INTEGER,
@@ -39,38 +38,58 @@ def init_db():
     """)
 
     conn.commit()
+
+    cur.close()
     conn.close()
 
-    print("DB READY")
+    print("POSTGRES DB READY")
 
 
 def save_clan(chat_id, clan_id, clan_tag, clan_name):
-    conn = sqlite3.connect(DB_NAME)
+
+    conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
-    INSERT OR REPLACE INTO clans
+    INSERT INTO clans
     (chat_id, clan_id, clan_tag, clan_name)
-    VALUES (?, ?, ?, ?)
+    VALUES (%s, %s, %s, %s)
+    ON CONFLICT (chat_id)
+    DO UPDATE SET
+        clan_id = EXCLUDED.clan_id,
+        clan_tag = EXCLUDED.clan_tag,
+        clan_name = EXCLUDED.clan_name
     """,
-    (chat_id, clan_id, clan_tag, clan_name))
+    (
+        chat_id,
+        clan_id,
+        clan_tag,
+        clan_name
+    ))
 
     conn.commit()
+
+    cur.close()
     conn.close()
 
 
 def get_clan(chat_id):
-    conn = sqlite3.connect(DB_NAME)
+
+    conn = get_connection()
     cur = conn.cursor()
 
     cur.execute(
-        "SELECT clan_id, clan_tag, clan_name FROM clans WHERE chat_id=?",
+        """
+        SELECT clan_id, clan_tag, clan_name
+        FROM clans
+        WHERE chat_id=%s
+        """,
         (chat_id,)
     )
 
     result = cur.fetchone()
 
+    cur.close()
     conn.close()
 
     return result
-  
