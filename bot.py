@@ -174,30 +174,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # ---------- Клан ----------
         clan_text = "Без клана"
-
+        
         clan = get_clan(update.effective_chat.id)
         
         if clan:
-        
             clan_id, clan_tag, clan_name = clan
-        
-            clan_response = requests.get(
-                "https://api.wotblitz.eu/wotb/clans/info/",
-                params={
-                    "application_id": WG_APP_ID,
-                    "clan_id": clan_id
-                },
-                timeout=10
-            )
-        
-            clan_data = clan_response.json()
-        
-            if clan_data.get("status") == "ok":
-
-                members_ids = clan_data["data"][str(clan_id)]["members_ids"]
-            
-                if str(account_id) in members_ids:
-                    clan_text = f"[{clan_tag}]"
+            clan_text = f"[{clan_tag}]"
                     
 
         # ---------- Расчеты ----------
