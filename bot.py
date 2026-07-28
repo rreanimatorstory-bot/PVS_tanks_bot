@@ -46,6 +46,23 @@ def save_player_history(account_id, nickname, battles, damage):
 
 
 
+async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
+        text=(
+             "🤖 BlitzClanBot\n\n"
+             "📋 Доступные команды:\n\n"
+             "📊 /stats <ник> — статистика игрока\n"
+             "🏆 /top — ТОП клана по среднему урону\n"
+             "📈 /clanreport — отчёт клана\n"
+             "👥 /members — список игроков клана\n"
+             "⚙️ /setclan [тег] — привязать клан\n"
+             "     Пример: /setclan [1PVS]\n"
+             "📋 /menu — это меню"
+        )
+    )  
+
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     
@@ -131,30 +148,24 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         account = info_data["data"].get(str(account_id))
- 
 
+        print("ACCOUNT DATA:")
+        print(account.keys())
+        print(account)
+
+        print("========== ACCOUNT ==========")
+        print(account)
+        print("=============================")
+    
         if account is None:
              await update.message.reply_text(
                 "❌ В ответе API нет данных игрока"
              )
              return
 
-        # ВСТАВИТЬ СЮДА
-        print("ACCOUNT KEYS:")
-        print(account.keys())
-        
-        print("CLAN FIELD:")
-        print(account.get("clan"))
-        
-        print("CLAN ID:")
-        print(account.get("clan_id"))
-
         player_name = account["nickname"]
 
         stats = account["statistics"]["all"]
-
-        print("STATISTICS BLOCK:")
-        print(account["statistics"])
 
         battles = stats.get("battles", 0)
         wins = stats.get("wins", 0)
@@ -167,9 +178,31 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         survived = stats.get("survived_battles", 0)
         
                
-        # ---------- Клан игрока ----------
+        # ---------- Реальный клан игрока ----------
         clan_text = "Без клана"
         
+        player_clan_id = account.get("clan_id")
+        
+        if player_clan_id:
+        
+            clan_response = requests.get(
+                "https://api.wotblitz.eu/wotb/clans/info/",
+                params={
+                    "application_id": WG_APP_ID,
+                    "clan_id": player_clan_id
+                },
+                timeout=10
+            )
+        
+            clan_data = clan_response.json()
+        
+            if clan_data.get("status") == "ok":
+        
+                clan_info = clan_data["data"].get(str(player_clan_id))
+        
+                if clan_info:
+                    clan_text = f"[{clan_info['tag']}]"
+                    
         # ---------- Расчеты ----------
         winrate = round(
             wins / battles * 100,
@@ -219,16 +252,13 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "⌛ Сервер Wargaming не ответил вовремя. Попробуйте позже."
         )
 
-
     except Exception as e:
-        import traceback
 
-        traceback.print_exc()
+        print(e)
 
         await update.message.reply_text(
-            f"❌ Ошибка:\n{e}"
+            "❌ Произошла ошибка при получении статистики."
         )
-    
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -881,7 +911,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"ID: {clan_id}"
     )
 
-async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         "🤖 Добро пожаловать в BlitzClanBot!\n\n"
