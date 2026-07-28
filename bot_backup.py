@@ -229,9 +229,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
         clan_data = clan_response.json()
-        
-        print("CLAN DATA:", flush=True)
-        print(clan_data, flush=True)
+         
         
         clan_name = "Без клана"
         
@@ -239,18 +237,29 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
             player_clan = clan_data.get("data", {}).get(str(account_id))
         
-            print("PLAYER CLAN:", flush=True)
-            print(player_clan, flush=True)
-        
             if player_clan:
         
-                clan = player_clan.get("clan")
+                player_clan_id = player_clan.get("clan_id")
         
-                print("CLAN OBJECT:", flush=True)
-                print(clan, flush=True)
+                if player_clan_id:
         
-                if clan:
-                    clan_name = clan.get("name", "Без клана")
+                    clan_response = requests.get(
+                        "https://api.wotblitz.eu/wotb/clans/info/",
+                        params={
+                            "application_id": WG_APP_ID,
+                            "clan_id": player_clan_id
+                        },
+                        timeout=10
+                    )
+        
+                    clan_info_data = clan_response.json()
+        
+                    if clan_info_data.get("status") == "ok":
+        
+                        clan_info = clan_info_data.get("data", {}).get(str(player_clan_id))
+        
+                        if clan_info:
+                            clan_name = f"[{clan_info.get('tag')}]"
                     
         # ---------- Расчеты ----------
         winrate = round(
@@ -276,23 +285,44 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             xp / battles
         ) if battles else 0
 
+        # ---------- Ранг игрока ----------
+        if winrate >= 60 and avg_damage >= 2000:
+            rank = "Мастер"
+        
+        elif winrate >= 58 and avg_damage >= 1800:
+            rank = "Ас"
+        
+        elif winrate >= 55 and avg_damage >= 1500:
+            rank = "Элитный боец"
+        
+        elif winrate >= 50 and avg_damage >= 1200:
+            rank = "Ветеран"
+        
+        elif battles < 2000 and winrate <= 45:
+            rank = "Новобранец"
+        
+        else:
+            rank = "Боец"
+
         # ---------- Ответ ----------
         await update.message.reply_text(
-
-            f"🎮 {player_name}\n\n"
-
-            f"⚔️ Бои: {battles:,}\n"
-            f"🏆 Победы: {wins:,}\n"
-            f"📊 Винрейт: {winrate}%\n"
-            f"🏰 Клан: {clan_name}\n\n"
-
-            f"💥 Средний урон: {avg_damage:,}\n"
-            f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
-            f"🎯 Точность: {accuracy}%\n"
-            f"⭐ Средний опыт: {avg_xp:,}\n"
-            f"👁 Обнаружено: {spotted:,}\n"
-            f"🛡 Выжил в боях: {survived:,}"
-
+        
+            f"🎮 *{player_name}*\n\n"
+            f"🏰 Клан: {clan_name}\n"
+            f"🎖️ Ранг: {rank}\n\n"
+            
+            f"⚔️ Боёв: {f'{battles:,}'.replace(',', ' ')}\n"
+            f"🏆 Победы: {f'{wins:,}'.replace(',', ' ')} ({winrate}%)\n\n"
+            
+            f"💥 Средний урон: {f'{avg_damage:,}'.replace(',', ' ')}\n"
+            f"💀 Фраги: {f'{frags:,}'.replace(',', ' ')} ({avg_frags}/бой)\n"
+            f"🎯 Точность: {accuracy}%\n\n"
+            
+            f"⭐ Средний опыт: {f'{avg_xp:,}'.replace(',', ' ')}\n"
+            f"👁 Обнаружено: {f'{spotted:,}'.replace(',', ' ')}\n"
+            f"🛡 Выжил в боях: {f'{survived:,}'.replace(',', ' ')}",
+            
+            parse_mode="Markdown"
         )
 
     except requests.exceptions.Timeout:
@@ -723,7 +753,6 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message_thread_id=update.message.message_thread_id,
         text=text
     )
-
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
