@@ -219,7 +219,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         survived = stats.get("survived_battles", 0)
         
         # ---------- Клан игрока ----------
-        
         clan_response = requests.get(
             "https://api.wotblitz.eu/wotb/clans/accountinfo/",
             params={
@@ -231,36 +230,28 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         clan_data = clan_response.json()
         
-        print("CLAN DATA:")
-        print(clan_data)
-
+        print("CLAN DATA:", flush=True)
+        print(clan_data, flush=True)
+        
         clan_name = "Без клана"
         
         if clan_data.get("status") == "ok":
+        
             player_clan = clan_data.get("data", {}).get(str(account_id))
         
+            print("PLAYER CLAN:", flush=True)
+            print(player_clan, flush=True)
+        
             if player_clan:
-                clan_name = player_clan.get("clan", {}).get("name", "Без клана")
         
-                if clan_id:
+                clan = player_clan.get("clan")
         
-                    clan_response = requests.get(
-                        "https://api.wotblitz.eu/wotb/clans/info/",
-                        params={
-                            "application_id": WG_APP_ID,
-                            "clan_id": clan_id
-                        },
-                        timeout=10
-                    )
+                print("CLAN OBJECT:", flush=True)
+                print(clan, flush=True)
         
-                    clan_info_data = clan_response.json()
-        
-                    if clan_info_data.get("status") == "ok":
-        
-                        clan = clan_info_data["data"].get(str(clan_id))
-
                 if clan:
-                    clan_text = f"[{clan['tag']}]"
+                    clan_name = clan.get("name", "Без клана")
+                    
         # ---------- Расчеты ----------
         winrate = round(
             wins / battles * 100,
