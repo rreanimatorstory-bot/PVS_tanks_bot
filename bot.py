@@ -311,12 +311,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     except Exception as e:
-
-        print(e)
-
+        print("STATS ERROR:", e, flush=True)
         await update.message.reply_text(
-            "❌ Произошла ошибка при получении статистики."
-        )
+        f"❌ Ошибка: {e}"
+    )
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
