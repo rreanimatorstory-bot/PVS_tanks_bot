@@ -3,7 +3,7 @@ import sqlite3
 from datetime import datetime
 from threading import Thread
 
-# Печатаем ID процесса для контроля в логах
+# Вывод ID процесса для контроля старта в консоли Render
 print("PROCESS ID:", os.getpid())
 
 import httpx
@@ -12,37 +12,37 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-# Импорт ваших функций из соседнего файла базы данных
+# Импорт ваших функций для работы с базой данных
 from database import init_db, save_clan, get_clan
 
-# Загружаем переменные окружения и инициализируем БД
+# Загрузка переменных среды и первичная настройка БД
 load_dotenv()
 init_db()
 
-# Константы из настроек среды
+# Конфигурационные константы
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 WG_APP_ID = os.getenv("WG_APP_ID")
-DB_NAME = "database.db"  # Убедитесь, что имя совпадает с вашей БД в database.py
+DB_NAME = "database.db"
 
-# Создаем один глобальный клиент для асинхронных HTTP-запросов к API Wargaming
+# Инициализация единого асинхронного HTTP-клиента
 http_client = httpx.AsyncClient(timeout=10.0)
 
-# Инициализируем Flask-сервер для прохождения Health Check на Render
+# Инициализация веб-сервера Flask для прохождения Health Check на Render
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    """Эндпоинт, который Render будет пинговать для проверки работоспособности"""
+    """Простейший эндпоинт, подтверждающий работоспособность сервиса."""
     return "Bot is alive and running!", 200
 
 def run_flask():
-    """Функция для запуска веб-сервера в отдельном потоке"""
+    """Запуск веб-сервера на порту, предоставленном платформой Render."""
     port = int(os.getenv("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
 
 
 def save_player_history(account_id, nickname, battles, damage):
-    """Сохранение истории игрока в локальную БД SQLite"""
+    """Запись текущего среза статистики игрока в историю."""
     conn = sqlite3.connect(DB_NAME)
     cur = conn.cursor()
     cur.execute("""
@@ -62,7 +62,7 @@ def save_player_history(account_id, nickname, battles, damage):
 
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Отображение главного меню команд"""
+    """Вывод списка доступных команд."""
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=update.message.message_thread_id if update.message.message_thread_id else None,
@@ -81,7 +81,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Вывод информации о текущем привязанном к чату клане"""
+    """Проверка текущего клана, закрепленного за данным чатом."""
     clan = get_clan(update.effective_chat.id)
 
     if clan is None:
@@ -107,7 +107,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Получение подробной статистики конкретного игрока"""
+    """Поиск и вывод подробной статистики игрока по его никнейму."""
     if not context.args:
         await update.message.reply_text("Использование:\n/stats ник")
         return
@@ -116,7 +116,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(f"🔎 Ищу игрока {nickname}...")
 
     try:
-        # ---------- 1. Поиск ID игрока по никнейму ----------
+        # ---------- 1. Определение Account ID по нику ----------
         search_response = await http_client.get(
             "https://wotblitz.eu",
             params={"application_id": WG_APP_ID, "search": nickname}
@@ -129,7 +129,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account_id = search_data["data"][0]["account_id"]
 
-        # ---------- 2. Запрос общей боевой статистики ----------
+        # ---------- 2. Запрос статистики аккаунта ----------
         info_response = await http_client.get(
             "https://wotblitz.eu",
             params={"application_id": WG_APP_ID, "account_id": account_id}
@@ -142,7 +142,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account = info_data["data"][str(account_id)]
         
-        # Проверка скрытого (приватного) аккаунта
         if account.get("private") or not account.get("statistics"):
             await update.message.reply_text("🔒 Профиль игрока скрыт настройками приватности.")
             return
@@ -160,7 +159,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         spotted = player_stats.get("spotted", 0)
         survived = player_stats.get("survived_battles", 0)
         
-        # ---------- 3. Запрос клана игрока (исправленный эндпоинт) ----------
+        # ---------- 3. Определение клана игрока через accountinfo ----------
         clan_text = "Без клана"
         clan_response = await http_client.get(
             "https://wotblitz.eu",
@@ -173,20 +172,19 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if player_clan_info and player_clan_info.get("clan"):
                 clan_text = f"[{player_clan_info['clan']['tag']}]"
                     
-        # ---------- 4. Математические расчеты эффективности ----------
+        # ---------- 4. Расчет средних показателей ----------
         winrate = round(wins / battles * 100, 2) if battles else 0
         avg_damage = round(damage / battles) if battles else 0
         avg_frags = round(frags / battles, 2) if battles else 0
         accuracy = round(hits / shots * 100, 2) if shots else 0
         avg_xp = round(xp / battles) if battles else 0
 
-        # Сохранение среза данных в историю для графиков/отчетов
         try:
             save_player_history(account_id, player_name, battles, damage)
         except Exception as db_err:
-            print(f"Ошибка сохранения истории в БД: {db_err}")
+            print(f"Ошибка сохранения в локальную БД: {db_err}")
 
-        # ---------- 5. Отправка итогового сообщения ----------
+        # ---------- 5. Отправка ответа в чат ----------
         await update.message.reply_text(
             f"🎮 {player_name}\n\n"
             f"⚔️ Бои: {battles:,}\n"
@@ -209,7 +207,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Построение таблицы лидеров клана по среднему урону"""
+    """Пакетный сбор данных участников привязанного клана и вывод ТОП-15 по урону."""
     clan = get_clan(update.effective_chat.id)
 
     if clan is None:
@@ -225,7 +223,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     try:
-        # ---------- 1. Получаем список ID всех участников клана ----------
+        # ---------- 1. Получение ID всех участников клана ----------
         clan_res = await http_client.get(
             "https://wotblitz.eu",
             params={"application_id": WG_APP_ID, "clan_id": clan_id}
@@ -238,11 +236,10 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         members_ids = clan_data["data"][str(clan_id)]["members_ids"]
         if not members_ids:
-            await update.message.reply_text("🏰 В клане отсутствуют участники.")
+            await update.message.reply_text("🏰 В клане нет игроков.")
             return
 
-        # ---------- 2. Оптимизированный пакетный запрос статистики ----------
-        # Передаем массив ID строкой через запятую (например: "135,246,357")
+        # ---------- 2. Оптимизированный запрос всей группы игроков за один раз ----------
         account_ids_str = ",".join(map(str, members_ids))
         
         stats_res = await http_client.get(
@@ -252,15 +249,21 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
         stats_data = stats_res.json()
 
         if stats_data.get("status") != "ok":
-            await update.message.reply_text("❌ Не удалось пакетно получить статистику игроков.")
+            await update.message.reply_text("❌ Не удалось получить групповую статистику.")
             return
 
         players_stats = stats_data["data"]
         leaderboard = []
 
-        # ---------- 3. Сбор и обработка профилей участников ----------
+        # ---------- 3. Вычисление среднего урона ----------
         for p_id_str, p_data in players_stats.items():
             if not p_data or p_data.get("private") or not p_data.get("statistics"):
-                continue  # Игнорируем закрытые аккаунты
+                continue
             
-
+            nickname = p_data["nickname"]
+            all_b = p_data["statistics"]["all"]
+            battles = all_b.get("battles", 0)
+            damage = all_b.get("damage_dealt", 0)
+            
+            avg_dmg = round(damage / battles) if battles > 0 else 0
+            
