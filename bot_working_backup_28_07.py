@@ -285,23 +285,44 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             xp / battles
         ) if battles else 0
 
+        # ---------- Ранг игрока ----------
+        if winrate >= 60 and avg_damage >= 2000:
+            rank = "Мастер"
+        
+        elif winrate >= 58 and avg_damage >= 1800:
+            rank = "Ас"
+        
+        elif winrate >= 55 and avg_damage >= 1500:
+            rank = "Элитный боец"
+        
+        elif winrate >= 50 and avg_damage >= 1200:
+            rank = "Ветеран"
+        
+        elif battles < 2000 and winrate <= 45:
+            rank = "Новобранец"
+        
+        else:
+            rank = "Боец"
+
         # ---------- Ответ ----------
         await update.message.reply_text(
-
-            f"🎮 {player_name}\n\n"
-
-            f"⚔️ Бои: {battles:,}\n"
-            f"🏆 Победы: {wins:,}\n"
-            f"📊 Винрейт: {winrate}%\n"
-            f"🏰 Клан: {clan_name}\n\n"
-
-            f"💥 Средний урон: {avg_damage:,}\n"
-            f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
-            f"🎯 Точность: {accuracy}%\n"
-            f"⭐ Средний опыт: {avg_xp:,}\n"
-            f"👁 Обнаружено: {spotted:,}\n"
-            f"🛡 Выжил в боях: {survived:,}"
-
+        
+            f"🎮 *{player_name}*\n\n"
+            f"🏰 Клан: {clan_name}\n"
+            f"🎖️ Ранг: {rank}\n\n"
+            
+            f"⚔️ Боёв: {f'{battles:,}'.replace(',', ' ')}\n"
+            f"🏆 Победы: {f'{wins:,}'.replace(',', ' ')} ({winrate}%)\n\n"
+            
+            f"💥 Средний урон: {f'{avg_damage:,}'.replace(',', ' ')}\n"
+            f"💀 Фраги: {f'{frags:,}'.replace(',', ' ')} ({avg_frags}/бой)\n"
+            f"🎯 Точность: {accuracy}%\n\n"
+            
+            f"⭐ Средний опыт: {f'{avg_xp:,}'.replace(',', ' ')}\n"
+            f"👁 Обнаружено: {f'{spotted:,}'.replace(',', ' ')}\n"
+            f"🛡 Выжил в боях: {f'{survived:,}'.replace(',', ' ')}",
+            
+            parse_mode="Markdown"
         )
 
     except requests.exceptions.Timeout:
