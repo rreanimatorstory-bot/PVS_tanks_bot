@@ -46,23 +46,6 @@ def save_player_history(account_id, nickname, battles, damage):
 
 
 
-async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
-        text=(
-             "🤖 BlitzClanBot\n\n"
-             "📋 Доступные команды:\n\n"
-             "📊 /stats <ник> — статистика игрока\n"
-             "🏆 /top — ТОП клана по среднему урону\n"
-             "📈 /clanreport — отчёт клана\n"
-             "👥 /members — список игроков клана\n"
-             "⚙️ /setclan [тег] — привязать клан\n"
-             "     Пример: /setclan [1PVS]\n"
-             "📋 /menu — это меню"
-        )
-    )  
-
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     
