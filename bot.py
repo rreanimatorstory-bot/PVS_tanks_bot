@@ -122,8 +122,18 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("❌ Игрок не найден")
             return
 
-        account_id = search_data["data"][0]["account_id"]
+        account_id = None
 
+        for acc in search_data["data"]:
+            if acc["nickname"].lower() == nickname.lower():
+                account_id = acc["account_id"]
+                break
+        
+        if account_id is None:
+            account_id = search_data["data"][0]["account_id"]
+
+            print("SEARCH DATA:", search_data, flush=True)
+            print("SELECTED ID:", account_id, flush=True)
         # ---------- Статистика игрока ----------
         info_response = requests.get(
             "https://api.wotblitz.eu/wotb/account/info/",
@@ -136,8 +146,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         info_data = info_response.json()
 
-        print("INFO DATA:")
-        print(info_data)
+        print("INFO DATA:", flush=True)
+        print(info_data, Flush=True)
 
         if info_data.get("status") != "ok":
             await update.message.reply_text(
@@ -147,11 +157,11 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account = info_data["data"].get(str(account_id))
 
-        print("ACCOUNT DATA:")
-        print(account)
+        print("ACCOUNT DATA:",flush=True)
+        print(account, flush=True)
         
-        print("ACCOUNT CLAN:")
-        print(account.get("clan_id"))
+        print("ACCOUNT CLAN:", flush=True)
+        print(account.get("clan_id"), flush=True)
     
         if account is None:
              await update.message.reply_text(
