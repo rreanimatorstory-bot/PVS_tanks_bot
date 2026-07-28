@@ -167,6 +167,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         stats = account["statistics"]["all"]
 
+        print("STATISTICS BLOCK:")
+        print(account["statistics"])
+
         battles = stats.get("battles", 0)
         wins = stats.get("wins", 0)
         damage = stats.get("damage_dealt", 0)
