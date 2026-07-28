@@ -190,7 +190,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         survived = stats.get("survived_battles", 0)
         
         # ---------- Клан игрока ----------
-        clan_text = "Без клана"
         
         clan_response = requests.get(
             "https://api.wotblitz.eu/wotb/clans/accountinfo/",
@@ -203,16 +202,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         clan_data = clan_response.json()
         
-        print("CLAN ACCOUNT INFO:")
+        print("CLAN DATA:")
         print(clan_data)
+
+        clan_name = "Без клана"
         
         if clan_data.get("status") == "ok":
-        
             clan_info = clan_data.get("data", {}).get(str(account_id))
         
             if clan_info:
-        
-                clan_id = clan_info.get("clan_id")
+                clan_name = clan_info.get("clan", {}).get("name", "Без клана")
         
                 if clan_id:
         
@@ -265,7 +264,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"⚔️ Бои: {battles:,}\n"
             f"🏆 Победы: {wins:,}\n"
             f"📊 Винрейт: {winrate}%\n"
-            f"🏰 Клан: {clan_text}\n\n"
+            f"🏰 Клан: {clan_name}\n\n"
 
             f"💥 Средний урон: {avg_damage:,}\n"
             f"💀 Уничтожено: {frags:,} ({avg_frags}/бой)\n"
