@@ -187,32 +187,46 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         survived = stats.get("survived_battles", 0)
         
                
-        # ---------- Реальный клан игрока ----------
+        # ---------- Клан игрока ----------
         clan_text = "Без клана"
-
-        clan = get_clan(update.effective_chat.id)
         
-        if clan:
+        clan_response = requests.get(
+            "https://api.wotblitz.eu/wotb/clans/member/",
+            params={
+                "application_id": WG_APP_ID,
+                "account_id": account_id
+            },
+            timeout=10
+        )
         
-            clan_id, clan_tag, clan_name = clan
+        clan_data = clan_response.json()
         
-            clan_response = requests.get(
-                "https://api.wotblitz.eu/wotb/clans/info/",
-                params={
-                    "application_id": WG_APP_ID,
-                    "clan_id": clan_id
-                },
-                timeout=10
-            )
+        if clan_data.get("status") == "ok":
+            
+            data = clan_data.get("data")
         
-            clan_data = clan_response.json()
+            if data:
+                clan_id = data.get("clan_id")
         
-            if clan_data.get("status") == "ok":
+                if clan_id:
+                    
+                    clan_info_response = requests.get(
+                        "https://api.wotblitz.eu/wotb/clans/info/",
+                        params={
+                            "application_id": WG_APP_ID,
+                            "clan_id": clan_id
+                        },
+                        timeout=10
+                    )
         
-                members_ids = clan_data["data"][str(clan_id)]["members_ids"]
+                    clan_info_data = clan_info_response.json()
         
-                if str(account_id) in [str(x) for x in members_ids]:
-                    clan_text = f"[{clan_tag}]"
+                    if clan_info_data.get("status") == "ok":
+        
+                        clan_info = clan_info_data["data"].get(str(clan_id))
+        
+                        if clan_info:
+                            clan_text = f"[{clan_info['tag']}]"
                     
         # ---------- Расчеты ----------
         winrate = round(
