@@ -898,7 +898,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"ID: {clan_id}"
     )
 
-async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
         "🤖 Добро пожаловать в BlitzClanBot!\n\n"
