@@ -148,12 +148,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         account = info_data["data"].get(str(account_id))
 
         print("ACCOUNT DATA:")
-        print(account.keys())
         print(account)
-
-        print("========== ACCOUNT ==========")
-        print(account)
-        print("=============================")
+        
+        print("ACCOUNT CLAN:")
+        print(account.get("clan_id"))
     
         if account is None:
              await update.message.reply_text(
