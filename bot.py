@@ -172,8 +172,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # ---------- Проверка клана игрока ----------
         clan_id = account.get("clan_id")
 
-        rint("CLAN ID:", flush=True)
-        rint(clan_id, flush=True)
+        print("CLAN ID:", flush=True)
+        print(clan_id, flush=True)
 
         clan_text = "Без клана"
         
