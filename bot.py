@@ -318,6 +318,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("TOP START", flush=True)
+
     clan = get_clan(update.effective_chat.id)
 
     if clan is None:
@@ -425,6 +427,8 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    print("REPORT START", flush=True)
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
@@ -619,6 +623,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    
+    print("MEMBERS START", flush=True)
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
