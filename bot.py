@@ -173,32 +173,50 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         spotted = stats.get("spotted", 0)
         survived = stats.get("survived_battles", 0)
         
-               
-        # ---------- Реальный клан игрока ----------
-        clan_text = "Без клана"
-        
-        player_clan_id = account.get("clan_id")
-        
-        if player_clan_id:
-        
+        # ---------- Клан игрока ----------
+clan_text = "Без клана"
+
+clan_response = requests.get(
+    "https://api.wotblitz.eu/wotb/clans/accountinfo/",
+    params={
+        "application_id": WG_APP_ID,
+        "account_id": account_id
+    },
+    timeout=10
+)
+
+clan_data = clan_response.json()
+
+print("CLAN ACCOUNT INFO:")
+print(clan_data)
+
+if clan_data.get("status") == "ok":
+
+    clan_info = clan_data.get("data", {}).get(str(account_id))
+
+    if clan_info:
+
+        clan_id = clan_info.get("clan_id")
+
+        if clan_id:
+
             clan_response = requests.get(
                 "https://api.wotblitz.eu/wotb/clans/info/",
                 params={
                     "application_id": WG_APP_ID,
-                    "clan_id": player_clan_id
+                    "clan_id": clan_id
                 },
                 timeout=10
             )
-        
-            clan_data = clan_response.json()
-        
-            if clan_data.get("status") == "ok":
-        
-                clan_info = clan_data["data"].get(str(player_clan_id))
-        
-                if clan_info:
-                    clan_text = f"[{clan_info['tag']}]"
-                    
+
+            clan_info_data = clan_response.json()
+
+            if clan_info_data.get("status") == "ok":
+
+                clan = clan_info_data["data"].get(str(clan_id))
+
+                if clan:
+                    clan_text = f"[{clan['tag']}]"
         # ---------- Расчеты ----------
         winrate = round(
             wins / battles * 100,
