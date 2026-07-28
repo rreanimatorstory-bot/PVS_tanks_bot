@@ -429,12 +429,24 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-    text = "🏆 ТОП КЛАНА\n\n"
+    text = (
+        "🏆 ТОП КЛАНА\n"
+        "💥 По среднему урону\n\n"
+    )
 
-    for i, player in enumerate(results[:10], start=1):
+    for i, player in enumerate(results[:5], start=1):
 
+        if i == 1:
+            icon = "🥇"
+        elif i == 2:
+            icon = "🥈"
+        elif i == 3:
+            icon = "🥉"
+        else:
+            icon = "🎮"
+    
         text += (
-            f"{i}. 🎮 {player['name']}\n"
+            f"{i}. {icon} {player['name']}\n"
             f"💥 Средний урон: {player['damage']}\n\n"
         )
 
