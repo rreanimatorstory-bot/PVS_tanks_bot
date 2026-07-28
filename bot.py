@@ -196,7 +196,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
                 members_ids = clan_data["data"][str(clan_id)]["members_ids"]
             
-                if account_id in members_ids:
+                if str(account_id) in members_ids:
                     clan_text = f"[{clan_tag}]"
                     
 
