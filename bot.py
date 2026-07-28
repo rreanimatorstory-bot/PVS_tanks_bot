@@ -168,7 +168,36 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         print("ACCOUNT CLAN:", flush=True)
         print(account.get("clan_id"), flush=True)
-    
+
+        # ---------- Проверка клана игрока ----------
+        clan_id = account.get("clan_id")
+
+        rint("CLAN ID:", flush=True)
+        rint(clan_id, flush=True)
+
+        clan_text = "Без клана"
+        
+        if clan_id:
+            clan_response = requests.get(
+                "https://api.wotblitz.eu/wotb/clans/info/",
+                params={
+                    "application_id": WG_APP_ID,
+                    "clan_id": clan_id
+                },
+                timeout=10
+            )
+        
+            clan_data = clan_response.json()
+        
+            print("CLAN DATA:", flush=True)
+            print(clan_data, flush=True)
+        
+            if clan_data.get("status") == "ok":
+                clan_info = clan_data["data"].get(str(clan_id))
+        
+                if clan_info:
+                    clan_text = clan_info.get("tag", "Без клана")
+            
         if account is None:
              await update.message.reply_text(
                 "❌ В ответе API нет данных игрока"
