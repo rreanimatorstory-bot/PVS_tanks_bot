@@ -132,8 +132,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if account_id is None:
             account_id = search_data["data"][0]["account_id"]
 
-            print("SEARCH DATA:", search_data, flush=True)
-            print("SELECTED ID:", account_id, flush=True)
+        print("SELECTED ACCOUNT:", account_id, flush=True)
+
+            
         # ---------- Статистика игрока ----------
         info_response = requests.get(
             "https://api.wotblitz.eu/wotb/account/info/",
