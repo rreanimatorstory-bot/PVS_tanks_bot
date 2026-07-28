@@ -230,8 +230,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         clan_data = clan_response.json()
         
-        print("CLAN DATA:", flush=True)
-        print(clan_data, flush=True)
+        await update.message.reply_text(
+            f"CLAN API:\n{clan_data}"
+        ) 
         
         clan_name = "Без клана"
         
