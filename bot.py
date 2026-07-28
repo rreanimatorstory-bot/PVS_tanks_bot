@@ -318,8 +318,6 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("TOP START", flush=True)
-
     clan = get_clan(update.effective_chat.id)
 
     if clan is None:
