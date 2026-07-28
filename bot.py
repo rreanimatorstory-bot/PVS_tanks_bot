@@ -426,8 +426,6 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("REPORT START", flush=True)
-
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=update.message.message_thread_id,
