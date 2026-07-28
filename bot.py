@@ -118,6 +118,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         search_data = search_response.json()
 
+        print("SEARCH DATA:")
+        print(search_data)
+
         if search_data.get("status") != "ok" or not search_data.get("data"):
             await update.message.reply_text("❌ Игрок не найден")
             return
