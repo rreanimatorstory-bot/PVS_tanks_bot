@@ -693,7 +693,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     data = response.json()
 
-    print("MEMBERS: clan API response received")
+    print("MEMBERS: clan API response received", flush=True)
+    print(data, flush=True)
 
 
     if data.get("status") != "ok":
