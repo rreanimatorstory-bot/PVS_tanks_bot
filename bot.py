@@ -175,10 +175,11 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # ---------- Клан игрока ----------
         clan_text = "Без клана"
-        
-        player_clan_id = account.get("clan_id")
-        
-        if player_clan_id:
+
+        player_clan = account.get("clan")
+
+        if player_clan:
+            clan_text = f"[{player_clan.get('tag')}]"
             
             clan_response = requests.get(
                 "https://api.wotblitz.eu/wotb/clans/info/",
