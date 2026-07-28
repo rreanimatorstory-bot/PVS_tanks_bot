@@ -149,6 +149,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account = info_data["data"].get(str(account_id))
 
+        print("ACCOUNT DATA:")
+        print(account.keys())
+        print(account)
+
         print("========== ACCOUNT ==========")
         print(account)
         print("=============================")
