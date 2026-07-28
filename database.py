@@ -1,9 +1,11 @@
 import sqlite3
 import os
+import psycopg2
 
 print("DATABASE.PY LOADED")
 
 DB_NAME = os.path.join(os.path.dirname(__file__), "clans.db")
+DATABASE_URL = os.getenv("DATABASE_URL")
 
 
 def init_db():
