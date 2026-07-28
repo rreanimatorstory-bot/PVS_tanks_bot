@@ -149,19 +149,24 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account = info_data["data"].get(str(account_id))
 
-        print("ACCOUNT DATA:")
-        print(account.keys())
+        print("PLAYER ACCOUNT:")
         print(account)
 
-        print("========== ACCOUNT ==========")
-        print(account)
-        print("=============================")
-    
         if account is None:
              await update.message.reply_text(
                 "❌ В ответе API нет данных игрока"
              )
              return
+
+        # ВСТАВИТЬ СЮДА
+        print("ACCOUNT KEYS:")
+        print(account.keys())
+        
+        print("CLAN FIELD:")
+        print(account.get("clan"))
+        
+        print("CLAN ID:")
+        print(account.get("clan_id"))
 
         player_name = account["nickname"]
 
