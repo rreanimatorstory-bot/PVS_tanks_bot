@@ -105,7 +105,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     try:
-
+  
         # ---------- Поиск игрока ----------
         search_response = requests.get(
             "https://api.wotblitz.eu/wotb/account/list/",
