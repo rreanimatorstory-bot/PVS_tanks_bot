@@ -200,6 +200,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         
         clan_data = clan_response.json()
+
+        await update.message.reply_text(
+            f"CLAN API:\n{clan_data}"
+        )
         
         if clan_data.get("status") == "ok":
             
