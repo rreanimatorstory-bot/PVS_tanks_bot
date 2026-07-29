@@ -9,9 +9,16 @@ from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
 from telegram import Update
-from telegram.ext import Application, CommandHandler, ContextTypes
+from telegram.ext import (
+    Application,
+    CommandHandler,
+    CallbackQueryHandler,
+    ContextTypes
+)
 
 from database import init_db, save_clan, get_clan, save_player_history, get_player_history
+
+from keyboard import main_menu
 
 load_dotenv()
 
@@ -25,16 +32,9 @@ WG_APP_ID = os.getenv("WG_APP_ID")
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
-        "🤖 Добро пожаловать в BlitzClanBot!\n\n"
-        "Я помогу следить за статистикой вашего клана.\n\n"
-        "📌 Сначала привяжите клан:\n"
-        "/setclan [TAG]\n\n"
-        "Команды:\n\n"
-        "📊 /stats ник — статистика любого игрока\n"
-        "🏆 /top — ТОП вашего клана\n"
-        "📈 /clanreport — отчёт клана\n"
-        "👥 /members — список игроков клана\n"
-        "🏰 /myclan — текущий клан"
+        "🤖 BlitzClanBot\n\n"
+        "Выберите действие:",
+        reply_markup=main_menu()
     )
 
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -947,6 +947,49 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=text
     )
 
+async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    query = update.callback_query
+
+    await query.answer()
+
+    if query.data == "stats":
+        await query.message.reply_text(
+            "📊 Введите ник игрока:\n\n"
+            "Пример:\n"
+            "Panzerluger"
+        )
+
+    elif query.data == "history":
+        await query.message.reply_text(
+            "📜 Введите ник игрока для истории:"
+        )
+
+    elif query.data == "members":
+        await query.message.reply_text(
+            "👥 Используйте /members"
+        )
+
+    elif query.data == "top":
+        await query.message.reply_text(
+            "🏆 Используйте /top"
+        )
+
+    elif query.data == "report":
+        await query.message.reply_text(
+            "📈 Используйте /clanreport"
+        )
+
+    elif query.data == "myclan":
+        await query.message.reply_text(
+            "🏰 Используйте /myclan"
+        )
+
+    elif query.data == "settings":
+        await query.message.reply_text(
+            "⚙️ Настройки пока в разработке"
+        )    
+
 # Flask для Render
 
 web = Flask(__name__)
@@ -1048,6 +1091,9 @@ def run_bot():
     app.add_handler(CommandHandler("members", members))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
+    app.add_handler(
+    CallbackQueryHandler(button_handler)
+)
 
     print("BOT STARTED")
     print("STARTING POLLING")
