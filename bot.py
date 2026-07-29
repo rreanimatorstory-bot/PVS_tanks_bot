@@ -1063,7 +1063,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🏆 /top — ТОП вашего клана\n"
         "📈 /clanreport — отчёт клана\n"
         "👥 /members — список игроков клана\n"
-        "🏰 /myclan — текущий клан"
+        "🏰 /myclan — текущий клан",
+        reply_markup=main_menu()
     )
     
 def run_bot():
