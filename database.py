@@ -117,3 +117,24 @@ def save_player_history(account_id, nickname, battles, damage):
 
     cur.close()
     conn.close()
+
+def get_player_history(account_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT nickname, battles, damage, date
+    FROM history
+    WHERE account_id=%s
+    ORDER BY id DESC
+    LIMIT 10
+    """,
+    (account_id,))
+
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
