@@ -707,7 +707,13 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     members_ids = data["data"][str(clan_id)]["members_ids"]
+    
+    clan_info = data["data"][str(clan_id)]
+
+    leader_id = clan_info.get("leader_id")
+    
     print("MEMBERS: players count", len(members_ids))
+    print("MEMBERS: leader id", leader_id, flush=True)
 
 
     # Один запрос вместо 50 запросов
