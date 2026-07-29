@@ -88,7 +88,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.message.message_thread_id,
+            message_thread_id=update.callback_query.message.message_thread_id,
             text="🏰 Для этого чата клан пока не настроен."
         )
         return
@@ -97,7 +97,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
+        message_thread_id=update.callback_query.message.message_thread_id,
         text=(
             f"🏰 Текущий клан\n\n"
             f"Название: {clan_name}\n"
