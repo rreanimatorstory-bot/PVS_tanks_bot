@@ -19,7 +19,15 @@ from telegram.ext import (
     filters
 )
 
-from database import init_db, save_clan, get_clan, save_player_history, get_player_history
+from database import (
+    init_db,
+    save_clan,
+    get_clan,
+    save_player_history,
+    get_player_history,
+    get_last_update,
+    set_last_update
+)
 
 from keyboard import main_menu
 
@@ -900,6 +908,10 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         saved += 1
+
+    set_last_update(
+        datetime.now().strftime("%Y-%m-%d")
+    )    
 
 
     await context.bot.send_message(

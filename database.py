@@ -38,6 +38,15 @@ def init_db():
     )
     """)
 
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS bot_settings (
+        key TEXT PRIMARY KEY,
+        value TEXT
+    )
+    """)
+
+    
+
     conn.commit()
 
     cur.close()
@@ -150,3 +159,42 @@ def get_player_history(account_id):
     print("GET HISTORY RESULT:", result, flush=True)
 
     return result
+
+def get_last_update():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT value
+    FROM bot_settings
+    WHERE key='last_update'
+    """)
+
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if row:
+        return row[0]
+
+    return None
+
+
+def set_last_update(date):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    INSERT INTO bot_settings (key, value)
+    VALUES ('last_update', %s)
+    ON CONFLICT (key)
+    DO UPDATE SET value = EXCLUDED.value
+    """, (date,))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
