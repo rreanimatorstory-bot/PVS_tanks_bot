@@ -400,7 +400,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 {
                     "name": nickname,
                     "damage": avg_damage,
-                    ""winrate": round(player.get("wins", 0) / battles * 100, 2) if battles else 0,
+                    "winrate": round(player.get("wins", 0) / battles * 100, 2) if battles else 0,
                     "battles": battles
                 }
             )
