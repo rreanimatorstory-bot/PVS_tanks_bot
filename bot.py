@@ -458,7 +458,6 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.callback_query.message.message_thread_id,
         text="⏳ Собираю отчёт клана...\nЭто может занять немного времени."
     )
 
@@ -469,7 +468,6 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.callback_query.message.message_thread_id,
             text="❌ Сначала привяжите клан:\n/setclan [TAG]"
         )
         return
@@ -492,7 +490,6 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.callback_query.message.message_thread_id,
             text="❌ Не удалось получить данные клана"
         )
         return
@@ -644,7 +641,6 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.callback_query.message.message_thread_id,
         text=text
     )
 
