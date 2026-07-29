@@ -1152,8 +1152,12 @@ def run_bot():
     app.add_handler(CommandHandler("myclan", myclan))
     app.add_handler(
     ConversationHandler(
-        entry_points=[
-            CallbackQueryHandler(button_handler, pattern="^stats$")
+        entry_points=[ 
+            CallbackQueryHandler(
+                button_handler,
+                pattern="^(stats|setclan)$"
+
+            )    
         ],
         per_message=False,
 
