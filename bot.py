@@ -799,8 +799,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text += (
                 f"{i}. {crown}{player['nickname']}\n"
                 f"{player['rank']}\n"
-                f"⚔️ {battles_text} боёв | 🏆 {player['winrate']}%\n"
-                f"💥 {damage_text} С/У\n\n"
+                f"⚔️ {player['battles']} боёв | 🏆 {player['winrate']}%\n"
+                f"💥 {player['avg_damage']} С/У\n\n"
             )
 
 
