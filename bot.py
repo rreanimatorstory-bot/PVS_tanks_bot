@@ -1029,13 +1029,11 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await top(update, context)
 
     elif query.data == "report":
-        await query.message.reply_text(
-            "📈 Используйте /clanreport"
-        )
+        await report(update, context)
 
     elif query.data == "myclan":
-
         await myclan(update, context)
+        
         
 
     elif query.data == "setclan":
