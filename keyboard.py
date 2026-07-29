@@ -5,8 +5,11 @@ def main_menu():
 
     keyboard = [
         [
-            InlineKeyboardButton("📊 Статистика", callback_data="stats"),
-            InlineKeyboardButton("📜 История", callback_data="history")
+            InlineKeyboardButton("🏰 Привязать клан", callback_data="setclan"),
+        ],
+        [
+            InlineKeyboardButton("📊 Статистика игрока", callback_data="stats"),
+            InlineKeyboardButton("📜 История игрока", callback_data="history")
         ],
         [
             InlineKeyboardButton("👥 Состав клана", callback_data="members"),
