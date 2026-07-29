@@ -975,6 +975,19 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text=text
     )
 
+async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    if context.user_data.get("waiting_stats"):
+
+        nickname = update.message.text.strip()
+
+        context.user_data["waiting_stats"] = False
+
+        context.args = [nickname]
+
+        await stats(update, context)
+
+
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     query = update.callback_query
@@ -984,10 +997,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "stats":
 
         await query.message.reply_text(
-            "📊 Введите ник игрока:\n\n"
-            "Пример:\n"
-            "Panzerluger"
+            "📊 Введите ник игрока:"
         )
+
+        return WAIT_STATS_NICK
 
         return WAIT_STATS_NICK
 
