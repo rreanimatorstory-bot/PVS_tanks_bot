@@ -760,7 +760,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
             names.append(nickname)
 
-    names.sort()
+    names.sort(key=lambda x: "👑" not in x)
 
 
     text = (
