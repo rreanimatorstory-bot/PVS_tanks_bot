@@ -109,18 +109,53 @@ def save_player_history(account_id, nickname, battles, damage):
     conn = get_connection()
     cur = conn.cursor()
 
+    today = datetime.now().strftime("%Y-%m-%d")
+
     cur.execute("""
-    INSERT INTO history
-    (account_id, nickname, battles, damage, date)
-    VALUES (%s, %s, %s, %s, %s)
+    SELECT id
+    FROM history
+    WHERE account_id=%s
+    AND date=%s
     """,
     (
         account_id,
-        nickname,
-        battles,
-        damage,
-        datetime.now().strftime("%Y-%m-%d")
+        today
     ))
+
+    exists = cur.fetchone()
+
+
+    if exists:
+
+        cur.execute("""
+        UPDATE history
+        SET nickname=%s,
+            battles=%s,
+            damage=%s
+        WHERE id=%s
+        """,
+        (
+            nickname,
+            battles,
+            damage,
+            exists[0]
+        ))
+
+    else:
+
+        cur.execute("""
+        INSERT INTO history
+        (account_id, nickname, battles, damage, date)
+        VALUES (%s, %s, %s, %s, %s)
+        """,
+        (
+            account_id,
+            nickname,
+            battles,
+            damage,
+            today
+        ))
+
 
     print(
         "SAVE HISTORY ID:",
@@ -130,6 +165,7 @@ def save_player_history(account_id, nickname, battles, damage):
         damage,
         flush=True
     )
+
 
     conn.commit()
 
