@@ -622,7 +622,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         low_text = "\nНет игроков"
 
     text = (
-        "📊 Отчёт клана P=V=S\n\n"
+        "📊 Отчёт клана {clan_tag}\n\n"
         f"👥 Участников: {len(members_ids)}\n\n"
         f"⚔️ Всего боёв: {total_battles:,}\n"
         f"🏆 Побед: {total_wins:,}\n"
