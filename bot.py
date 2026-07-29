@@ -755,11 +755,23 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             is_leader = player["account_id"] == leader_id
         
+            stats = player.get("statistics", {}).get("all", {})
+        
+            battles = stats.get("battles", 0)
+            wins = stats.get("wins", 0)
+            damage = stats.get("damage_dealt", 0)
+        
+            winrate = round(wins / battles * 100, 2) if battles else 0
+        
+            avg_damage = round(damage / battles) if battles else 0
+        
             members.append({
                 "nickname": player["nickname"],
-                "leader": is_leader
+                "leader": is_leader,
+                "battles": battles,
+                "winrate": winrate,
+                "avg_damage": avg_damage
             })
-        
         
         members.sort(key=lambda x: not x["leader"])
 
