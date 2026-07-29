@@ -1037,9 +1037,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     elif query.data == "myclan":
-        await query.message.reply_text(
-            "🏰 Используйте /myclan"
-        )
+
+        await myclan(update, context)
+        
 
     elif query.data == "setclan":
 
