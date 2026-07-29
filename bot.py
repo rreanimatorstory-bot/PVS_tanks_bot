@@ -344,7 +344,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id,
             text="❌ Сначала привяжите клан:\n/setclan [TAG]"
         )
-    return
+        return
 
     clan_id, clan_tag, clan_name = clan
 
