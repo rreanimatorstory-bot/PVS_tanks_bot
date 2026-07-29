@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-from database import init_db, save_clan, get_clan, save_player_history
+from database import init_db, save_clan, get_clan, save_player_history, get_player_history
 
 load_dotenv()
 
@@ -883,7 +883,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     nickname = context.args[0]
 
-    # Поиск игрока
+    # Поиск игрока через WG API
     url = "https://api.wotblitz.eu/wotb/account/list/"
 
     params = {
@@ -891,52 +891,52 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "search": nickname
     }
 
-    response = requests.get(url, params=params)
+    response = requests.get(
+        url,
+        params=params,
+        timeout=10
+    )
+
     data = response.json()
 
     if data.get("status") != "ok" or not data.get("data"):
-        await update.message.reply_text("❌ Игрок не найден")
+        await update.message.reply_text(
+            "❌ Игрок не найден"
+        )
         return
 
-    player = data["data"][0]
-    account_id = player["account_id"]
 
-    # Получение статистики
-    url = "https://api.wotblitz.eu/wotb/account/info/"
+    account_id = data["data"][0]["account_id"]
 
-    params = {
-        "application_id": WG_APP_ID,
-        "account_id": account_id
-    }
 
-    response = requests.get(url, params=params)
-    data = response.json()
+    # Берём историю из PostgreSQL
+    history_data = get_player_history(account_id)
 
-    if data.get("status") != "ok":
-        await update.message.reply_text("❌ Ошибка получения статистики")
+
+    if not history_data:
+        await update.message.reply_text(
+            "📭 Истории пока нет.\n"
+            "Используйте /update для сохранения статистики."
+        )
         return
 
-    player = list(data["data"].values())[0]
-
-    stats = player["statistics"]["all"]
-
-    nickname = player["nickname"]
-    battles = stats["battles"]
-    wins = stats["wins"]
-    damage = stats["damage_dealt"]
-    frags = stats["frags"]
-
-    winrate = round(wins / battles * 100, 1) if battles else 0
 
     text = (
         f"📜 История игрока\n\n"
         f"👤 {nickname}\n\n"
-        f"⚔️ Бои: {battles:,}\n"
-        f"🏆 Победы: {wins:,}\n"
-        f"📊 Винрейт: {winrate}%\n"
-        f"💥 Урон: {damage:,}\n"
-        f"☠️ Фраги: {frags:,}"
     )
+
+
+    for row in reversed(history_data):
+
+        name, battles, damage, date = row
+
+        text += (
+            f"📅 {date}\n"
+            f"⚔️ Бои: {battles:,}\n"
+            f"💥 Урон: {damage:,}\n\n"
+        )
+
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
