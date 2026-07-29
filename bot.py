@@ -981,7 +981,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
         text=text
     )
 
@@ -1019,6 +1018,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(
             "📜 Введите ник игрока для истории:"
         )
+
+        return WAIT_HISTORY_NICK
 
     elif query.data == "members":
         await members(update, context)
