@@ -780,7 +780,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "leader": is_leader,
                 "battles": battles,
                 "winrate": winrate,
-                "avg_damage": avg_damage
+                "avg_damage": avg_damage,
+                "rank": get_rank(battles, winrate)
             })
         
         members.sort(key=lambda x: not x["leader"])
@@ -797,8 +798,9 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
             text += (
                 f"{i}. {crown}{player['nickname']}\n"
-                f"⚔️ {f'{player['battles']:,}'.replace(',', ' ')} боёв | 🏆 {player['winrate']}%\n"
-                f"💥 {f'{player['avg_damage']:,}'.replace(',', ' ')} С/У\n\n"
+                f"{player['rank']}\n"
+                f"⚔️ {battles_text} боёв | 🏆 {player['winrate']}%\n"
+                f"💥 {damage_text} С/У\n\n"
             )
 
 
