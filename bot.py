@@ -27,6 +27,7 @@ load_dotenv()
 
 # Состояния ConversationHandler
 WAIT_STATS_NICK = 1
+WAIT_HISTORY_NICK = 2
 
 init_db()
 
@@ -50,6 +51,16 @@ async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE)
     context.args = [nickname]
 
     await stats(update, context)
+
+    return ConversationHandler.END
+
+async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    nickname = update.message.text.strip()
+
+    context.args = [nickname]
+
+    await history(update, context)
 
     return ConversationHandler.END
     
@@ -1122,7 +1133,14 @@ def run_bot():
                     filters.TEXT & ~filters.COMMAND,
                     receive_stats_nick
                 )
-            ]
+            ],
+
+            WAIT_HISTORY_NICK: [
+                MessageHandler(
+                    filters.TEXT & ~filters.COMMAND,
+                    receive_history_nick
+                )
+           ]
         },
         fallbacks=[]
     )
