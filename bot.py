@@ -249,7 +249,7 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         clan_name = "Без клана"
         
-        if clan_data.get("status") == "ok":
+        if clan_data.get("status") == "ok": 
         
             player_clan = clan_data.get("data", {}).get(str(account_id))
         
