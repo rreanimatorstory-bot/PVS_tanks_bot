@@ -59,6 +59,8 @@ async def receive_clan_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     clan_tag = update.message.text.strip()
 
+    print("RECEIVED CLAN TAG:", clan_tag, flush=True)
+
     context.args = [clan_tag]
 
     await setclan(update, context)
