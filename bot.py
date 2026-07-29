@@ -1024,9 +1024,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     elif query.data == "members":
-        await query.message.reply_text(
-            "👥 Используйте /members"
-        )
+        await members(update, context)
+        
 
     elif query.data == "top":
         await query.message.reply_text(
