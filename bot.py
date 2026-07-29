@@ -912,6 +912,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Берём историю из PostgreSQL
     history_data = get_player_history(account_id)
 
+    print("HISTORY ACCOUNT ID:", account_id, flush=True)
+    print("HISTORY DATA:", history_data, flush=True)
+
 
     if not history_data:
         await update.message.reply_text(

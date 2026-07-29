@@ -137,4 +137,7 @@ def get_player_history(account_id):
     cur.close()
     conn.close()
 
+    print("GET HISTORY ID:", account_id, flush=True)
+    print("GET HISTORY RESULT:", result, flush=True)
+
     return result
