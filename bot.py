@@ -399,7 +399,9 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
             results.append(
                 {
                     "name": nickname,
-                    "damage": avg_damage
+                    "damage": avg_damage,
+                    ""winrate": round(player.get("wins", 0) / battles * 100, 2) if battles else 0,
+                    "battles": battles
                 }
             )
 
@@ -411,8 +413,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     text = (
-        "🏆 ТОП КЛАНА\n"
-        "💥 По среднему урону\n\n"
+        "🏆 ТОП КЛАНА\n\n"
     )
 
     for i, player in enumerate(results[:5], start=1):
@@ -427,8 +428,8 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
             icon = "🎮"
     
         text += (
-            f"{i}. {icon} {player['name']}\n"
-            f"💥 Средний урон: {player['damage']}\n\n"
+            f"{icon} {player['name']}\n"
+            f"💥{player['damage']} | 🏆{player['winrate']}% | ⚔️{player['battles']:,}\n\n"
         )
 
 
