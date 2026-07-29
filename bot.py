@@ -752,6 +752,9 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         for player in players_data["data"].values():
 
+            if player is None:
+                continue
+
             is_leader = player["account_id"] == leader_id
         
             stats = player.get("statistics", {}).get("all", {})
