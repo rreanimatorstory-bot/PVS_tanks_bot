@@ -349,7 +349,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
+        message_thread_id=update.callback_query.message.message_thread_id,
         text=f"⏳ Считаю статистику клана {clan_tag}..."
     )
 
@@ -452,7 +452,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
+        message_thread_id=update.callback_query.message.message_thread_id,
         text=text
     )
 
@@ -471,7 +471,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.message.message_thread_id,
+            message_thread_id=update.callback_query.message.message_thread_id,
             text="❌ Сначала привяжите клан:\n/setclan [TAG]"
         )
         return
@@ -646,7 +646,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
+        message_thread_id=update.callback_query.message.message_thread_id,
         text=text
     )
 
