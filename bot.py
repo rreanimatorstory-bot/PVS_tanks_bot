@@ -89,22 +89,6 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     )
     
-def get_rank(battles, winrate, avg_damage):
-
-    if battles >= 40000 and winrate >= 60:
-        return "🏆 Мастер"
-
-    if battles >= 30000 and winrate >= 55 and avg_damage >= 1700:
-        return "🎖️ Ас"
-
-    if battles >= 30000 and winrate >= 47:
-        return "🏅 Ветеран"
-
-    if battles >= 2000:
-        return "⚔️ Боец"
-
-    return "🆕 Новобранец"   
-    
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -301,31 +285,12 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             xp / battles
         ) if battles else 0
 
-        # ---------- Ранг игрока ----------
-        if winrate >= 60 and avg_damage >= 2000:
-            rank = "Мастер"
-        
-        elif winrate >= 58 and avg_damage >= 1800:
-            rank = "Ас"
-        
-        elif winrate >= 55 and avg_damage >= 1500:
-            rank = "Элитный боец"
-        
-        elif winrate >= 50 and avg_damage >= 1200:
-            rank = "Ветеран"
-        
-        elif battles < 2000 and winrate <= 45:
-            rank = "Новобранец"
-        
-        else:
-            rank = "Боец"
 
         # ---------- Ответ ----------
         await update.message.reply_text(
         
             f"🎮 *{player_name}*\n\n"
             f"🏰 Клан: {clan_name}\n"
-            f"🎖️ Ранг: {rank}\n\n"
             
             f"⚔️ Боёв: {f'{battles:,}'.replace(',', ' ')}\n"
             f"🏆 Победы: {f'{wins:,}'.replace(',', ' ')} ({winrate}%)\n\n"
@@ -786,8 +751,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "leader": is_leader,
                 "battles": battles,
                 "winrate": winrate,
-                "avg_damage": avg_damage,
-                "rank": get_rank(battles, winrate, avg_damage)
+                "avg_damage": avg_damage
+            
             })
         
         members.sort(key=lambda x: not x["leader"])
