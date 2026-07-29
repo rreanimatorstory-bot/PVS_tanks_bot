@@ -89,6 +89,16 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     )
     
+def get_rank(battles, winrate):
+
+    if battles < 2000 or winrate <= 45:
+        return "🆕 Новобранец"
+
+    if battles >= 15000 and winrate >= 55:
+        return "🏅 Ветеран"
+
+    return "⚔️ Боец"   
+    
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
