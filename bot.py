@@ -28,6 +28,7 @@ load_dotenv()
 # Состояния ConversationHandler
 WAIT_STATS_NICK = 1
 WAIT_HISTORY_NICK = 2
+WAIT_CLAN_TAG = 3
 
 init_db()
 
@@ -51,6 +52,16 @@ async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE)
     context.args = [nickname]
 
     await stats(update, context)
+
+    return ConversationHandler.END
+
+async def receive_clan_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    clan_tag = update.message.text.strip()
+
+    context.args = [clan_tag]
+
+    await setclan(update, context)
 
     return ConversationHandler.END
 
@@ -1029,11 +1040,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     elif query.data == "setclan":
+
         await query.message.reply_text(
-            "🏰 Чтобы привязать свой клан, пришлите его тег.\n\n"
+            "🏰 Введите тег вашего клана:\n\n"
             "Например:\n"
-            "[1PVS]"
-        )    
+            "1PVS"
+        )
+
+        return WAIT_CLAN_TAG    
 
     elif query.data == "settings":
         await query.message.reply_text(
@@ -1154,7 +1168,14 @@ def run_bot():
                     filters.TEXT & ~filters.COMMAND,
                     receive_history_nick
                 )
-           ]
+           ],
+
+           WAIT_CLAN_TAG: [
+                MessageHandler(
+                    filters.TEXT & ~filters.COMMAND,
+                    receive_clan_tag
+                )
+            ]
         },
         fallbacks=[]
     )
