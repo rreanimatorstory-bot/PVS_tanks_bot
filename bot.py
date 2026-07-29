@@ -20,8 +20,9 @@ init_db()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-
 WG_APP_ID = os.getenv("WG_APP_ID")
+
+DB_NAME = "database.db"
     
 def save_player_history(account_id, nickname, battles, damage):
 
