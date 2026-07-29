@@ -89,15 +89,21 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
     )
     
-def get_rank(battles, winrate):
+def get_rank(battles, winrate, avg_damage):
 
-    if battles < 2000 or winrate <= 45:
-        return "🆕 Новобранец"
+    if battles >= 40000 and winrate >= 58 and avg_damage >= 1800:
+        return "🏆 Мастер"
+
+    if battles >= 20000 and winrate >= 57 and avg_damage >= 1600:
+        return "🎖️ Ас"
 
     if battles >= 15000 and winrate >= 55:
         return "🏅 Ветеран"
 
-    return "⚔️ Боец"   
+    if battles >= 2000 and winrate >= 47:
+        return "⚔️ Боец"
+
+    return "🆕 Новобранец"   
     
 
 async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -781,7 +787,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "battles": battles,
                 "winrate": winrate,
                 "avg_damage": avg_damage,
-                "rank": get_rank(battles, winrate)
+                "rank": get_rank(battles, winrate, avg_damage)
             })
         
         members.sort(key=lambda x: not x["leader"])
