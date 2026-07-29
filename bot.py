@@ -1002,7 +1002,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return WAIT_STATS_NICK
 
-        return WAIT_STATS_NICK
 
     elif query.data == "history":
         await query.message.reply_text(
@@ -1140,6 +1139,8 @@ def run_bot():
         entry_points=[
             CallbackQueryHandler(button_handler, pattern="^stats$")
         ],
+        per_message=False,
+
         states={
             WAIT_STATS_NICK: [
                 MessageHandler(
@@ -1158,6 +1159,17 @@ def run_bot():
         fallbacks=[]
     )
 )
+
+    app.add_handler(
+    CallbackQueryHandler(
+        button_handler,
+        pattern="^(history|members|top|report|myclan|setclan|settings)$"
+    )
+)
+
+    app.add_handler(
+        CallbackQueryHandler(button_handler)
+  )
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
