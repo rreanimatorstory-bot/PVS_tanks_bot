@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
 
-from database import init_db, save_clan, get_clan
+from database import init_db, save_clan, get_clan, save_player_history
 
 load_dotenv()
 
@@ -20,29 +20,6 @@ init_db()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 WG_APP_ID = os.getenv("WG_APP_ID")
-
-    
-def save_player_history(account_id, nickname, battles, damage):
-
-    conn = sqlite3.connect(DB_NAME)
-    cur = conn.cursor()
-
-    cur.execute("""
-    INSERT INTO history
-    (account_id, nickname, battles, damage, date)
-    VALUES (?, ?, ?, ?, ?)
-    """,
-    (
-        account_id,
-        nickname,
-        battles,
-        damage,
-        datetime.now().strftime("%Y-%m-%d")
-    ))
-
-    conn.commit()
-    conn.close()
-
 
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
