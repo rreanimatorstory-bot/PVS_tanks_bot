@@ -94,3 +94,26 @@ def get_clan(chat_id):
     conn.close()
 
     return result
+
+def save_player_history(account_id, nickname, battles, damage):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    INSERT INTO history
+    (account_id, nickname, battles, damage, date)
+    VALUES (%s, %s, %s, %s, %s)
+    """,
+    (
+        account_id,
+        nickname,
+        battles,
+        damage,
+        datetime.now().strftime("%Y-%m-%d")
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
