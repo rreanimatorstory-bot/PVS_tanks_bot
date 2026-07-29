@@ -752,7 +752,13 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
         for player in players_data["data"].values():
-            names.append(player["nickname"])
+
+            nickname = player["nickname"]
+        
+            if player["account_id"] == leader_id:
+                nickname = f"👑 {nickname}"
+        
+            names.append(nickname)
 
     names.sort()
 
