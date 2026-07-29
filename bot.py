@@ -763,15 +763,19 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         members.sort(key=lambda x: not x["leader"])
 
-
-    text = (
-        f"👥 Состав клана {clan_tag}\n\n"
-        f"Всего игроков: {len(names)}\n\n"
-    )
-
-
-    for i, name in enumerate(names, start=1):
-        text += f"{i}. {name}\n"
+        text = (
+            f"👥 Состав клана {clan_tag}\n\n"
+            f"Всего игроков: {len(members)}\n\n"
+        )
+        
+        
+        for i, player in enumerate(members, start=1):
+        
+            crown = "👑 " if player["leader"] else ""
+        
+            text += (
+                f"{i}. {crown}{player['nickname']}\n\n"
+            )
 
 
     await context.bot.send_message(
