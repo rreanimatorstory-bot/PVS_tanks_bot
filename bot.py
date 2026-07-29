@@ -753,14 +753,15 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         for player in players_data["data"].values():
 
-            nickname = player["nickname"]
+            is_leader = player["account_id"] == leader_id
         
-            if player["account_id"] == leader_id:
-                nickname = f"👑 {nickname}"
+            members.append({
+                "nickname": player["nickname"],
+                "leader": is_leader
+            })
         
-            names.append(nickname)
-
-    names.sort(key=lambda x: "👑" not in x)
+        
+        members.sort(key=lambda x: not x["leader"])
 
 
     text = (
