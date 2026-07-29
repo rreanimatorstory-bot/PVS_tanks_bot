@@ -788,11 +788,26 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text="⏳ Обновляю историю игроков..."
     )
 
+
+    clan = get_clan(update.effective_chat.id)
+
+    if clan is None:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=update.message.message_thread_id,
+            text="❌ Сначала привяжите клан:\n/setclan [TAG]"
+        )
+        return
+
+
+    clan_id, clan_tag, clan_name = clan
+
+
     clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
 
     clan_params = {
         "application_id": WG_APP_ID,
-        "clan_id": CLAN_ID
+        "clan_id": clan_id
     }
 
     clan_response = requests.get(
@@ -812,7 +827,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    members_ids = clan_data["data"][str(CLAN_ID)]["members_ids"]
+    members_ids = clan_data["data"][str(clan_id)]["members_ids"]
 
 
     saved = 0
