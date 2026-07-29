@@ -13,7 +13,10 @@ from telegram.ext import (
     Application,
     CommandHandler,
     CallbackQueryHandler,
-    ContextTypes
+    ConversationHandler,
+    MessageHandler,
+    ContextTypes,
+    filters
 )
 
 from database import init_db, save_clan, get_clan, save_player_history, get_player_history
@@ -21,6 +24,9 @@ from database import init_db, save_clan, get_clan, save_player_history, get_play
 from keyboard import main_menu
 
 load_dotenv()
+
+# Состояния ConversationHandler
+WAIT_STATS_NICK = 1
 
 init_db()
 
@@ -36,6 +42,17 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Выберите действие:",
         reply_markup=main_menu()
     )
+
+async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    nickname = update.message.text.strip()
+
+    context.args = [nickname]
+
+    await stats(update, context)
+
+    return ConversationHandler.END
+    
 
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -954,11 +971,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await query.answer()
 
     if query.data == "stats":
+
         await query.message.reply_text(
             "📊 Введите ник игрока:\n\n"
             "Пример:\n"
             "Panzerluger"
         )
+
+        return WAIT_STATS_NICK
 
     elif query.data == "history":
         await query.message.reply_text(
@@ -1091,15 +1111,30 @@ def run_bot():
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
+    app.add_handler(
+    ConversationHandler(
+        entry_points=[
+            CallbackQueryHandler(button_handler, pattern="^stats$")
+        ],
+        states={
+            WAIT_STATS_NICK: [
+                MessageHandler(
+                    filters.TEXT & ~filters.COMMAND,
+                    receive_stats_nick
+                )
+            ]
+        },
+        fallbacks=[]
+    )
+)
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
     app.add_handler(CommandHandler("members", members))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
-    app.add_handler(
-    CallbackQueryHandler(button_handler)
-)
+    
+
 
     print("BOT STARTED")
     print("STARTING POLLING")
