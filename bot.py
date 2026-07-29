@@ -782,11 +782,13 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         
         for i, player in enumerate(members, start=1):
-        
+
             crown = "👑 " if player["leader"] else ""
         
             text += (
-                f"{i}. {crown}{player['nickname']}\n\n"
+                f"{i}. {crown}{player['nickname']}\n"
+                f"⚔️ {player['battles']:,} боёв | 🏆 {player['winrate']}%\n"
+                f"💥 {player['avg_damage']:,} С/У\n\n"
             )
 
 
