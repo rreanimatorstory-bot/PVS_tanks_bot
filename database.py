@@ -113,6 +113,15 @@ def save_player_history(account_id, nickname, battles, damage):
         datetime.now().strftime("%Y-%m-%d")
     ))
 
+    print(
+        "SAVE HISTORY ID:",
+        account_id,
+        nickname,
+        battles,
+        damage,
+        flush=True
+    )
+
     conn.commit()
 
     cur.close()
