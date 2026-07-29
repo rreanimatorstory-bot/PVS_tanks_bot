@@ -91,10 +91,10 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
 def get_rank(battles, winrate, avg_damage):
 
-    if battles >= 40000 and winrate >= 58 and avg_damage >= 1800:
+    if battles >= 40000 and winrate >= 60:
         return "🏆 Мастер"
 
-    if battles >= 30000 and winrate >= 55 and avg_damage >= 1500:
+    if battles >= 30000 and winrate >= 55 and avg_damage >= 1700:
         return "🎖️ Ас"
 
     if battles >= 30000 and winrate >= 47:
