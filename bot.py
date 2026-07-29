@@ -94,13 +94,13 @@ def get_rank(battles, winrate, avg_damage):
     if battles >= 40000 and winrate >= 58 and avg_damage >= 1800:
         return "🏆 Мастер"
 
-    if battles >= 20000 and winrate >= 57 and avg_damage >= 1600:
+    if battles >= 30000 and winrate >= 55 and avg_damage >= 1500:
         return "🎖️ Ас"
 
-    if battles >= 15000 and winrate >= 55:
+    if battles >= 30000 and winrate >= 47:
         return "🏅 Ветеран"
 
-    if battles >= 2000 and winrate >= 47:
+    if battles >= 2000:
         return "⚔️ Боец"
 
     return "🆕 Новобранец"   
