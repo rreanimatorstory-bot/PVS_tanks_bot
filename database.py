@@ -112,7 +112,7 @@ def save_player_history(account_id, nickname, battles, damage):
 
     # Проверяем последнюю запись
     cur.execute("""
-    SELECT battles, damage
+    SELECT battles, damage, date
     FROM history
     WHERE account_id=%s
     ORDER BY id DESC
@@ -122,11 +122,12 @@ def save_player_history(account_id, nickname, battles, damage):
 
     last = cur.fetchone()
 
-    # Если данные не изменились — не сохраняем
-    if last:
-        if last[0] == battles and last[1] == damage:
-        
+    today = datetime.now().strftime("%Y-%m-%d")
 
+    if last:
+        last_battles, last_damage, last_date = last
+
+        if str(last_date) == today:
             cur.close()
             conn.close()
             return
