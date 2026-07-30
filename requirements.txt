@@ -1,4 +1,4 @@
-pytpython-telegram-bot[job-queue]
+python-telegram-bot[job-queue]
 requests
 python-dotenv
 flask
