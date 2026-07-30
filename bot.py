@@ -1306,15 +1306,29 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    user_id = update.effective_user.id
+
+    # Разработчик всегда имеет полный доступ
+    if is_developer(user_id):
+        await update.message.reply_text(
+            "🤖 BlitzClanBot\n\n"
+            "Выберите действие:",
+            reply_markup=main_menu()
+        )
+        return
+
     await update.message.reply_text(
         "🤖 Добро пожаловать в BlitzClanBot!\n\n"
-        "Я помогу следить за статистикой вашего клана.\n\n"
+        "Я помогу следить за статистикой World of Tanks Blitz.\n\n"
+        "Что умею:\n"
         "📊 Статистика игроков\n"
         "🏆 Рейтинг участников\n"
         "📈 Отчёты клана\n"
         "👥 Состав и активность игроков\n\n"
-        "Для начала привяжите свой клан.\n\n"
-        "Выберите нужный раздел в меню ниже 👇",
+        "⚠️ Для начала добавьте бота в групповой чат.\n\n"
+        "После добавления бот станет доступен для работы с вашим кланом.\n\n"
+        "Выберите нужный раздел в меню ниже 👇\n\n"
+        "👨‍💻 Разработчик: @Eodreid",
         reply_markup=main_menu()
     )
 
