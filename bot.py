@@ -26,7 +26,8 @@ from database import (
     save_player_history,
     get_player_history,
     get_last_update,
-    set_last_update
+    set_last_update,
+    clean_history_duplicates
 )
 
 from keyboard import main_menu
@@ -802,6 +803,15 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         message_thread_id=update.callback_query.message.message_thread_id,
         text=text
     )
+
+async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    clean_history_duplicates()
+
+    await update.message.reply_text(
+        "✅ Дубли истории удалены"
+    )
+        
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
@@ -1211,6 +1221,7 @@ def run_bot():
     app.add_handler(CommandHandler("members", members))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
+    app.add_handler(CommandHandler("cleanhistory", cleanhistory))
     
 
 

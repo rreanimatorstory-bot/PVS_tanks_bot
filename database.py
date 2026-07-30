@@ -234,3 +234,24 @@ def set_last_update(date):
 
     cur.close()
     conn.close()
+
+def clean_history_duplicates():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    DELETE FROM history
+    WHERE id NOT IN (
+        SELECT MIN(id)
+        FROM history
+        GROUP BY account_id, date
+    )
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    print("HISTORY DUPLICATES CLEANED")    
