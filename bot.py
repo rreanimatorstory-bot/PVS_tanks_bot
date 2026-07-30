@@ -1334,7 +1334,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
 
-    # Разработчик всегда имеет полный доступ
     if is_developer(user_id):
         await update.message.reply_text(
             "🤖 BlitzClanBot\n\n"
@@ -1351,11 +1350,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🏆 Рейтинг участников\n"
         "📈 Отчёты клана\n"
         "👥 Состав и активность игроков\n\n"
-        "⚠️ Для начала добавьте бота в групповой чат.\n\n"
-        "После добавления бот станет доступен для работы с вашим кланом.\n\n"
-        "Выберите нужный раздел в меню ниже 👇\n\n"
-        "👨‍💻 Разработчик: @Eodreid",
-        reply_markup=main_menu()
+        "⚠️ Для начала добавьте бота в ваш групповой чат.\n\n"
+        "После добавления бот будет работать с вашим кланом.\n\n"
+        "👨‍💻 Разработчик: @Eodreid"
     )
 
 async def set_commands(app):
