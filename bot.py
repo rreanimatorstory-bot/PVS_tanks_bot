@@ -5,6 +5,9 @@ print("PROCESS ID:", os.getpid())
 import requests
 from datetime import datetime
 
+def format_number(number):
+    return f"{number:,}".replace(",", " ")
+
 from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
@@ -454,7 +457,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
         text += (
             f"{icon} {player['name']}\n"
-            f"💥{player['damage']} | 🏆{player['winrate']}% | ⚔️{player['battles']:,}\n\n"
+            f"💥{format_number(player['damage'])} | 🏆{player['winrate']}% | ⚔️{format_number(player['battles'])}\n\n"
         )
 
 
@@ -633,10 +636,10 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         f"📊 Отчёт клана {clan_tag}\n\n"
         f"👥 Участников: {len(members_ids)}\n\n"
-        f"⚔️ Всего боёв: {total_battles:,}\n"
-        f"🏆 Побед: {total_wins:,}\n"
+        f"⚔️ Всего боёв: {format_number(total_battles)}\n"
+        f"🏆 Побед: {format_number(total_wins)}\n"
         f"📊 Средний WR: {winrate}%\n"
-        f"💥 Средний урон: {avg_damage_clan:,}\n\n"
+        f"💥 Средний урон: {format_number(avg_damage_clan)}\n\n"
         f"🥇 Лучший урон:\n"
         f"{best_damage['name']} — {best_damage['damage']}\n\n"
         f"🔥 ТОП по боям:\n"
@@ -811,7 +814,7 @@ async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "✅ Дубли истории удалены"
     )
-        
+
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
@@ -996,9 +999,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         text += (
             f"📅 {date}\n"
-            f"⚔️ Бои: {battles:,}\n"
-            f"💥 Урон: {damage:,}\n\n"
-        )
+            f"⚔️ Бои: {format_number(battles)}\n"
+            f"💥 Урон: {format_number(damage)}\n\n"
+      )
 
 
     await context.bot.send_message(
