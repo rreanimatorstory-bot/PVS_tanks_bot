@@ -28,6 +28,8 @@ from database import (
     init_db,
     save_clan,
     get_clan,
+    save_dashboard_message,
+    get_dashboard_message,
     save_player_history,
     get_player_history,
     get_last_update,
@@ -889,10 +891,35 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
 
 
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        message_thread_id=update.callback_query.message.message_thread_id,
-        text=text
+    message_id = get_dashboard_message(
+        update.effective_chat.id,
+        "members"
+    )
+
+
+    if message_id:
+
+        try:
+            await context.bot.edit_message_text(
+                chat_id=update.effective_chat.id,
+                message_id=message_id,
+                text=text
+            )
+
+        except Exception as e:
+            print("DASHBOARD EDIT ERROR:", e, flush=True)
+
+    else:
+
+        message = await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=text
+        )
+
+    save_dashboard_message(
+        update.effective_chat.id,
+        "members",
+        message.message_id
     )
 
 async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
