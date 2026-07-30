@@ -820,6 +820,39 @@ async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "✅ Дубли истории удалены"
     )
 
+async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
+
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    last_update = get_last_update()
+
+    print("AUTO UPDATE CHECK")
+    print("LAST UPDATE:", last_update)
+    print("TODAY:", today)
+
+    if last_update == today:
+        return
+
+    if last_update:
+        last_date = datetime.strptime(
+            last_update,
+            "%Y-%m-%d"
+        )
+
+        days = (datetime.now() - last_date).days
+
+        if days < 3:
+            return
+
+
+    print("AUTO HISTORY UPDATE START")
+
+
+    # здесь пока только ставим отметку
+    set_last_update(today)
+
+    print("AUTO HISTORY UPDATE DONE")    
+
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
@@ -1169,6 +1202,12 @@ def run_bot():
     print("TOKEN END:", BOT_TOKEN[-10:])
 
     app = Application.builder().token(BOT_TOKEN).build()
+
+    app.job_queue.run_repeating(
+        auto_update_history,
+        interval=86400,
+        first=30
+    )
 
     print("TELEGRAM APP CREATED")
 
