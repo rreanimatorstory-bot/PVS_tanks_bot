@@ -976,29 +976,101 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
-    last = get_last_update()
-
-    today = datetime.now().date()
-
-    if last:
-        last_date = datetime.strptime(
-            last,
-            "%Y-%m-%d"
-        ).date()
-
-        if today - last_date < timedelta(days=3):
-            print("AUTO UPDATE: not needed", flush=True)
-            return
-
-
     print("AUTO UPDATE: START", flush=True)
 
-    # пока просто фиксируем запуск
+    clan_id = "1336303"  # временно, потом сделаем динамически
+
+    clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
+
+    clan_params = {
+        "application_id": WG_APP_ID,
+        "clan_id": clan_id
+    }
+
+    try:
+        clan_response = requests.get(
+            clan_url,
+            params=clan_params,
+            timeout=10
+        )
+
+        clan_data = clan_response.json()
+
+    except Exception as e:
+        print("AUTO UPDATE ERROR:", e, flush=True)
+        return
+
+
+    if clan_data.get("status") != "ok":
+        print("AUTO UPDATE: CLAN ERROR", flush=True)
+        return
+
+
+    members_ids = clan_data["data"][str(clan_id)]["members_ids"]
+
+
+    saved = 0
+
+
+    for account_id in members_ids:
+
+        stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        }
+
+
+        try:
+
+            stats_response = requests.get(
+                stats_url,
+                params=stats_params,
+                timeout=10
+            )
+
+            stats_data = stats_response.json()
+
+        except:
+            continue
+
+
+        if stats_data.get("status") != "ok":
+            continue
+
+
+        account = stats_data["data"][str(account_id)]
+
+        nickname = account["nickname"]
+
+        player = account["statistics"]["all"]
+
+
+        battles = player.get("battles", 0)
+        damage = player.get("damage_dealt", 0)
+
+
+        save_player_history(
+            account_id,
+            nickname,
+            battles,
+            damage
+        )
+
+        saved += 1
+
+
     set_last_update(
-        today.strftime("%Y-%m-%d")
+        datetime.now().strftime("%Y-%m-%d")
     )
 
-    print("AUTO UPDATE: DONE", flush=True)    
+
+    print(
+        "AUTO UPDATE DONE:",
+        saved,
+        flush=True
+    )    
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
