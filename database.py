@@ -45,6 +45,15 @@ def init_db():
     )
     """)
 
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS dashboard_messages (
+        chat_id BIGINT,
+        dashboard TEXT,
+        message_id BIGINT,
+        PRIMARY KEY(chat_id, dashboard)
+    )
+    """)
+
     
 
     conn.commit()
