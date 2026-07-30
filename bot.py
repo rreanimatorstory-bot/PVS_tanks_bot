@@ -1194,54 +1194,17 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await query.answer()
 
-    print("BUTTON:", query.data, flush=True)
+    user_id = update.effective_user.id
 
-    if query.data == "stats":
+    if not is_developer(user_id):
+        if update.effective_chat.type == "private":
+            await query.message.reply_text(
+                "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
+                "После добавления бот станет доступен для работы с вашим кланом."
+            )
+            return
 
-        await query.message.reply_text(
-            "📊 Введите ник игрока:"
-        )
-
-        return WAIT_STATS_NICK
-
-
-    elif query.data == "history":
-        await query.message.reply_text(
-            "📜 Введите ник игрока для истории:"
-        )
-
-        return WAIT_HISTORY_NICK
-
-    elif query.data == "members":
-        await members(update, context)
-        
-
-    
-    elif query.data == "top":
-        await top(update, context)
-
-    elif query.data == "report":
-        await report(update, context)
-
-    elif query.data == "myclan":
-        await myclan(update, context)
-        
-        
-
-    elif query.data == "setclan":
-
-        await query.message.reply_text(
-            "🏰 Введите тег вашего клана:\n\n"
-            "Например:\n"
-            "1PVS"
-        )
-
-        return WAIT_CLAN_TAG    
-
-    elif query.data == "settings":
-        await query.message.reply_text(
-            "⚙️ Настройки пока в разработке"
-        )    
+    print("BUTTON:", query.data, flush=True)    
 
 # Flask для Render
 
