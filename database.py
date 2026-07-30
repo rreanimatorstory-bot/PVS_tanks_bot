@@ -113,6 +113,57 @@ def get_clan(chat_id):
 
     return result
 
+def save_dashboard_message(chat_id, dashboard, message_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    INSERT INTO dashboard_messages
+    (chat_id, dashboard, message_id)
+    VALUES (%s,%s,%s)
+    ON CONFLICT (chat_id, dashboard)
+    DO UPDATE SET
+        message_id = EXCLUDED.message_id
+    """,
+    (
+        chat_id,
+        dashboard,
+        message_id
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+
+def get_dashboard_message(chat_id, dashboard):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT message_id
+    FROM dashboard_messages
+    WHERE chat_id=%s
+    AND dashboard=%s
+    """,
+    (
+        chat_id,
+        dashboard
+    ))
+
+    row = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    if row:
+        return row[0]
+
+    return None
+
 def save_player_history(account_id, nickname, battles, damage):
 
 
