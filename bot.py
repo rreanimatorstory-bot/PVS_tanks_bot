@@ -1196,6 +1196,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
 
+    print("BUTTON USER ID:", user_id, flush=True)
+    print("IS DEVELOPER:", is_developer(user_id), flush=True)
+
     if not is_developer(user_id):
         if update.effective_chat.type == "private":
             await query.message.reply_text(
