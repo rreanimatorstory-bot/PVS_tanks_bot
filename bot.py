@@ -631,7 +631,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
     if not low_text:
-        low_text = "\nНет игроков"
+        low_text = "\nНет игроков"  
 
     text = (
         f"📊 Отчёт клана {clan_tag}\n\n"
