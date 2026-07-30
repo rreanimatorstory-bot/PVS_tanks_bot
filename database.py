@@ -106,6 +106,14 @@ def get_clan(chat_id):
 
 def save_player_history(account_id, nickname, battles, damage):
 
+    print(
+        "CHECK HISTORY:",
+        nickname,
+        battles,
+        damage,
+        flush=True
+    )
+
     conn = get_connection()
     cur = conn.cursor()
 
