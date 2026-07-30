@@ -1222,12 +1222,15 @@ def run_bot():
 
     print("CREATING TELEGRAM APP")
 
-    print("TOKEN EXISTS:", bool(BOT_TOKEN))
-    print("TOKEN LENGTH:", len(BOT_TOKEN) if BOT_TOKEN else 0)
-    print("TOKEN START:", BOT_TOKEN[:10])
-    print("TOKEN END:", BOT_TOKEN[-10:])
+    
 
-    app = Application.builder().token(BOT_TOKEN).build()
+    app = (
+        Application.builder()
+        .token(BOT_TOKEN)
+        .build()
+    )
+
+    print("TELEGRAM APP CREATED", flush=True)
 
     app.job_queue.run_repeating(
         auto_update_history,
