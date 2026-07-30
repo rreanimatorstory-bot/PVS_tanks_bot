@@ -1333,7 +1333,22 @@ async def set_commands(app):
     await app.bot.set_my_commands(commands)
 
 def is_developer(user_id):
-    return user_id == DEVELOPER_ID    
+    return user_id == DEVELOPER_ID 
+
+def can_use_bot(update):
+    user_id = update.effective_user.id
+    chat_type = update.effective_chat.type
+
+    # Разработчик имеет полный доступ
+    if is_developer(user_id):
+        return True
+
+    # В группах бот работает
+    if chat_type in ["group", "supergroup"]:
+        return True
+
+    # В личке обычным пользователям нельзя
+    return False   
 
     
 def run_bot():
