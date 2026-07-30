@@ -1196,9 +1196,12 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
 
-    print("BUTTON USER ID:", user_id, flush=True)
+    print("BUTTON PRESSED:", query.data, flush=True)
+    print("USER ID:", user_id, flush=True)
+    print("CHAT TYPE:", update.effective_chat.type, flush=True)
     print("IS DEVELOPER:", is_developer(user_id), flush=True)
 
+    # Проверка доступа
     if not is_developer(user_id):
         if update.effective_chat.type == "private":
             await query.message.reply_text(
@@ -1207,7 +1210,64 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return
 
-    print("BUTTON:", query.data, flush=True)    
+
+    # ====== СЮДА ВОЗВРАЩАЕМ ЛОГИКУ КНОПОК ======
+
+    print("BUTTON:", query.data, flush=True)
+
+
+    if query.data == "stats":
+
+        await query.message.reply_text(
+            "📊 Введите ник игрока:"
+        )
+
+        return WAIT_STATS_NICK
+
+
+    elif query.data == "history":
+
+        await query.message.reply_text(
+            "📜 Введите ник игрока для истории:"
+        )
+
+        return WAIT_HISTORY_NICK
+
+
+    elif query.data == "members":
+
+        await members(update, context)
+
+
+    elif query.data == "top":
+
+        await top(update, context)
+
+
+    elif query.data == "report":
+
+        await report(update, context)
+
+
+    elif query.data == "myclan":
+
+        await myclan(update, context)
+
+
+    elif query.data == "setclan":
+
+        await query.message.reply_text(
+            "🏰 Введите тег вашего клана:"
+        )
+
+        return WAIT_CLAN_TAG
+
+
+    elif query.data == "settings":
+
+        await query.message.reply_text(
+            "⚙️ Настройки пока в разработке"
+        )    
 
 # Flask для Render
 
