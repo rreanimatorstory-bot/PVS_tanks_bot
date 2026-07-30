@@ -1014,6 +1014,13 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
     for account_id in members_ids:
 
+        print(
+            "AUTO CHECK PLAYER:",
+            account_id,
+            flush=True
+        )
+
+
         stats_url = "https://api.wotblitz.eu/wotb/account/info/"
 
         stats_params = {
