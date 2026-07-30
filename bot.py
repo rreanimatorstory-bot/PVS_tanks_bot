@@ -1300,7 +1300,7 @@ def run_bot():
 
     print("BOT STARTED")
     print("STARTING POLLING")
-
+    print("STARTING TELEGRAM POLLING", flush=True)
     
     app.run_polling(
         drop_pending_updates=True,
