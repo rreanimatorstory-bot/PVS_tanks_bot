@@ -3,7 +3,7 @@ import os
 print("PROCESS ID:", os.getpid())
 
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def format_number(number):
     return f"{number:,}".replace(",", " ")
@@ -973,6 +973,32 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"Сохранено игроков: {saved}"
         )
     )
+
+async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
+
+    last = get_last_update()
+
+    today = datetime.now().date()
+
+    if last:
+        last_date = datetime.strptime(
+            last,
+            "%Y-%m-%d"
+        ).date()
+
+        if today - last_date < timedelta(days=3):
+            print("AUTO UPDATE: not needed", flush=True)
+            return
+
+
+    print("AUTO UPDATE: START", flush=True)
+
+    # пока просто фиксируем запуск
+    set_last_update(
+        today.strftime("%Y-%m-%d")
+    )
+
+    print("AUTO UPDATE: DONE", flush=True)    
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
