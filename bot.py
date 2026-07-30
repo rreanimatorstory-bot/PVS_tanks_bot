@@ -12,6 +12,7 @@ from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
 from telegram import Update
+from telegram import BotCommand
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -21,6 +22,7 @@ from telegram.ext import (
     ContextTypes,
     filters
 )
+
 
 from database import (
     init_db,
@@ -1294,6 +1296,21 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "Выберите нужный раздел в меню ниже 👇",
         reply_markup=main_menu()
     )
+
+async def set_commands(app):
+
+    commands = [
+        BotCommand("stats", "📊 Статистика игрока"),
+        BotCommand("clanreport", "🏰 Отчет клана"),
+        BotCommand("history", "📈 История игрока"),
+        BotCommand("members", "👥 Состав клана"),
+        BotCommand("top", "🏆 Топ игроков клана"),
+        BotCommand("update", "🔄 Обновить историю"),
+        BotCommand("menu", "📋 Меню бота"),
+    ]
+
+    await app.bot.set_my_commands(commands)
+        
     
 def run_bot():
 
@@ -1308,6 +1325,7 @@ def run_bot():
         .token(BOT_TOKEN)
         .build()
     )
+    app.post_init = set_commands
 
     print("TELEGRAM APP CREATED", flush=True)
 
