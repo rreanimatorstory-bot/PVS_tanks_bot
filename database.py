@@ -106,13 +106,6 @@ def get_clan(chat_id):
 
 def save_player_history(account_id, nickname, battles, damage):
 
-    print(
-        "CHECK HISTORY:",
-        nickname,
-        battles,
-        damage,
-        flush=True
-    )
 
     conn = get_connection()
     cur = conn.cursor()
@@ -132,11 +125,7 @@ def save_player_history(account_id, nickname, battles, damage):
     # Если данные не изменились — не сохраняем
     if last:
         if last[0] == battles and last[1] == damage:
-            print(
-                "HISTORY SKIPPED (NO CHANGES):",
-                nickname,
-                flush=True
-            )
+        
 
             cur.close()
             conn.close()
@@ -156,13 +145,7 @@ def save_player_history(account_id, nickname, battles, damage):
         datetime.now().strftime("%Y-%m-%d")
     ))
 
-    print(
-        "SAVE HISTORY:",
-        nickname,
-        battles,
-        damage,
-        flush=True
-    )
+    
 
     conn.commit()
 
@@ -188,8 +171,6 @@ def get_player_history(account_id):
     cur.close()
     conn.close()
 
-    print("GET HISTORY ID:", account_id, flush=True)
-    print("GET HISTORY RESULT:", result, flush=True)
 
     return result
 
@@ -253,8 +234,4 @@ def clean_history_duplicates():
     cur.close()
     conn.close()
 
-    print(
-        "HISTORY DUPLICATES CLEANED:",
-        deleted,
-        flush=True
-    )
+   
