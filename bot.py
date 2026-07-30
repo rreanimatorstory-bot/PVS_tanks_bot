@@ -627,7 +627,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for p in low_activity[:5]:
         low_text += (
-            f"\n• {p['name']} — {p['battles']:,} боёв"
+            f"\n• {p['name']} — {format_number(p['battles'])} боёв"
         )
 
     if not low_text:
@@ -643,9 +643,14 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🥇 Лучший урон:\n"
         f"{best_damage['name']} — {best_damage['damage']}\n\n"
         f"🔥 ТОП по боям:\n"
-        f"1. {players_activity[0]['name']} — {players_activity[0]['battles']:,}\n"
-        f"2. {players_activity[1]['name']} — {players_activity[1]['battles']:,}\n"
-        f"3. {players_activity[2]['name']} — {players_activity[2]['battles']:,}\n\n"
+        f"🔥 ТОП по боям:\n"
+        + "\n".join(
+            [
+                f"{i}. {p['name']} — {format_number(p['battles'])}"
+                for i, p in enumerate(players_activity[:3], start=1)
+            ]
+        )
+        + "\n\n"
         f"⚠️ Мало боёв:"
         f"{low_text}"
     )
