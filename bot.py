@@ -1238,7 +1238,7 @@ def run_bot():
         first=30
     )
 
-    print("TELEGRAM APP CREATED")
+    print("AUTO UPDATE SCHEDULER ENABLED", flush=True)
 
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("setclan", setclan))
@@ -1288,9 +1288,7 @@ def run_bot():
     )
 )
 
-    app.add_handler(
-        CallbackQueryHandler(button_handler)
-  )
+   
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("top", top))
     app.add_handler(CommandHandler("clanreport", report))
@@ -1313,7 +1311,7 @@ def run_bot():
 
 print("START BOT THREAD")
 
-thread = Thread(target=run_bot)
+thread = Thread(target=run_bot, daemon=True)
 thread.start()
 
 print("Starting Flask...")
