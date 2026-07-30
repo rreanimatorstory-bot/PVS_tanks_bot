@@ -906,8 +906,11 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 text=text
             )
 
+            print("DASHBOARD UPDATED", flush=True)
+
         except Exception as e:
             print("DASHBOARD EDIT ERROR:", e, flush=True)
+
 
     else:
 
@@ -916,11 +919,13 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             text=text
         )
 
-    save_dashboard_message(
-        update.effective_chat.id,
-        "members",
-        message.message_id
-    )
+        save_dashboard_message(
+            update.effective_chat.id,
+            "members",
+            message.message_id
+        )
+
+        print("DASHBOARD MESSAGE CREATED", message.message_id, flush=True)
 
 async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
