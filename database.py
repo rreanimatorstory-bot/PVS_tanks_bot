@@ -109,63 +109,52 @@ def save_player_history(account_id, nickname, battles, damage):
     conn = get_connection()
     cur = conn.cursor()
 
-    today = datetime.now().strftime("%Y-%m-%d")
-
+    # Проверяем последнюю запись
     cur.execute("""
-    SELECT id
+    SELECT battles, damage
     FROM history
     WHERE account_id=%s
-    AND date=%s
+    ORDER BY id DESC
+    LIMIT 1
+    """,
+    (account_id,))
+
+    last = cur.fetchone()
+
+    # Если данные не изменились — не сохраняем
+    if last:
+        if last[0] == battles and last[1] == damage:
+            print(
+                "HISTORY SKIPPED (NO CHANGES):",
+                nickname,
+                flush=True
+            )
+
+            cur.close()
+            conn.close()
+            return
+
+    # Сохраняем новый снимок
+    cur.execute("""
+    INSERT INTO history
+    (account_id, nickname, battles, damage, date)
+    VALUES (%s, %s, %s, %s, %s)
     """,
     (
         account_id,
-        today
+        nickname,
+        battles,
+        damage,
+        datetime.now().strftime("%Y-%m-%d")
     ))
 
-    exists = cur.fetchone()
-
-
-    if exists:
-
-        cur.execute("""
-        UPDATE history
-        SET nickname=%s,
-            battles=%s,
-            damage=%s
-        WHERE id=%s
-        """,
-        (
-            nickname,
-            battles,
-            damage,
-            exists[0]
-        ))
-
-    else:
-
-        cur.execute("""
-        INSERT INTO history
-        (account_id, nickname, battles, damage, date)
-        VALUES (%s, %s, %s, %s, %s)
-        """,
-        (
-            account_id,
-            nickname,
-            battles,
-            damage,
-            today
-        ))
-
-
     print(
-        "SAVE HISTORY ID:",
-        account_id,
+        "SAVE HISTORY:",
         nickname,
         battles,
         damage,
         flush=True
     )
-
 
     conn.commit()
 
