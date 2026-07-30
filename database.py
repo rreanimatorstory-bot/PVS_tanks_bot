@@ -238,17 +238,23 @@ def clean_history_duplicates():
     cur = conn.cursor()
 
     cur.execute("""
-    DELETE FROM history
-    WHERE id NOT IN (
-        SELECT MIN(id)
-        FROM history
-        GROUP BY account_id, date
-    )
+    DELETE FROM history a
+    USING history b
+    WHERE a.id > b.id
+    AND a.account_id = b.account_id
+    AND a.battles = b.battles
+    AND a.damage = b.damage
     """)
+
+    deleted = cur.rowcount
 
     conn.commit()
 
     cur.close()
     conn.close()
 
-    print("HISTORY DUPLICATES CLEANED")    
+    print(
+        "HISTORY DUPLICATES CLEANED:",
+        deleted,
+        flush=True
+    )
