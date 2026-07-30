@@ -50,6 +50,8 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 
 WG_APP_ID = os.getenv("WG_APP_ID")
 
+DEVELOPER_ID = 356966584
+
 
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -1310,7 +1312,10 @@ async def set_commands(app):
     ]
 
     await app.bot.set_my_commands(commands)
-        
+
+def is_developer(user_id):
+    return user_id == DEVELOPER_ID    
+
     
 def run_bot():
 
