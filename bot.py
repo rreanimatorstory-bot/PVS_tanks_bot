@@ -379,6 +379,14 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    thread_id = None
+
+    if update.message:
+        thread_id = update.message.message_thread_id
+
+    elif update.callback_query:
+        thread_id = update.callback_query.message.message_thread_id
+
     if not can_use_bot(update):
         await update.message.reply_text(
             "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
@@ -399,6 +407,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=thread_id,
         text=f"⏳ Считаю статистику клана {clan_tag}..."
     )
 
@@ -419,6 +428,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
             text="❌ Не удалось получить клан"
         )
         return
@@ -500,10 +510,12 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=thread_id,
         text=text
-   )
+    )
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    
 
     if not can_use_bot(update):
         await update.message.reply_text(
@@ -511,10 +523,20 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "После добавления бот станет доступен для работы с вашим кланом."
         )
         return
+    
+
+    thread_id = None
+
+    if update.message:
+        thread_id = update.message.message_thread_id
+
+    elif update.callback_query:
+        thread_id = update.callback_query.message.message_thread_id
+
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
+        message_thread_id=thread_id,
         text="⏳ Собираю отчёт клана...\nЭто может занять немного времени."
     )
 
@@ -525,6 +547,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
             text="❌ Сначала привяжите клан:\n/setclan [TAG]"
         )
         return
@@ -547,6 +570,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan_data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
             text="❌ Не удалось получить данные клана"
         )
         return
@@ -701,9 +725,16 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+    send_params = {
+        "chat_id": update.effective_chat.id,
+        "text": text
+    }
+
+    if thread_id:
+        send_params["message_thread_id"] = thread_id
+
     await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=text
+        **send_params
     )
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
