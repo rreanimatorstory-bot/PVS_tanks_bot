@@ -514,6 +514,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
+        message_thread_id=update.message.message_thread_id,
         text="⏳ Собираю отчёт клана...\nЭто может занять немного времени."
     )
 
