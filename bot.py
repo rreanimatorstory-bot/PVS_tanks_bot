@@ -179,6 +179,11 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
         nickname,
         account_id
     )
+
+    check = get_user(user.id)
+
+    print("CHECK USER AFTER SAVE:", check, flush=True)
+    
     print("TRY SET TAG START", flush=True)
     print("TRYING SET TAG FOR:", nickname, flush=True)
     try:
