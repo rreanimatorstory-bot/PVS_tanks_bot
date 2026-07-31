@@ -1313,6 +1313,8 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("🔥🔥🔥 BUTTON HANDLER START 🔥🔥🔥", flush=True)
+
     query = update.callback_query
 
     await query.answer()
