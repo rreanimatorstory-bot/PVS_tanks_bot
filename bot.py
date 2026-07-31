@@ -126,6 +126,8 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("RECEIVE WOT NICK STARTED", flush=True)
+
     nickname = update.message.text.strip()
 
     await update.message.reply_text(
@@ -177,7 +179,7 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
         nickname,
         account_id
     )
-
+    print("TRYING SET TAG FOR:", nickname, flush=True)
     try:
         response = requests.post(
             f"https://api.telegram.org/bot{BOT_TOKEN}/setChatMemberTag",
