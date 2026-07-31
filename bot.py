@@ -768,7 +768,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("MEMBERS THREAD:", thread_id, flush=True)
 
 
-    await context.bot.send_message(
+    loading_message = await context.bot.send_message(
         chat_id=update.effective_chat.id,
         message_thread_id=thread_id,
         text="⏳ Загружаю состав клана..."
@@ -950,8 +950,19 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             print("DASHBOARD UPDATED", flush=True)
 
+            try:
+                await context.bot.delete_message(
+                    chat_id=update.effective_chat.id,
+                    message_id=loading_message.message_id
+                )
+            except Exception as e:
+                print("LOADING DELETE ERROR:", e, flush=True)
+
         except Exception as e:
-            print("DASHBOARD EDIT ERROR:", e, flush=True)
+            if "Message is not modified" in str(e):
+                print("DASHBOARD ALREADY UP TO DATE", flush=True)
+            else:
+                print("DASHBOARD EDIT ERROR:", e, flush=True)
 
 
     else:
