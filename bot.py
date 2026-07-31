@@ -1626,6 +1626,17 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     chat_id = update.effective_chat.id
 
+    member = await context.bot.get_chat_member(
+        chat_id=chat_id,
+        user_id=update.effective_user.id
+    )
+
+    if member.status not in ["administrator", "creator"]:
+        await update.message.reply_text(
+            "❌ Только администраторы могут привязать клан."
+        )
+        return
+
     if not context.args:
         await update.message.reply_text(
             "Использование:\n"
