@@ -3,7 +3,7 @@ import os
 print("PROCESS ID:", os.getpid())
 
 import requests
-from datetime import datetime, timedelta
+from datetime import datetime
 
 def format_number(number):
     return f"{number:,}".replace(",", " ")
@@ -21,7 +21,7 @@ from telegram.ext import (
     MessageHandler,
     ContextTypes,
     filters,
-    ChatMemberHandler
+    ChatMemberHandler,
 )
 
 
@@ -32,17 +32,13 @@ from database import (
     save_clan,
     get_clan,
     get_all_clans,
-    save_dashboard_message,
-    get_dashboard_message,
-    delete_dashboard_message,
     save_player_history,
     get_player_history,
-    get_last_update,
     set_last_update,
     clean_history_duplicates
 )
 
-from keyboard import main_menu, user_menu
+from keyboard import main_menu
 
 load_dotenv()
 
@@ -757,7 +753,6 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"🥇 Лучший урон:\n"
         f"{best_damage['name']} — {best_damage['damage']}\n\n"
         f"🔥 ТОП по боям:\n"
-        f"🔥 ТОП по боям:\n"
         + "\n".join(
             [
                 f"{i}. {p['name']} — {format_number(p['battles'])}"
@@ -1007,40 +1002,13 @@ async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "✅ Дубли истории удалены"
     )
 
-async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
-
-    today = datetime.now().strftime("%Y-%m-%d")
-
-    last_update = get_last_update()
-
-    print("AUTO UPDATE CHECK")
-    print("LAST UPDATE:", last_update)
-    print("TODAY:", today)
-
-    if last_update == today:
-        return
-
-    if last_update:
-        last_date = datetime.strptime(
-            last_update,
-            "%Y-%m-%d"
-        )
-
-        days = (datetime.now() - last_date).days
-
-        if days < 3:
-            return
-
-
-    print("AUTO HISTORY UPDATE START")
-
-
-    # здесь пока только ставим отметку
-    set_last_update(today)
-
-    print("AUTO HISTORY UPDATE DONE")    
+  
 
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    print("UPDATE_HISTORY START", flush=True)
 
     if not can_use_bot(update):
         await update.message.reply_text(
@@ -1149,7 +1117,8 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             account_id,
             nickname,
             battles,
-            damage
+            damage,
+            clan_id
         )
 
         saved += 1
@@ -1432,18 +1401,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         chat_id=update.effective_chat.id,
         text=text
     )
-
-async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
-    if context.user_data.get("waiting_stats"):
-
-        nickname = update.message.text.strip()
-
-        context.user_data["waiting_stats"] = False
-
-        context.args = [nickname]
-
-        await stats(update, context)        
+        
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):

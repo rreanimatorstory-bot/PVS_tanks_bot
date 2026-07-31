@@ -283,7 +283,8 @@ def save_player_history(account_id, nickname, battles, damage, clan_id):
         nickname,
         battles,
         damage,
-        datetime.now().strftime("%Y-%m-%d")
+        datetime.now().strftime("%Y-%m-%d"),
+        clan_id
     ))
 
     
