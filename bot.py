@@ -873,7 +873,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     members_ids = data["data"][str(clan_id)]["members_ids"]
-    
+
     print(
         "DEBUG MEMBERS IDS COUNT:",
         len(members_ids),
@@ -1523,11 +1523,24 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    clan = data["data"][0]
+    found_clan = None
 
-    clan_id = clan["clan_id"]
-    clan_name = clan["name"]
-    clan_tag = clan["tag"]
+    for clan in data["data"]:
+        if clan["tag"].upper() == clan_tag:
+            found_clan = clan
+            break
+
+
+    if found_clan is None:
+        await update.message.reply_text(
+            "❌ Клан с таким тегом не найден"
+        )
+        return
+
+
+    clan_id = found_clan["clan_id"]
+    clan_name = found_clan["name"]
+    clan_tag = found_clan["tag"]
 
     save_clan(
         chat_id,
