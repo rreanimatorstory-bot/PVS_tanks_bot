@@ -35,7 +35,9 @@ from database import (
     save_player_history,
     get_player_history,
     set_last_update,
-    clean_history_duplicates
+    clean_history_duplicates,
+    save_user,
+    get_user
 )
 
 from keyboard import main_menu
@@ -46,6 +48,7 @@ load_dotenv()
 WAIT_STATS_NICK = 1
 WAIT_HISTORY_NICK = 2
 WAIT_CLAN_TAG = 3
+WAIT_WOT_NICK = 4
 
 init_db()
 check_history_columns()
@@ -120,6 +123,71 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ),
         reply_markup=reply_markup
     )  
+
+async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    nickname = update.message.text.strip()
+
+    await update.message.reply_text(
+        f"🔎 Проверяю игрока {nickname}..."
+    )
+
+    # пока только проверка через API
+    response = requests.get(
+        "https://api.wotblitz.eu/wotb/account/list/",
+        params={
+            "application_id": WG_APP_ID,
+            "search": nickname
+        },
+        timeout=10
+    )
+
+    data = response.json()
+
+    if data.get("status") != "ok" or not data.get("data"):
+        await update.message.reply_text(
+            "❌ Игрок не найден. Проверь ник."
+        )
+        return ConversationHandler.END
+
+
+    account_id = None
+
+    for player in data["data"]:
+        if player["nickname"].lower() == nickname.lower():
+            account_id = player["account_id"]
+            nickname = player["nickname"]
+            break
+
+
+    if account_id is None:
+        await update.message.reply_text(
+            "❌ Точный ник не найден."
+        )
+        return ConversationHandler.END
+
+
+    user = update.effective_user
+
+
+    save_user(
+        user.id,
+        user.username,
+        user.first_name,
+        nickname,
+        account_id
+    )
+
+
+    await update.message.reply_text(
+        f"✅ Готово!\n\n"
+        f"👤 {user.first_name}\n"
+        f"🎮 {nickname}\n\n"
+        f"Теперь я буду использовать этот аккаунт."
+    )
+
+
+    return ConversationHandler.END    
 
 async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -1478,6 +1546,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         return
 
+    if query.data == "link_wot":
+
+        await query.message.reply_text(
+            "🎮 Введите ваш ник в WoT Blitz:"
+        )
+
+        return WAIT_WOT_NICK
+
 
     if query.data == "stats":
 
@@ -1729,6 +1805,13 @@ def run_bot():
                 MessageHandler(
                     filters.TEXT & ~filters.COMMAND,
                     receive_stats_nick
+                )
+            ],
+
+            WAIT_WOT_NICK: [
+                MessageHandler(
+                    filters.TEXT & ~filters.COMMAND,
+                    receive_wot_nick
                 )
             ],
 
