@@ -1393,11 +1393,22 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "admin_rights_yes":
 
+        keyboard = [
+            [
+                InlineKeyboardButton(
+                    "🏰 Привязать клан",
+                    callback_data="setclan"
+                )
+            ]
+        ]
+
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
         await query.message.reply_text(
             "🎉 Отлично!\n\n"
             "Теперь осталось привязать ваш клан.\n\n"
-            "👇 Нажмите кнопку:\n\n"
-            "🏰 Привязать клан"
+            "👇 Нажмите кнопку:",
+            reply_markup=reply_markup
         )
 
         return
