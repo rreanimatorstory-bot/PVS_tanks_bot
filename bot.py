@@ -1021,9 +1021,11 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text="⏳ Обновляю историю игроков..."
     )
 
+    print("BEFORE GET CLAN", flush=True)
 
     clan = get_clan(update.effective_chat.id)
-    print("CLAN FROM DB:", clan, flush=True)
+    
+    print("AFTER GET CLAN:", clan, flush=True)
 
     if clan is None:
         await context.bot.send_message(
