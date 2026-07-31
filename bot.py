@@ -741,6 +741,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("🔥 MEMBERS FUNCTION ENTERED", flush=True)
+
     if not can_use_bot(update):
         await update.message.reply_text(
             "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
