@@ -1477,7 +1477,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👥 Состав и активность игроков\n\n"
         "⚠️ Для начала добавьте бота в ваш групповой чат.\n\n"
         "После добавления бот будет работать с вашим кланом.\n\n"
-        "👨‍💻 Разработчик: @Eodreid"
+        "👨‍💻 Разработчик: @Eodreid",
+        reply_markup=main_menu()
     )
 
 async def set_commands(app):
