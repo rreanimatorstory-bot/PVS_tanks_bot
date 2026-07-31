@@ -25,3 +25,36 @@ def main_menu():
     ]
 
     return InlineKeyboardMarkup(keyboard)
+
+def user_menu():
+
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "📊 Статистика игрока",
+                callback_data="stats"
+            ),
+            InlineKeyboardButton(
+                "📜 История игрока",
+                callback_data="history"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "👥 Состав клана",
+                callback_data="members"
+            ),
+            InlineKeyboardButton(
+                "🏆 ТОП игроков",
+                callback_data="top"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "📈 Отчёт клана",
+                callback_data="report"
+            )
+        ]
+    ]
+
+    return InlineKeyboardMarkup(keyboard)

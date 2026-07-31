@@ -38,7 +38,7 @@ from database import (
     clean_history_duplicates
 )
 
-from keyboard import main_menu
+from keyboard import main_menu, user_menu
 
 load_dotenv()
 
