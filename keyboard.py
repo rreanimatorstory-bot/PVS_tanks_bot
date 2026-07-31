@@ -5,6 +5,12 @@ def main_menu():
 
     keyboard = [
         [
+            InlineKeyboardButton(
+                "➕ Добавить бота в чат",
+                url="https://t.me/PVS_tanks_bot?startgroup=true"
+            )
+        ],
+        [
             InlineKeyboardButton("🏰 Привязать клан", callback_data="setclan"),
         ],
         [
@@ -23,6 +29,8 @@ def main_menu():
             InlineKeyboardButton("⚙️ Настройки", callback_data="settings")
         ]
     ]
+
+    return InlineKeyboardMarkup(keyboard)
 
     return InlineKeyboardMarkup(keyboard)
 
