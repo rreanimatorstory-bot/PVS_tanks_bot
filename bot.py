@@ -748,19 +748,44 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
+    print("MEMBERS START", flush=True)
+
+    thread_id = None
+
+    if update.message:
+        thread_id = update.message.message_thread_id
+
+    elif update.callback_query:
+        thread_id = update.callback_query.message.message_thread_id
+
+
+    thread_id = None
+
+    if update.message:
+        thread_id = update.message.message_thread_id
+
+    elif update.callback_query:
+        thread_id = update.callback_query.message.message_thread_id
+
+
+    print("MEMBERS THREAD:", thread_id, flush=True)
+
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.callback_query.message.message_thread_id,
+        message_thread_id=thread_id,
         text="⏳ Загружаю состав клана..."
     )
 
     # Получаем привязанный клан из базы
     clan = get_clan(update.effective_chat.id)
 
+    print("MEMBERS CLAN:", clan, flush=True)
+
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.callback_query.message.message_thread_id,
+            message_thread_id=thread_id,
             text="❌ Сначала привяжите клан:\n/setclan [TAG]"
         )
         return
@@ -788,6 +813,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     data = response.json()
 
+    print("MEMBERS API STATUS:", data.get("status"), flush=True)
+
     print("MEMBERS: clan API response received", flush=True)
     print(data, flush=True)
 
@@ -795,7 +822,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data.get("status") != "ok":
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.callback_query.message.message_thread_id,
+            message_thread_id=thread_id,
             text="❌ Не удалось получить данные клана"
         )
         return
@@ -839,6 +866,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
         players_data = players_response.json()
+        print("MEMBERS PLAYERS STATUS:", players_data.get("status"), flush=True)
         print("MEMBERS: players API response received")
 
 
@@ -918,6 +946,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             chat_id=update.effective_chat.id,
             text=text
         )
+
+        print("MEMBERS MESSAGE READY", flush=True)
 
         save_dashboard_message(
             update.effective_chat.id,
