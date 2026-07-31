@@ -1598,6 +1598,17 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "setclan":
 
+        member = await context.bot.get_chat_member(
+            chat_id=update.effective_chat.id,
+            user_id=update.effective_user.id
+        )
+
+        if member.status not in ["administrator", "creator"]:
+            await query.message.reply_text(
+                "❌ Только администраторы могут привязать клан."
+            )
+            return
+
         await query.message.reply_text(
             "🏰 Введите тег вашего клана.\n\n"
             "Например: [1PVS]\n\n"
