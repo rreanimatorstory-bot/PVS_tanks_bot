@@ -829,6 +829,13 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     clan_id, clan_tag, clan_name = clan
+    print(
+        "DEBUG CURRENT CLAN:",
+        clan_id,
+        clan_tag,
+        clan_name,
+        flush=True
+    )
 
     print("MEMBERS: clan from database", clan_id, clan_tag)
 
@@ -866,6 +873,12 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     members_ids = data["data"][str(clan_id)]["members_ids"]
+    
+    print(
+        "DEBUG MEMBERS IDS COUNT:",
+        len(members_ids),
+        flush=True
+    )
     
     clan_info = data["data"][str(clan_id)]
 
