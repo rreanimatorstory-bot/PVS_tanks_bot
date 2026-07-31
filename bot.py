@@ -1524,11 +1524,13 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.reply_text(
-        f"✅ Клан настроен:\n"
-        f"🏰 {clan_name}\n"
-        f"🔖 {clan_tag}\n"
-        f"ID: {clan_id}"
+        "🎉 Настройка завершена!\n\n"
+        f"🏰 Клан успешно привязан: {clan_tag}\n\n"
+        "BlitzClanBot готов к работе.",
+        reply_markup=main_menu()
     )
+
+    
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
