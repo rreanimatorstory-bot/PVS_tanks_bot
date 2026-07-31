@@ -114,6 +114,13 @@ def get_clan(chat_id):
     return result
 
 def save_dashboard_message(chat_id, dashboard, message_id):
+    print(
+        "SAVE DASHBOARD:",
+        chat_id,
+        dashboard,
+        message_id,
+        flush=True
+    )
 
     conn = get_connection()
     cur = conn.cursor()
