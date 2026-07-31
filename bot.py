@@ -11,7 +11,7 @@ def format_number(number):
 from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
-from telegram import Update
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram import BotCommand
 from telegram.ext import (
     Application,
