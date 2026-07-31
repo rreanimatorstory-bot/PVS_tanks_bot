@@ -742,6 +742,8 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("🚀🚀🚀 MEMBERS TEST 777 🚀🚀🚀", flush=True)
+
     print("🔥🔥🔥 NEW MEMBERS CODE STARTED 🔥🔥🔥", flush=True)
 
     if not can_use_bot(update):
