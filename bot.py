@@ -1576,11 +1576,10 @@ def run_bot():
 )
 
     app.add_handler(
-    CallbackQueryHandler(
-        button_handler,
-        pattern="^(history|members|top|report|myclan|setclan|settings)$"
+        CallbackQueryHandler(
+            button_handler
+        )
     )
-)
 
    
     app.add_handler(CommandHandler("stats", stats))
