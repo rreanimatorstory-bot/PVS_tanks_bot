@@ -1712,6 +1712,7 @@ def run_bot():
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("history", history))
     app.add_handler(CommandHandler("update", update_history))
+    print("UPDATE HANDLER REGISTERED", flush=True)
     app.add_handler(
         ConversationHandler(
             entry_points=[ 
