@@ -1262,73 +1262,70 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
 
             try:
-
                 stats_response = requests.get(
                     stats_url,
                     params=stats_params,
                     timeout=10
                 )
-
                 stats_data = stats_response.json()
 
+                if stats_data.get("status") != "ok":
+                    continue
+
+                account = stats_data["data"].get(str(account_id))
+
+                if not account:
+                    continue
+
+                nickname = account["nickname"]
+
+                player = account.get(
+                    "statistics",
+                    {}
+                ).get(
+                    "all",
+                    {}
+                )
+
+                battles = player.get(
+                    "battles",
+                    0
+                )
+
+                damage = player.get(
+                    "damage_dealt",
+                    0
+                )
+
+                print(
+                    "SAVING HISTORY:",
+                    nickname,
+                    flush=True
+                )
+
+                save_player_history(
+                    account_id,
+                    nickname,
+                    battles,
+                    damage
+                )
+
+                print(
+                    "HISTORY SAVED:",
+                    nickname,
+                    flush=True
+                )
+
+                saved += 1
 
             except Exception as e:
-
                 print(
                     "PLAYER ERROR:",
                     account_id,
                     e,
                     flush=True
                 )
-
                 continue
-
-
-            if stats_data.get("status") != "ok":
-                continue
-
-
-            account = stats_data["data"].get(str(account_id))
-
-
-            if not account:
-                continue
-
-
-            nickname = account["nickname"]
-
-
-            player = account.get(
-                "statistics",
-                {}
-            ).get(
-                "all",
-                {}
-            )
-
-
-            battles = player.get(
-                "battles",
-                0
-            )
-
-
-            damage = player.get(
-                "damage_dealt",
-                0
-            )
-
-
-            save_player_history(
-                account_id,
-                nickname,
-                battles,
-                damage
-            )
-
-
-            saved += 1
-
 
 
         print(
