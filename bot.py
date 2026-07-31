@@ -1024,7 +1024,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("BEFORE GET CLAN", flush=True)
 
     clan = get_clan(update.effective_chat.id)
-    
+
     print("AFTER GET CLAN:", clan, flush=True)
 
     if clan is None:
@@ -1663,6 +1663,12 @@ def can_use_bot(update):
     # В личке обычным пользователям нельзя
     return False   
 
+async def test_update(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    print("TEST UPDATE HANDLER WORKS", flush=True)
+
+    await update.message.reply_text(
+        "Тест /update работает"
+    )
     
 def run_bot():
 
@@ -1703,7 +1709,7 @@ def run_bot():
     app.add_handler(CommandHandler("myclan", myclan))
     app.add_handler(CommandHandler("stats", stats))
     app.add_handler(CommandHandler("history", history))
-    app.add_handler(CommandHandler("update", update_history))
+    app.add_handler(CommandHandler("update", test_update))
     app.add_handler(
         ConversationHandler(
             entry_points=[ 
