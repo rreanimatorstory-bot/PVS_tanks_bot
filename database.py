@@ -244,7 +244,7 @@ def get_dashboard_message(chat_id, dashboard):
 
     return None
 
-def save_player_history(account_id, nickname, battles, damage):
+def save_player_history(account_id, nickname, battles, damage, clan_id):
 
 
     conn = get_connection()

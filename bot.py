@@ -1311,7 +1311,8 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
                     account_id,
                     nickname,
                     battles,
-                    damage
+                    damage,
+                    clan_id
                 )
 
                 print(
