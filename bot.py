@@ -934,63 +934,13 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
    
 
 
-    message_id = get_dashboard_message(
-        update.effective_chat.id,
-        "members"
+    message = await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        message_thread_id=thread_id,
+        text=text
     )
 
-
-    if message_id:
-
-        try:
-            await context.bot.edit_message_text(
-                chat_id=update.effective_chat.id,
-                message_id=message_id,
-                text=text
-            )
-
-            print("DASHBOARD UPDATED", flush=True)
-
-            try:
-                await context.bot.delete_message(
-                    chat_id=update.effective_chat.id,
-                    message_id=loading_message.message_id
-                )
-            except Exception as e:
-                print("LOADING DELETE ERROR:", e, flush=True)
-
-        except Exception as e:
-            if "Message is not modified" in str(e):
-                print("DASHBOARD ALREADY UP TO DATE", flush=True)
-
-                try:
-                    await context.bot.delete_message(
-                        chat_id=update.effective_chat.id,
-                        message_id=loading_message.message_id
-                    )
-                except Exception as e:
-                    print("LOADING DELETE ERROR:", e, flush=True)
-            else:
-                print("DASHBOARD EDIT ERROR:", e, flush=True)
-
-
-    else:
-
-        message = await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            message_thread_id=thread_id,
-            text=text
-        )
-
-        print("MEMBERS MESSAGE READY", flush=True)
-
-        save_dashboard_message(
-            update.effective_chat.id,
-            "members",
-            message.message_id
-        )
-
-        print("DASHBOARD MESSAGE CREATED", message.message_id, flush=True)
+    print("MEMBERS TEST MESSAGE SENT", message.message_id, flush=True)
 
 async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
