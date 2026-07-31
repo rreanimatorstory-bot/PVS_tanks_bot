@@ -961,6 +961,14 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception as e:
             if "Message is not modified" in str(e):
                 print("DASHBOARD ALREADY UP TO DATE", flush=True)
+
+                try:
+                    await context.bot.delete_message(
+                        chat_id=update.effective_chat.id,
+                        message_id=loading_message.message_id
+                    )
+                except Exception as e:
+                    print("LOADING DELETE ERROR:", e, flush=True)
             else:
                 print("DASHBOARD EDIT ERROR:", e, flush=True)
 
