@@ -1478,6 +1478,13 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
 
+    if update.effective_chat.type != "private":
+        await update.message.reply_text(
+            "ℹ️ BlitzClanBot уже добавлен в этот чат.\n\n"
+            "Для полноценной работы выдайте мне права администратора."
+        )
+        return
+
     if is_developer(user_id):
         await update.message.reply_text(
             "🤖 BlitzClanBot\n\n"
