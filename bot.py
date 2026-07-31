@@ -20,7 +20,8 @@ from telegram.ext import (
     ConversationHandler,
     MessageHandler,
     ContextTypes,
-    filters
+    filters,
+    ChatMemberHandler
 )
 
 
@@ -82,6 +83,15 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👨‍💻 Разработчик: @Eodreid",
         reply_markup=main_menu()
     )
+
+async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    print("🔥 BOT ADDED TO CHAT EVENT", flush=True)
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="✅ Тест: бот добавлен в чат"
+    )    
 
 async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -1308,7 +1318,7 @@ async def text_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         context.args = [nickname]
 
-        await stats(update, context)
+        await stats(update, context)        
 
 
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -1543,12 +1553,20 @@ def run_bot():
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
+
     app.add_handler(
-    ConversationHandler(
-        entry_points=[ 
-            CallbackQueryHandler(
-                button_handler,
-                pattern="^(stats|history|setclan)$"
+        ChatMemberHandler(
+            bot_added_to_chat,
+            ChatMemberHandler.MY_CHAT_MEMBER
+        )
+    )
+
+    app.add_handler(
+        ConversationHandler(
+            entry_points=[ 
+                CallbackQueryHandler(
+                    button_handler,
+                    pattern="^(stats|history|setclan)$"
 
             )    
         ],
