@@ -1377,6 +1377,31 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("BUTTON:", query.data, flush=True)
 
+    if query.data == "admin_rights_no":
+
+        await query.message.reply_text(
+            "⚠️ Для полноценной работы мне нужны права администратора:\n\n"
+            "☑️ Удаление сообщений\n"
+            "☑️ Закрепление сообщений\n"
+            "☑️ Управление сообщениями\n\n"
+            "После выдачи прав нажмите:\n"
+            "✅ Да, права выданы"
+        )
+
+        return
+
+
+    elif query.data == "admin_rights_yes":
+
+        await query.message.reply_text(
+            "🎉 Отлично!\n\n"
+            "Теперь осталось привязать ваш клан.\n\n"
+            "👇 Нажмите кнопку:\n\n"
+            "🏰 Привязать клан"
+        )
+
+        return
+
 
     if query.data == "stats":
 
