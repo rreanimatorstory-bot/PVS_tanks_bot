@@ -179,28 +179,6 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
         nickname,
         account_id
     )
-
-    check = get_user(user.id)
-
-    print("CHECK USER AFTER SAVE:", check, flush=True)
-    
-    print("TRY SET TAG START", flush=True)
-    print("TRYING SET TAG FOR:", nickname, flush=True)
-    try:
-        response = requests.post(
-            f"https://api.telegram.org/bot{BOT_TOKEN}/setChatMemberTag",
-            json={
-                "chat_id": update.effective_chat.id,
-                "user_id": user.id,
-                "tag": nickname
-            },
-            timeout=10
-        )
-
-        print("SET TAG RESPONSE:", response.text, flush=True)
-
-    except Exception as e:
-        print("SET TAG ERROR:", e, flush=True)
     
 
 

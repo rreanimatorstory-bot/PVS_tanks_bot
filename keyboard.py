@@ -14,9 +14,6 @@ def main_menu():
             InlineKeyboardButton("🏰 Привязать клан", callback_data="setclan"),
         ],
         [
-            InlineKeyboardButton("🎮 Привязать WoT ник", callback_data="link_wot"),
-        ],
-        [
             InlineKeyboardButton("📊 Статистика игрока", callback_data="stats"),
             InlineKeyboardButton("📜 История игрока", callback_data="history")
         ],
