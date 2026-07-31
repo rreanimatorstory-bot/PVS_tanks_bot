@@ -77,7 +77,25 @@ def add_clan_id_to_history():
     cur.close()
     conn.close()
 
-    print("HISTORY TABLE UPDATED: clan_id added", flush=True)    
+    print("HISTORY TABLE UPDATED: clan_id added", flush=True)
+
+def check_history_columns():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT column_name
+    FROM information_schema.columns
+    WHERE table_name='history'
+    """)
+
+    rows = cur.fetchall()
+
+    print("HISTORY COLUMNS:", rows, flush=True)
+
+    cur.close()
+    conn.close()        
 
 
 def save_clan(chat_id, clan_id, clan_tag, clan_name):
