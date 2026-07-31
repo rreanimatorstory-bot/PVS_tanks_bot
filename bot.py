@@ -29,6 +29,7 @@ from database import (
     init_db,
     save_clan,
     get_clan,
+    get_all_clans,
     save_dashboard_message,
     get_dashboard_message,
     delete_dashboard_message,

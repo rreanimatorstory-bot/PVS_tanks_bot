@@ -113,6 +113,25 @@ def get_clan(chat_id):
 
     return result
 
+def get_all_clans():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        SELECT chat_id, clan_id, clan_tag, clan_name
+        FROM clans
+        """
+    )
+
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
+
 def save_dashboard_message(chat_id, dashboard, message_id):
     print(
         "SAVE DASHBOARD:",
