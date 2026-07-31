@@ -30,6 +30,7 @@ from database import (
     get_clan,
     save_dashboard_message,
     get_dashboard_message,
+    delete_dashboard_message,
     save_player_history,
     get_player_history,
     get_last_update,
@@ -926,7 +927,12 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{i}. {crown}{player['nickname']}\n"
             f"⚔️ {player['battles']} боёв | 🏆 {player['winrate']}%\n"
             f"💥 {player['avg_damage']} С/У\n\n"
-        )    
+        )   
+
+    delete_dashboard_message(
+        update.effective_chat.id,
+        "members"
+    )     
 
 
     message_id = get_dashboard_message(
@@ -941,6 +947,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.edit_message_text(
                 chat_id=update.effective_chat.id,
                 message_id=message_id,
+                message_thread_id=thread_id,
                 text=text
             )
 
@@ -954,6 +961,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         message = await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
             text=text
         )
 

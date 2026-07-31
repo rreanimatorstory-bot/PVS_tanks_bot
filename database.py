@@ -137,6 +137,26 @@ def save_dashboard_message(chat_id, dashboard, message_id):
     cur.close()
     conn.close()
 
+def delete_dashboard_message(chat_id, dashboard):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    DELETE FROM dashboard_messages
+    WHERE chat_id=%s
+    AND dashboard=%s
+    """,
+    (
+        chat_id,
+        dashboard
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()    
+
 
 def get_dashboard_message(chat_id, dashboard):
 
