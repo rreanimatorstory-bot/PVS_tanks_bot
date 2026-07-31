@@ -385,4 +385,76 @@ def clean_history_duplicates():
     cur.close()
     conn.close()
 
+def save_user(
+    telegram_id,
+    telegram_username,
+    telegram_first_name,
+    wot_nickname,
+    wot_account_id
+):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    INSERT INTO users
+    (
+        telegram_id,
+        telegram_username,
+        telegram_first_name,
+        wot_nickname,
+        wot_account_id
+    )
+    VALUES (%s,%s,%s,%s,%s)
+
+    ON CONFLICT (telegram_id)
+    DO UPDATE SET
+        telegram_username = EXCLUDED.telegram_username,
+        telegram_first_name = EXCLUDED.telegram_first_name,
+        wot_nickname = EXCLUDED.wot_nickname,
+        wot_account_id = EXCLUDED.wot_account_id
+    """,
+    (
+        telegram_id,
+        telegram_username,
+        telegram_first_name,
+        wot_nickname,
+        wot_account_id
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+
+def get_user(telegram_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT
+        telegram_id,
+        telegram_username,
+        telegram_first_name,
+        wot_nickname,
+        wot_account_id
+    FROM users
+    WHERE telegram_id=%s
+    """,
+    (telegram_id,))
+
+    result = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return result
+
+
+    
+       
+    
+
    
