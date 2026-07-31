@@ -178,6 +178,15 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
         account_id
     )
 
+    try:
+        await context.bot.set_chat_administrator_custom_title(
+            chat_id=update.effective_chat.id,
+            user_id=user.id,
+            custom_title=nickname
+        )
+    except Exception as e:
+        print("CUSTOM TITLE ERROR:", e)
+
 
     await update.message.reply_text(
         f"✅ Готово!\n\n"
