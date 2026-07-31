@@ -761,14 +761,6 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         thread_id = update.callback_query.message.message_thread_id
 
 
-    thread_id = None
-
-    if update.message:
-        thread_id = update.message.message_thread_id
-
-    elif update.callback_query:
-        thread_id = update.callback_query.message.message_thread_id
-
 
     print("MEMBERS THREAD:", thread_id, flush=True)
 
@@ -847,6 +839,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     # запрашиваем игроков группами по 10
+
+    print("MEMBERS: START PLAYERS REQUEST", flush=True)
     for i in range(0, len(members_ids), 10):
 
         batch = members_ids[i:i+10]
@@ -866,8 +860,14 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             timeout=10
         )
 
+        print("MEMBERS: players response received", flush=True)
+        print(players_response.status_code, flush=True)
+
 
         players_data = players_response.json()
+
+        print("MEMBERS: json parsed", flush=True)
+        print(players_data.get("status"), flush=True)
 
         print("MEMBERS: batch received", batch, flush=True)
         print("MEMBERS: players count in batch", len(players_data.get("data", {})), flush=True)
@@ -881,7 +881,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         for player in players_data["data"].values():
 
-            print("MEMBERS: processing player", flush=True)     
+            print("MEMBERS: processing player", flush=True)
+   
 
             if player is None:
                 continue
@@ -907,27 +908,25 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             })
 
-        print("MEMBERS: sorting", len(members), flush=True)
+    print("MEMBERS: sorting", len(members), flush=True)
 
-        members.sort(key=lambda x: not x["leader"])    
+    members.sort(key=lambda x: not x["leader"])    
+            
+    text = (
+        f"👥 Состав клана {clan_tag}\n\n"
+        f"Всего игроков: {len(members)}\n\n"
+    )
         
+        
+    for i, player in enumerate(members, start=1):
+
+        crown = "👑 " if player["leader"] else ""
     
-
-        text = (
-            f"👥 Состав клана {clan_tag}\n\n"
-            f"Всего игроков: {len(members)}\n\n"
-        )
-        
-        
-        for i, player in enumerate(members, start=1):
-
-            crown = "👑 " if player["leader"] else ""
-        
-            text += (
-                f"{i}. {crown}{player['nickname']}\n"
-                f"⚔️ {player['battles']} боёв | 🏆 {player['winrate']}%\n"
-                f"💥 {player['avg_damage']} С/У\n\n"
-            )
+        text += (
+            f"{i}. {crown}{player['nickname']}\n"
+            f"⚔️ {player['battles']} боёв | 🏆 {player['winrate']}%\n"
+            f"💥 {player['avg_damage']} С/У\n\n"
+        )    
 
 
     message_id = get_dashboard_message(
