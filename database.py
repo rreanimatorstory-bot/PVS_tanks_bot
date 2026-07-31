@@ -53,6 +53,16 @@ def init_db():
         PRIMARY KEY(chat_id, dashboard)
     )
     """)
+    
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        telegram_id BIGINT PRIMARY KEY,
+        telegram_username TEXT,
+        telegram_first_name TEXT,
+        wot_nickname TEXT,
+        wot_account_id BIGINT
+    )
+    """)
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (

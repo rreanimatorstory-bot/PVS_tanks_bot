@@ -1794,10 +1794,10 @@ def run_bot():
             entry_points=[ 
                 CallbackQueryHandler(
                     button_handler,
-                    pattern="^(stats|history|setclan)$"
+                    pattern="^(stats|history|setclan|link_wot)$"
 
-            )    
-        ],
+                )    
+            ],
         per_message=False,
 
         states={
