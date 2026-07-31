@@ -88,19 +88,37 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("🔥 BOT ADDED TO CHAT EVENT", flush=True)
 
+    keyboard = [
+        [
+            InlineKeyboardButton(
+                "✅ Да, права выданы",
+                callback_data="admin_rights_yes"
+            )
+        ],
+        [
+            InlineKeyboardButton(
+                "❌ Нет, ещё не выдал",
+                callback_data="admin_rights_no"
+            )
+        ]
+    ]
+
+    reply_markup = InlineKeyboardMarkup(keyboard)
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
         text=(
             "✅ BlitzClanBot добавлен в чат! 🏰\n\n"
             "Отлично! Давайте настроим меня для работы.\n\n"
             "Для полноценной работы мне нужны права администратора:\n\n"
-            "☑ Удаление сообщений\n"
-            "☑ Закрепление сообщений\n"
-            "☑ Управление сообщениями\n\n"
+            "☑️ Удаление сообщений\n"
+            "☑️ Закрепление сообщений\n"
+            "☑️ Управление сообщениями\n\n"
             "Без этих прав некоторые функции могут работать некорректно.\n\n"
             "Вы уже выдали мне права администратора?"
-        )
-    )   
+        ),
+        reply_markup=reply_markup
+    )  
 
 async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
