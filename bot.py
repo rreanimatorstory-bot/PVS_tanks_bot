@@ -1006,8 +1006,6 @@ async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     print("UPDATE_HISTORY START", flush=True)
 
     if not can_use_bot(update):
@@ -1025,6 +1023,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     clan = get_clan(update.effective_chat.id)
+    print("CLAN FROM DB:", clan, flush=True)
 
     if clan is None:
         await context.bot.send_message(
@@ -1063,6 +1062,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     members_ids = clan_data["data"][str(clan_id)]["members_ids"]
+    print("MEMBERS:", len(members_ids), flush=True)
 
 
     saved = 0
