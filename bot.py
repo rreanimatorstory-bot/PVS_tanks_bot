@@ -90,8 +90,17 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="✅ Тест: бот добавлен в чат"
-    )    
+        text=(
+            "✅ BlitzClanBot добавлен в чат! 🏰\n\n"
+            "Отлично! Давайте настроим меня для работы.\n\n"
+            "Для полноценной работы мне нужны права администратора:\n\n"
+            "☑ Удаление сообщений\n"
+            "☑ Закрепление сообщений\n"
+            "☑ Управление сообщениями\n\n"
+            "Без этих прав некоторые функции могут работать некорректно.\n\n"
+            "Вы уже выдали мне права администратора?"
+        )
+    )   
 
 async def receive_stats_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -1550,17 +1559,17 @@ def run_bot():
     print("AUTO UPDATE SCHEDULER ENABLED", flush=True)
 
     app.add_handler(CommandHandler("start", start))
+
+    app.add_handler(
+            ChatMemberHandler(
+                bot_added_to_chat,
+                ChatMemberHandler.MY_CHAT_MEMBER
+            )
+        )
+    
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
-
-    app.add_handler(
-        ChatMemberHandler(
-            bot_added_to_chat,
-            ChatMemberHandler.MY_CHAT_MEMBER
-        )
-    )
-
     app.add_handler(
         ConversationHandler(
             entry_points=[ 
