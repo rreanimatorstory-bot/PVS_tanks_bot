@@ -54,6 +54,16 @@ def init_db():
     )
     """)
 
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        telegram_id BIGINT PRIMARY KEY,
+        telegram_username TEXT,
+        telegram_first_name TEXT,
+        wot_nickname TEXT,
+        wot_account_id BIGINT
+    )
+    """)
+
     
 
     conn.commit()
