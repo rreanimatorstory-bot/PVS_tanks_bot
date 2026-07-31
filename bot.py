@@ -179,13 +179,21 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     try:
-        await context.bot.set_chat_administrator_custom_title(
-            chat_id=update.effective_chat.id,
-            user_id=user.id,
-            custom_title=nickname
+        response = requests.post(
+            f"https://api.telegram.org/bot{BOT_TOKEN}/setChatMemberTag",
+            json={
+                "chat_id": update.effective_chat.id,
+                "user_id": user.id,
+                "tag": nickname
+            },
+            timeout=10
         )
+
+        print("SET TAG RESPONSE:", response.text, flush=True)
+
     except Exception as e:
-        print("CUSTOM TITLE ERROR:", e)
+        print("SET TAG ERROR:", e, flush=True)
+    
 
 
     await update.message.reply_text(
