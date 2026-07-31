@@ -1006,7 +1006,11 @@ async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("UPDATE COMMAND RECEIVED", flush=True)
+
     print("UPDATE_HISTORY START", flush=True)
+
+   
 
     if not can_use_bot(update):
         await update.message.reply_text(
