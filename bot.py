@@ -866,6 +866,9 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
         players_data = players_response.json()
+
+        print("MEMBERS: batch received", batch, flush=True)
+        print("MEMBERS: players count in batch", len(players_data.get("data", {})), flush=True)
         print("MEMBERS PLAYERS STATUS:", players_data.get("status"), flush=True)
         print("MEMBERS: players API response received")
 
@@ -875,6 +878,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
         for player in players_data["data"].values():
+
+            print("MEMBERS: processing player", flush=True)     
 
             if player is None:
                 continue
@@ -899,8 +904,12 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "avg_damage": avg_damage
             
             })
+
+        print("MEMBERS: sorting", len(members), flush=True)
+
+        members.sort(key=lambda x: not x["leader"])    
         
-        members.sort(key=lambda x: not x["leader"])
+    
 
         text = (
             f"👥 Состав клана {clan_tag}\n\n"
