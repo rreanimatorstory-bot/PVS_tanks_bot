@@ -1168,94 +1168,177 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
     print("AUTO UPDATE: START", flush=True)
 
-    clan_id = "1336303"  # временно, потом сделаем динамически
+    clans = get_all_clans()
 
-    clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
+    print("AUTO UPDATE CLANS:", clans, flush=True)
 
-    clan_params = {
-        "application_id": WG_APP_ID,
-        "clan_id": clan_id
-    }
 
-    try:
-        clan_response = requests.get(
-            clan_url,
-            params=clan_params,
-            timeout=10
-        )
-
-        clan_data = clan_response.json()
-
-    except Exception as e:
-        print("AUTO UPDATE ERROR:", e, flush=True)
+    if not clans:
+        print("AUTO UPDATE: NO CLANS FOUND", flush=True)
         return
 
 
-    if clan_data.get("status") != "ok":
-        print("AUTO UPDATE: CLAN ERROR", flush=True)
-        return
-
-
-    members_ids = clan_data["data"][str(clan_id)]["members_ids"]
-
-
-    saved = 0
-
-
-    for account_id in members_ids:
+    for chat_id, clan_id, clan_tag, clan_name in clans:
 
         print(
-            "AUTO CHECK PLAYER:",
-            account_id,
+            "AUTO UPDATE CLAN:",
+            clan_tag,
+            clan_id,
             flush=True
         )
 
 
-        stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+        clan_url = "https://api.wotblitz.eu/wotb/clans/info/"
 
-        stats_params = {
+        clan_params = {
             "application_id": WG_APP_ID,
-            "account_id": account_id
+            "clan_id": clan_id
         }
 
 
         try:
 
-            stats_response = requests.get(
-                stats_url,
-                params=stats_params,
+            clan_response = requests.get(
+                clan_url,
+                params=clan_params,
                 timeout=10
             )
 
-            stats_data = stats_response.json()
+            clan_data = clan_response.json()
 
-        except:
+        except Exception as e:
+
+            print(
+                "AUTO UPDATE CLAN ERROR:",
+                e,
+                flush=True
+            )
+
             continue
 
 
-        if stats_data.get("status") != "ok":
+        if clan_data.get("status") != "ok":
+
+            print(
+                "AUTO UPDATE: CLAN API ERROR",
+                clan_tag,
+                flush=True
+            )
+
             continue
 
 
-        account = stats_data["data"][str(account_id)]
-
-        nickname = account["nickname"]
-
-        player = account["statistics"]["all"]
+        members_ids = clan_data["data"][str(clan_id)]["members_ids"]
 
 
-        battles = player.get("battles", 0)
-        damage = player.get("damage_dealt", 0)
-
-
-        save_player_history(
-            account_id,
-            nickname,
-            battles,
-            damage
+        print(
+            "AUTO UPDATE MEMBERS:",
+            clan_tag,
+            len(members_ids),
+            flush=True
         )
 
-        saved += 1
+
+        saved = 0
+
+
+        for account_id in members_ids:
+
+
+            print(
+                "AUTO CHECK PLAYER:",
+                account_id,
+                flush=True
+            )
+
+
+            stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+
+            stats_params = {
+                "application_id": WG_APP_ID,
+                "account_id": account_id
+            }
+
+
+            try:
+
+                stats_response = requests.get(
+                    stats_url,
+                    params=stats_params,
+                    timeout=10
+                )
+
+                stats_data = stats_response.json()
+
+
+            except Exception as e:
+
+                print(
+                    "PLAYER ERROR:",
+                    account_id,
+                    e,
+                    flush=True
+                )
+
+                continue
+
+
+            if stats_data.get("status") != "ok":
+                continue
+
+
+            account = stats_data["data"].get(str(account_id))
+
+
+            if not account:
+                continue
+
+
+            nickname = account["nickname"]
+
+
+            player = account.get(
+                "statistics",
+                {}
+            ).get(
+                "all",
+                {}
+            )
+
+
+            battles = player.get(
+                "battles",
+                0
+            )
+
+
+            damage = player.get(
+                "damage_dealt",
+                0
+            )
+
+
+            save_player_history(
+                account_id,
+                nickname,
+                battles,
+                damage
+            )
+
+
+            saved += 1
+
+
+
+        print(
+            "AUTO UPDATE CLAN DONE:",
+            clan_tag,
+            "SAVED:",
+            saved,
+            flush=True
+        )
+
 
 
     set_last_update(
@@ -1264,8 +1347,7 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
 
     print(
-        "AUTO UPDATE DONE:",
-        saved,
+        "AUTO UPDATE FINISHED",
         flush=True
     )    
 
