@@ -1699,6 +1699,9 @@ def run_bot():
     app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
+    app.add_handler(CommandHandler("stats", stats))
+    app.add_handler(CommandHandler("history", history))
+    app.add_handler(CommandHandler("update", update_history))
     app.add_handler(
         ConversationHandler(
             entry_points=[ 
