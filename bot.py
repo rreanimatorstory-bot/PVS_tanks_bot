@@ -27,6 +27,7 @@ from telegram.ext import (
 
 from database import (
     init_db,
+    add_clan_id_to_history,
     save_clan,
     get_clan,
     get_all_clans,
@@ -50,6 +51,7 @@ WAIT_HISTORY_NICK = 2
 WAIT_CLAN_TAG = 3
 
 init_db()
+add_clan_id_to_history()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 

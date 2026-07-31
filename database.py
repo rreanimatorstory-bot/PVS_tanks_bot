@@ -63,6 +63,22 @@ def init_db():
 
     print("POSTGRES DB READY")
 
+def add_clan_id_to_history():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        ALTER TABLE history
+        ADD COLUMN IF NOT EXISTS clan_id BIGINT;
+    """)
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    print("HISTORY TABLE UPDATED: clan_id added", flush=True)    
+
 
 def save_clan(chat_id, clan_id, clan_tag, clan_name):
 
