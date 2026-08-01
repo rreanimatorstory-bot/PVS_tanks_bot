@@ -1096,14 +1096,6 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("UPDATE_HISTORY START", flush=True)
 
-    print("SENDING MESSAGE", flush=True)
-
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        message_thread_id=update.message.message_thread_id,
-        text="⏳ Обновляю историю игроков..."
-    )
-    print("MESSAGE SENT", flush=True)
 
     print("BEFORE GET CLAN", flush=True)
 
