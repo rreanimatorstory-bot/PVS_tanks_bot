@@ -1143,6 +1143,8 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"⏳ Обновляю историю игрока {nickname}..."
         )
 
+        return
+
         # дальше будем сохранять статистику
 
     clan = get_clan(update.effective_chat.id)
