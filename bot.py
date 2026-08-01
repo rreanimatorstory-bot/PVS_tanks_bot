@@ -1615,13 +1615,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 return
 
         await context.bot.send_message(
-            chat_id=update.effective_chat.id,
-            text=(
-                "🏰 Введите тег вашего клана.\n\n"
-                "Например: [1PVS]\n\n"
-                "⚠️ Введите только тег клана, без названия."
-            )
+        chat_id=update.effective_chat.id,
+        text=(
+            "🏰 Введите тег вашего клана.\n\n"
+            "Например: [1PVS]\n\n"
+            "⚠️ Введите только тег клана, без названия."
         )
+    )
 
         return WAIT_CLAN_TAG
 
@@ -1720,7 +1720,6 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🎉 Настройка завершена!\n\n"
         f"🏰 Клан успешно привязан: {clan_tag}\n\n"
         "BlitzClanBot готов к работе.",
-        reply_markup=main_menu()
     )
 
     
