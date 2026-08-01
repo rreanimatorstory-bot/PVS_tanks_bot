@@ -1295,6 +1295,8 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         account = stats_data["data"][str(account_id)]
 
+        print("PLAYER CLAN:", account.get("clan_id"), flush=True)
+
         nickname = account["nickname"]
 
         player = account["statistics"]["all"]
