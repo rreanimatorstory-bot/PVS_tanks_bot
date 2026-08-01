@@ -337,6 +337,8 @@ def get_player_history(account_id):
     cur.close()
     conn.close()
 
+    
+
 
     return result
 
@@ -464,6 +466,29 @@ def get_user(telegram_id):
 
     cur.close()
     conn.close()
+
+    return result
+
+def test_history_clan(account_id):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT account_id, nickname, clan_id
+    FROM history
+    WHERE account_id=%s
+    ORDER BY id DESC
+    LIMIT 5
+    """,
+    (account_id,))
+
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    print("TEST DB HISTORY:", result, flush=True)
 
     return result
 

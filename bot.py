@@ -37,7 +37,8 @@ from database import (
     set_last_update,
     clean_history_duplicates,
     save_user,
-    get_user
+    get_user,
+    test_history_clan
 )
 
 from keyboard import main_menu
