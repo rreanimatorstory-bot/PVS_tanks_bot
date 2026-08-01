@@ -1502,8 +1502,6 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    
-
     if not context.args:
         await update.message.reply_text(
             "Использование:\n/history ник"
@@ -1537,7 +1535,8 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     account_id = data["data"][0]["account_id"]
 
-        # Получаем текущий клан игрока через WG API
+
+    # Получаем текущий клан игрока через WG API
     clan_name = "Без клана"
 
     clan_response = requests.get(
@@ -1580,30 +1579,20 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         clan_name = f"[{clan_info.get('tag')}]"
 
 
-    # Берём историю из PostgreSQL
-    history_data = get_player_history(account_id)
+    # Получаем свежую статистику игрока
+    info_response = requests.get(
+        "https://api.wotblitz.eu/wotb/account/info/",
+        params={
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        },
+        timeout=10
+    )
 
-    print("HISTORY ACCOUNT ID:", account_id, flush=True)
-    print("HISTORY DATA:", history_data, flush=True)
+    info_data = info_response.json()
 
-    if not history_data:
 
-        info_response = requests.get(
-            "https://api.wotblitz.eu/wotb/account/info/",
-            params={
-                "application_id": WG_APP_ID,
-                "account_id": account_id
-            },
-            timeout=10
-        )
-
-        info_data = info_response.json()
-
-        if info_data.get("status") != "ok":
-            await update.message.reply_text(
-                "❌ Не удалось получить статистику игрока"
-            )
-            return
+    if info_data.get("status") == "ok":
 
         account = info_data["data"][str(account_id)]
 
@@ -1612,15 +1601,46 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         battles = player.get("battles", 0)
         damage = player.get("damage_dealt", 0)
 
-        save_player_history(
-            account_id,
-            nickname,
-            battles,
-            damage,
-            account.get("clan_id")
-        )
+        last_history = get_player_history(account_id)
 
-        history_data = get_player_history(account_id)
+        save_needed = True
+
+        if last_history:
+
+            last = last_history[0]
+
+            old_battles = last[1]
+            old_damage = last[2]
+
+            if old_battles == battles and old_damage == damage:
+                save_needed = False
+
+
+        if save_needed:
+
+            save_player_history(
+                account_id,
+                account["nickname"],
+                battles,
+                damage,
+                account.get("clan_id")
+            )
+
+
+    # Берём обновлённую историю
+    history_data = get_player_history(account_id)
+
+
+    print("HISTORY ACCOUNT ID:", account_id, flush=True)
+    print("HISTORY DATA:", history_data, flush=True)
+
+
+    if not history_data:
+
+        await update.message.reply_text(
+            "📭 Истории пока нет."
+        )
+        return
 
 
     text = (
@@ -1638,7 +1658,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📅 {date}\n"
             f"⚔️ Бои: {format_number(battles)}\n"
             f"💥 Урон: {format_number(damage)}\n\n"
-      )
+        )
 
 
     await context.bot.send_message(
