@@ -668,9 +668,12 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             message_thread_id=thread_id,
-            text="❌ Сначала привяжите клан:\n/setclan [TAG]"
+            text=(
+                "❌ Клан ещё не привязан.\n\n"
+                "Добавьте бота в групповой чат и выполните настройку клана."
+            )
         )
-        return
+    return
     
     clan_id, clan_tag, clan_name = clan
 
