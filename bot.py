@@ -640,9 +640,12 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
 
     if not can_use_bot(update):
-        await update.message.reply_text(
-            "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
-            "После добавления бот станет доступен для работы с вашим кланом."
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=(
+                "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
+                "После добавления бот станет доступен для работы с вашим кланом."
+            )
         )
         return
     
