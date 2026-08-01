@@ -32,7 +32,7 @@ def main_menu():
 
     return InlineKeyboardMarkup(keyboard)
 
-    return InlineKeyboardMarkup(keyboard)
+    
 
 def user_menu():
 

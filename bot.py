@@ -1499,14 +1499,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("CHAT TYPE:", update.effective_chat.type, flush=True)
     print("IS DEVELOPER:", is_developer(user_id), flush=True)
 
-    # Проверка доступа
-    if not is_developer(user_id):
-        if update.effective_chat.type == "private":
-            await query.message.reply_text(
-                "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
-                "После добавления бот станет доступен для работы с вашим кланом."
-            )
-            return
 
 
     # ====== СЮДА ВОЗВРАЩАЕМ ЛОГИКУ КНОПОК ======
