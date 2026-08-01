@@ -1643,7 +1643,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     member = await context.bot.get_chat_member(
-        chat_id=chat_id,
+        chat_id=update.effective_chat.id,
         user_id=update.effective_user.id
     )
 
