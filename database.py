@@ -278,12 +278,15 @@ def save_player_history(account_id, nickname, battles, damage, clan_id):
     SELECT battles, damage, date
     FROM history
     WHERE account_id=%s
-    ORDER BY id DESC
+    ORDER BY id DESC, id DESC
     LIMIT 1
     """,
     (account_id,))
 
     last = cur.fetchone()
+
+    print("LAST FROM DB:", last, flush=True)
+    print("NEW DATA:", battles, damage, flush=True)
 
     
 
