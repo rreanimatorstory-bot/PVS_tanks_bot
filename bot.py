@@ -81,8 +81,9 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "🏆 Рейтинг участников\n"
         "📈 Отчёты клана\n"
         "👥 Состав и активность игроков\n\n"
-        "⚠️ Для начала добавьте бота в групповой чат.\n\n"
-        "После добавления бот станет доступен для работы с вашим кланом.\n\n"
+        "🚀 Вы можете проверить статистику игроков прямо сейчас.\n\n"
+        "Для работы с функциями клана добавьте меня в групповой чат "
+        "и выполните настройку клана.\n\n"
         "Выберите нужный раздел в меню ниже 👇\n\n"
         "👨‍💻 Разработчик: @Eodreid",
         reply_markup=main_menu()
@@ -236,7 +237,16 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             message_thread_id=update.callback_query.message.message_thread_id,
-            text="🏰 Для этого чата клан пока не настроен."
+            text=(
+                "🏰 Клан ещё не привязан.\n\n"
+                "Чтобы настроить функции клана:\n"
+                "1️⃣ Добавьте бота в групповой чат.\n"
+                "2️⃣ Выдайте боту права администратора:\n"
+                "☑️ Удаление сообщений\n"
+                "☑️ Закрепление сообщений\n"
+                "☑️ Управление темами\n\n"
+                "После этого администратор чата сможет выполнить привязку клана."
+            )
         )
         return
 
@@ -857,12 +867,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("🔥🔥🔥 NEW MEMBERS CODE STARTED 🔥🔥🔥", flush=True)
 
-    if not can_use_bot(update):
-        await update.message.reply_text(
-            "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
-            "После добавления бот станет доступен для работы с вашим кланом."
-        )
-        return
+    
 
     print("MEMBERS START", flush=True)
 
@@ -1600,9 +1605,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 user_id=user_id
             )
 
-            if member.status not in ["administrator", "creator"] and not is_developer(user_id):
+            if member.status not in ["administrator", "creator"]:
                 await query.message.reply_text(
-                    "❌ Только администраторы могут привязать клан."
+                    "❌ Только администраторы группы могут привязать клан.\n\n"
+                    "Попросите администратора выполнить настройку клана."
                 )
                 return
 
@@ -1650,7 +1656,8 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if member.status not in ["administrator", "creator"]:
             await update.message.reply_text(
-                "❌ Только администраторы могут привязать клан."
+                "❌ Только администраторы группы могут привязать клан.\n\n"
+                "Попросите администратора выполнить настройку клана."
             )
             return
 
