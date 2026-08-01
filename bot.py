@@ -1659,22 +1659,40 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
 
-    text = (
-        f"📜 История игрока\n\n"
-        f"👤 {nickname}\n"
-        f"🏰 Клан: {clan_name}\n\n"
+    # Сортируем историю по дате
+    history_data = sorted(
+        history_data,
+        key=lambda x: x[3]
     )
 
 
-    for row in reversed(history_data):
+    # Берём максимум 7 дней
+    history_7_days = history_data[-7:]
 
-        _, battles, damage, date, clan_id = row
 
-        text += (
-            f"📅 {date}\n"
-            f"⚔️ Бои: {format_number(battles)}\n"
-            f"💥 Урон: {format_number(damage)}\n\n"
-        )
+    first = history_7_days[0]
+    last = history_7_days[-1]
+
+
+    first_battles = first[1]
+    first_damage = first[2]
+
+    last_battles = last[1]
+    last_damage = last[2]
+
+
+    battles_diff = last_battles - first_battles
+    damage_diff = last_damage - first_damage
+
+
+    text = (
+        f"📜 Активность игрока (7 дней)\n\n"
+        f"👤 {nickname}\n"
+        f"🏰 Клан: {clan_name}\n\n"
+        f"📅 Период: {first[3]} → {last[3]}\n\n"
+        f"⚔️ Бои: +{format_number(battles_diff)}\n"
+        f"💥 Урон: +{format_number(damage_diff)}\n"
+    )
 
 
     await context.bot.send_message(
