@@ -1693,7 +1693,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     text = (
-        f"📜 Активность игрока (7 дней)\n\n"
+        f"📜 Активность игрока:\n\n"
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
         f"📅 Период: {first[3]} → {last[3]}\n\n"
