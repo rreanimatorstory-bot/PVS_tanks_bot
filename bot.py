@@ -1096,14 +1096,6 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("UPDATE_HISTORY START", flush=True)
 
-    if update.effective_chat.type == "private" and not context.args:
-        await update.message.reply_text(
-            "Использование:\n/update ник"
-        )
-        return
-
-        
-
     print("SENDING MESSAGE", flush=True)
 
     await context.bot.send_message(
@@ -1115,7 +1107,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("BEFORE GET CLAN", flush=True)
 
-    if update.effective_chat.type == "private":
+    if context.args:
     
         nickname = context.args[0]
 
@@ -1165,7 +1157,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         
 
-    if update.effective_chat.type == "private":
+    if context.args:
 
         account = data["data"][0]
 
@@ -1624,7 +1616,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         text += (
             f"📅 {date}\n"
-            f"🏰 Клан ID: {clan_id}\n"
             f"⚔️ Бои: {format_number(battles)}\n"
             f"💥 Урон: {format_number(damage)}\n\n"
       )
