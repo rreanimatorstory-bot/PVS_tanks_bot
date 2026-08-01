@@ -1816,7 +1816,7 @@ def run_bot():
             )
         )
     
-    
+    app.add_handler(CommandHandler("setclan", setclan))
     app.add_handler(CommandHandler("menu", menu))
     app.add_handler(CommandHandler("myclan", myclan))
     app.add_handler(CommandHandler("stats", stats))
@@ -1826,8 +1826,6 @@ def run_bot():
     app.add_handler(
         ConversationHandler(
             entry_points=[
-
-                CommandHandler("setclan", setclan),
 
                 CallbackQueryHandler(
                     button_handler,
