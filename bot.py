@@ -516,7 +516,10 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            text="❌ Сначала привяжите клан:\n/setclan [TAG]"
+            text=(
+                "❌ Клан ещё не привязан.\n\n"
+                "Добавьте бота в групповой чат и выполните настройку клана."
+            )
         )
         return
 
