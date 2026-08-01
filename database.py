@@ -284,12 +284,12 @@ def save_player_history(account_id, nickname, battles, damage, clan_id):
 
     last = cur.fetchone()
 
-    today = datetime.now().strftime("%Y-%m-%d")
+    
 
     if last:
-        last_battles, last_damage, last_date = last
+        last_battles, last_damage, _ = last
 
-        if str(last_date) == today:
+        if last_battles == battles and last_damage == damage:
             cur.close()
             conn.close()
             return
