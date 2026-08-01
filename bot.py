@@ -673,7 +673,7 @@ async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "Добавьте бота в групповой чат и выполните настройку клана."
             )
         )
-    return
+        return
     
     clan_id, clan_tag, clan_name = clan
 
