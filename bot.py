@@ -1311,7 +1311,7 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             nickname,
             battles,
             damage,
-            clan_id
+            account.get("clan_id")
         )
 
         saved += 1
