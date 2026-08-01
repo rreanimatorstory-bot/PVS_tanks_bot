@@ -509,12 +509,7 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif update.callback_query:
         thread_id = update.callback_query.message.message_thread_id
 
-    if not can_use_bot(update):
-        await update.message.reply_text(
-            "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
-            "После добавления бот станет доступен для работы с вашим кланом."
-        )
-        return
+    
 
     clan = get_clan(update.effective_chat.id)
 
