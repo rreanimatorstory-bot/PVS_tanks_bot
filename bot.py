@@ -1574,10 +1574,11 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     for row in reversed(history_data):
 
-        name, battles, damage, date = row
+        _, battles, damage, date, clan_id = row
 
         text += (
             f"📅 {date}\n"
+            f"🏰 Клан ID: {clan_id}\n"
             f"⚔️ Бои: {format_number(battles)}\n"
             f"💥 Урон: {format_number(damage)}\n\n"
       )
