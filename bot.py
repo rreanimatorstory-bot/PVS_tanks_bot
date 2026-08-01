@@ -884,11 +884,7 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("MEMBERS THREAD:", thread_id, flush=True)
 
 
-    loading_message = await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        message_thread_id=thread_id,
-        text="⏳ Загружаю состав клана..."
-    )
+    
 
     # Получаем привязанный клан из базы
     clan = get_clan(update.effective_chat.id)
@@ -899,9 +895,18 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
             message_thread_id=thread_id,
-            text="❌ Сначала привяжите клан:\n/setclan [TAG]"
+            text=(
+                "❌ Клан ещё не привязан.\n\n"
+                "Добавьте бота в групповой чат и выполните настройку клана."
+            )    
         )
         return
+
+    loading_message = await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text="⏳ Загружаю состав клана..."
+    )
 
 
     clan_id, clan_tag, clan_name = clan
