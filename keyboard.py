@@ -22,7 +22,7 @@ def main_menu():
             InlineKeyboardButton("🏆 ТОП игроков", callback_data="top")
         ],
         [
-            InlineKeyboardButton("📈 Отчёт клана TEST", callback_data="test_report"),
+            InlineKeyboardButton("📈 Отчёт клана", callback_data="report"),
             InlineKeyboardButton("🏰 Мой клан", callback_data="myclan")
         ],
         [

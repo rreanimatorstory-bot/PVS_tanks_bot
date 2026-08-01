@@ -1589,17 +1589,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "top":
 
         await top(update, context)
-        
-
-    elif query.data == "test_report":
-
-        await query.message.reply_text(
-            "Кнопка отчёта нажата"
-        )
-
-        return    
 
 
+      
     elif query.data == "report":
 
         print("🔥 REPORT BUTTON PRESSED", flush=True)
