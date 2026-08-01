@@ -1143,6 +1143,23 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"⏳ Обновляю историю игрока {nickname}..."
         )
 
+        stats_url = "https://api.wotblitz.eu/wotb/account/list/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "search": nickname
+        }
+
+        response = requests.get(
+            stats_url,
+            params=stats_params,
+            timeout=10
+        )
+
+        data = response.json()
+
+        print("PLAYER SEARCH:", data, flush=True)
+
         return
 
         # дальше будем сохранять статистику
