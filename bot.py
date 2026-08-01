@@ -1669,6 +1669,13 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Берём максимум 7 дней
     history_7_days = history_data[-7:]
 
+    if len(history_7_days) < 2:
+        await update.message.reply_text(
+            "📭 Недостаточно данных для расчёта активности.\n"
+            "История игрока только начала собираться."
+        )
+        return
+
 
     first = history_7_days[0]
     last = history_7_days[-1]
