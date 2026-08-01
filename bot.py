@@ -1553,6 +1553,48 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     account_id = data["data"][0]["account_id"]
 
+        # Получаем текущий клан игрока через WG API
+    clan_name = "Без клана"
+
+    clan_response = requests.get(
+        "https://api.wotblitz.eu/wotb/clans/accountinfo/",
+        params={
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        },
+        timeout=10
+    )
+
+    clan_data = clan_response.json()
+
+    if clan_data.get("status") == "ok":
+
+        player_clan = clan_data.get("data", {}).get(str(account_id))
+
+        if player_clan:
+
+            player_clan_id = player_clan.get("clan_id")
+
+            if player_clan_id:
+
+                clan_response = requests.get(
+                    "https://api.wotblitz.eu/wotb/clans/info/",
+                    params={
+                        "application_id": WG_APP_ID,
+                        "clan_id": player_clan_id
+                    },
+                    timeout=10
+                )
+
+                clan_info_data = clan_response.json()
+
+                if clan_info_data.get("status") == "ok":
+
+                    clan_info = clan_info_data.get("data", {}).get(str(player_clan_id))
+
+                    if clan_info:
+                        clan_name = f"[{clan_info.get('tag')}]"
+
 
     # Берём историю из PostgreSQL
     history_data = get_player_history(account_id)
@@ -1571,7 +1613,8 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = (
         f"📜 История игрока\n\n"
-        f"👤 {nickname}\n\n"
+        f"👤 {nickname}\n"
+        f"🏰 Клан: {clan_name}\n\n"
     )
 
 
