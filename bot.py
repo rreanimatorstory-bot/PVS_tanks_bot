@@ -1163,6 +1163,50 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
 
     if update.effective_chat.type == "private":
+
+        account = data["data"][0]
+
+        account_id = account["account_id"]
+        nickname = account["nickname"]
+
+        stats_url = "https://api.wotblitz.eu/wotb/account/info/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "account_id": account_id
+        }
+
+        response = requests.get(
+            stats_url,
+            params=stats_params,
+            timeout=10
+        )
+
+        stats_data = response.json()
+
+        if stats_data.get("status") != "ok":
+            await update.message.reply_text(
+                "❌ Не удалось получить статистику"
+            )
+            return
+
+        player = stats_data["data"][str(account_id)]["statistics"]["all"]
+
+        battles = player.get("battles", 0)
+        damage = player.get("damage_dealt", 0)
+
+        save_player_history(
+            account_id,
+            nickname,
+            battles,
+            damage,
+            None
+        )
+
+        await update.message.reply_text(
+            f"✅ История игрока {nickname} обновлена"
+        )
+
         return
 
 
