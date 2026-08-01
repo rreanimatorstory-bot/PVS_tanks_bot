@@ -266,6 +266,7 @@ def get_dashboard_message(chat_id, dashboard):
 
 def save_player_history(account_id, nickname, battles, damage, clan_id):
 
+    print("NEW SAVE FUNCTION VERSION", flush=True)
     print("SAVE CLAN ID:", clan_id, flush=True)
 
 
