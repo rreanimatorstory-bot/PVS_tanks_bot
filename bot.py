@@ -1614,10 +1614,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 )
                 return
 
-        await query.message.reply_text(
-            "🏰 Введите тег вашего клана.\n\n"
-            "Например: [1PVS]\n\n"
-            "⚠️ Введите только тег клана, без названия."
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=(
+                "🏰 Введите тег вашего клана.\n\n"
+                "Например: [1PVS]\n\n"
+                "⚠️ Введите только тег клана, без названия."
+            )
         )
 
         return WAIT_CLAN_TAG
