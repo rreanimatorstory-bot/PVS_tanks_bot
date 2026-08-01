@@ -295,15 +295,16 @@ def save_player_history(account_id, nickname, battles, damage, clan_id):
     # Сохраняем новый снимок
     cur.execute("""
     INSERT INTO history
-    (account_id, nickname, battles, damage, date)
-    VALUES (%s, %s, %s, %s, %s)
+    (account_id, nickname, battles, damage, date, clan_id)
+    VALUES (%s, %s, %s, %s, %s, %s)
     """,
     (
         account_id,
         nickname,
         battles,
         damage,
-        datetime.now().strftime("%Y-%m-%d")
+        datetime.now().strftime("%Y-%m-%d"),
+        clan_id
     ))
 
     
