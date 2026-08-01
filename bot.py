@@ -1640,6 +1640,8 @@ def home():
     
 async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("🔥 SETCLAN CALLED", flush=True)
+
     chat_id = update.effective_chat.id
 
     user_id = update.effective_user.id
