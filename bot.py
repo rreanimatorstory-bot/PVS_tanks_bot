@@ -217,6 +217,8 @@ async def receive_clan_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    print("🔥 RECEIVE HISTORY NICK:", update.message.text, flush=True)
+
     nickname = update.message.text.strip()
 
     context.args = [nickname]
