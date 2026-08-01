@@ -1162,7 +1162,8 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         
 
-        # дальше будем сохранять статис
+    if update.effective_chat.type == "private":
+        return
 
 
     clan = get_clan(update.effective_chat.id)
