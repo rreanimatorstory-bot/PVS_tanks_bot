@@ -1607,7 +1607,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if last_history:
 
-            last = last_history[0]
+            last = max(last_history, key=lambda x: x[3])
 
             old_battles = last[1]
             old_damage = last[2]
