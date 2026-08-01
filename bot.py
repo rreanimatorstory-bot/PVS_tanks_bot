@@ -635,6 +635,8 @@ async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 async def report(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    print("🔥 REPORT FUNCTION START", flush=True)
     
 
     if not can_use_bot(update):
