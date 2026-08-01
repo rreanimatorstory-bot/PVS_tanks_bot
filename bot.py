@@ -1453,14 +1453,30 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
                     nickname,
                     flush=True
                 )
+                last_history = get_player_history(account_id)
 
-                save_player_history(
-                    account_id,
-                    nickname,
-                    battles,
-                    damage,
-                    clan_id
-                )
+                save_needed = True
+
+                if last_history:
+
+                    last = last_history[0]
+
+                    old_battles = last[1]
+                    old_damage = last[2]
+
+                    if old_battles == battles and old_damage == damage:
+                        save_needed = False
+
+
+                if save_needed:
+
+                    save_player_history(
+                        account_id,
+                        nickname,
+                        battles,
+                        damage,
+                        clan_id
+                    )
 
                 print(
                     "HISTORY SAVED:",
