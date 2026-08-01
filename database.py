@@ -332,6 +332,8 @@ def get_player_history(account_id):
 
     result = cur.fetchall()
 
+    print("DB HISTORY RESULT:", result, flush=True)
+
     cur.close()
     conn.close()
 
