@@ -1586,13 +1586,41 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("HISTORY ACCOUNT ID:", account_id, flush=True)
     print("HISTORY DATA:", history_data, flush=True)
 
-
     if not history_data:
-        await update.message.reply_text(
-            "📭 Истории пока нет.\n"
-            "Используйте /update для сохранения статистики."
+
+        info_response = requests.get(
+            "https://api.wotblitz.eu/wotb/account/info/",
+            params={
+                "application_id": WG_APP_ID,
+                "account_id": account_id
+            },
+            timeout=10
         )
-        return
+
+        info_data = info_response.json()
+
+        if info_data.get("status") != "ok":
+            await update.message.reply_text(
+                "❌ Не удалось получить статистику игрока"
+            )
+            return
+
+        account = info_data["data"][str(account_id)]
+
+        player = account["statistics"]["all"]
+
+        battles = player.get("battles", 0)
+        damage = player.get("damage_dealt", 0)
+
+        save_player_history(
+            account_id,
+            nickname,
+            battles,
+            damage,
+            account.get("clan_id")
+        )
+
+        history_data = get_player_history(account_id)
 
 
     text = (
