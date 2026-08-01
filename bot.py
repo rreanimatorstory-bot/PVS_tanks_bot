@@ -1825,12 +1825,15 @@ def run_bot():
     print("UPDATE HANDLER REGISTERED", flush=True)
     app.add_handler(
         ConversationHandler(
-            entry_points=[ 
+            entry_points=[
+
+                CommandHandler("setclan", setclan),
+
                 CallbackQueryHandler(
                     button_handler,
                     pattern="^(stats|history|setclan|link_wot)$"
+                )
 
-                )    
             ],
         per_message=False,
 
