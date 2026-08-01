@@ -290,7 +290,7 @@ def save_player_history(account_id, nickname, battles, damage, clan_id):
     if last:
         last_battles, last_damage, _ = last
 
-        if last_battles == battles and last_damage == damage:
+        if int(last_battles) == int(battles) and int(last_damage) == int(damage):
             cur.close()
             conn.close()
             return
