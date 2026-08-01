@@ -1095,12 +1095,13 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
    
 
-    if not can_use_bot(update):
-        await update.message.reply_text(
-            "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
-            "После добавления бот станет доступен для работы с вашим кланом."
-        )
-        return
+    if update.effective_chat.type != "private":
+        if not can_use_bot(update):
+            await update.message.reply_text(
+                "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
+                "После добавления бот станет доступен для работы с вашим кланом."
+            )
+            return
 
     print("SENDING MESSAGE", flush=True)
 
