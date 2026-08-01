@@ -1093,15 +1093,13 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("UPDATE_HISTORY START", flush=True)
 
-   
+    if update.effective_chat.type == "private" and not context.args:
+        await update.message.reply_text(
+            "Использование:\n/update ник"
+        )
+        return
 
-    if update.effective_chat.type != "private":
-        if not can_use_bot(update):
-            await update.message.reply_text(
-                "⚠️ Для работы с ботом сначала добавьте его в групповой чат.\n\n"
-                "После добавления бот станет доступен для работы с вашим кланом."
-            )
-            return
+        
 
     print("SENDING MESSAGE", flush=True)
 
@@ -1113,6 +1111,39 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("MESSAGE SENT", flush=True)
 
     print("BEFORE GET CLAN", flush=True)
+
+    if update.effective_chat.type == "private":
+    
+        nickname = context.args[0]
+
+        stats_url = "https://api.wotblitz.eu/wotb/account/list/"
+
+        stats_params = {
+            "application_id": WG_APP_ID,
+            "search": nickname
+        }
+
+        response = requests.get(
+            stats_url,
+            params=stats_params,
+            timeout=10
+        )
+
+        data = response.json()
+
+        if data.get("status") != "ok" or not data.get("data"):
+            await update.message.reply_text(
+                "❌ Игрок не найден"
+            )
+            return
+
+        account_id = data["data"][0]["account_id"]
+
+        await update.message.reply_text(
+            f"⏳ Обновляю историю игрока {nickname}..."
+        )
+
+        # дальше будем сохранять статистику
 
     clan = get_clan(update.effective_chat.id)
 
