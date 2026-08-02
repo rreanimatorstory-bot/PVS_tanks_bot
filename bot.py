@@ -1713,6 +1713,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Попробуйте позже."
         )
         return
+    
+    print("FIRST:", first, flush=True)
+    print("LAST:", last, flush=True)
 
     first = history_7_days[0]
     last = history_7_days[-1]
