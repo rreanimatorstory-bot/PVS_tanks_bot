@@ -1847,10 +1847,10 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return WAIT_CLAN_TAG
 
 
-    elif query.data == "settings":
+    elif query.data == "info":
 
         await query.message.reply_text(
-            "⚙️ Настройки пока в разработке"
+            "ℹ️ Информация"
         )    
 
 # Flask для Render
