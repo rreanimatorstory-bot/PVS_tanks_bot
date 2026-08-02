@@ -4,6 +4,8 @@ print("PROCESS ID:", os.getpid())
 
 import requests
 import httpx
+
+print(httpx.__version__)
 from datetime import datetime
 
 def format_number(number):
