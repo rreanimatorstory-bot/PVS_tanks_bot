@@ -282,7 +282,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     nickname = context.args[0]
 
     await update.message.reply_text(
-        f"🔎 Ищу игрока {nickname}..."
+        f"🔎 Ищу игрока {nickname}...",
+        do_quote=False
     )
 
     try:
@@ -484,7 +485,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"👁 Обнаружено: {f'{spotted:,}'.replace(',', ' ')}\n"
             f"🛡 Выжил в боях: {f'{survived:,}'.replace(',', ' ')}",
             
-            parse_mode="Markdown"
+            parse_mode="Markdown",
+            do_quote=False
         )
 
     except requests.exceptions.Timeout:
