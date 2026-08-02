@@ -1691,6 +1691,8 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         history_data,
         key=lambda x: x[3]
     )
+    
+    print("HISTORY DATA:", history_data, flush=True)
 
 
     # Берём максимум 7 дней
