@@ -1673,9 +1673,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Берём обновлённую историю
     history_data = get_player_history(account_id)
 
+    print("CHECK ACCOUNT ID:", account_id, flush=True)
+    print("CHECK HISTORY DATA:", history_data, flush=True)
 
-    print("HISTORY ACCOUNT ID:", account_id, flush=True)
-    print("HISTORY DATA:", history_data, flush=True)
 
 
     if not history_data:
