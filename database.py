@@ -34,9 +34,11 @@ def init_db():
         nickname TEXT,
         battles INTEGER,
         damage INTEGER,
-        date TEXT
+        frags INTEGER,
+        date TEXT,
+        clan_id BIGINT
     )
-    """)
+    """)    
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS bot_settings (
