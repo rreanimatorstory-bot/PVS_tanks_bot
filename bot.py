@@ -3,9 +3,7 @@ import os
 print("PROCESS ID:", os.getpid())
 
 import requests
-import httpx
 
-print(httpx.__version__)
 from datetime import datetime
 
 def format_number(number):
@@ -1799,8 +1797,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "history":
 
-        await query.message.reply_text(
-            "📜 Введите ник игрока для истории:"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="📜 Введите ник игрока для истории:"
         )
 
         return WAIT_HISTORY_NICK
