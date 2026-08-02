@@ -26,7 +26,7 @@ def main_menu():
             InlineKeyboardButton("🏰 Мой клан", callback_data="myclan")
         ],
         [
-            InlineKeyboardButton("ℹ️ Информация", "info")
+            InlineKeyboardButton("ℹ️ Информация", callback_data="info")
         ]
     ]
 
