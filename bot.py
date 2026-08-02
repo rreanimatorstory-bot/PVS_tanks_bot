@@ -68,14 +68,14 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
 
     if is_developer(user_id):
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "🤖 BlitzClanBot\n\n"
             "Выберите действие:",
             reply_markup=main_menu()
         )
         return
 
-    await update.message.reply_text(
+    await update.message.chat.send_message(
         "🤖 Добро пожаловать в BlitzClanBot!\n\n"
         "Я помогу следить за статистикой World of Tanks Blitz.\n\n"
         "Что умею:\n"
@@ -134,7 +134,8 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
     nickname = update.message.text.strip()
 
     await update.message.reply_text(
-        f"🔎 Проверяю игрока {nickname}..."
+        f"🔎 Проверяю игрока {nickname}...",
+        do_quote=False
     )
 
     # пока только проверка через API
@@ -151,7 +152,8 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if data.get("status") != "ok" or not data.get("data"):
         await update.message.reply_text(
-            "❌ Игрок не найден. Проверь ник."
+            "❌ Игрок не найден. Проверь ник и сервер (EU).",
+            do_quote=False
         )
         return ConversationHandler.END
 
@@ -167,7 +169,8 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if account_id is None:
         await update.message.reply_text(
-            "❌ Точный ник не найден."
+            "❌ Точный ник не найден.",
+            do_quote=False
         )
         return ConversationHandler.END
 
@@ -189,7 +192,8 @@ async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"✅ Готово!\n\n"
         f"👤 {user.first_name}\n"
         f"🎮 {nickname}\n\n"
-        f"Теперь я буду использовать этот аккаунт."
+        f"Теперь я буду использовать этот аккаунт.",
+        do_quote=False
     )
 
 
@@ -281,8 +285,9 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not context.args:
         await update.message.reply_text(
-            "Использование:\n/stats ник"
-        )
+            "Использование:\n/stats ник",
+            do_quote=False
+)
         return
 
     nickname = context.args[0]
@@ -310,7 +315,10 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print(search_data)
 
         if search_data.get("status") != "ok" or not search_data.get("data"):
-            await update.message.reply_text("❌ Игрок не найден")
+            await update.message.reply_text(
+                "❌ Игрок не найден",
+                do_quote=False
+            )                                
             return
 
         account_id = None
@@ -345,7 +353,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if info_data.get("status") != "ok":
             await update.message.reply_text(
-                "❌ Не удалось получить статистику"
+                "❌ Не удалось получить статистику",
+                do_quote=False
             )
             return
 
@@ -388,7 +397,8 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
         if account is None:
              await update.message.reply_text(
-                "❌ В ответе API нет данных игрока"
+                "❌ В ответе API нет данных игрока",
+                do_quote=False
              )
              return
 
@@ -498,14 +508,16 @@ async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except requests.exceptions.Timeout:
 
         await update.message.reply_text(
-            "⌛ Сервер Wargaming не ответил вовремя. Попробуйте позже."
+            "⌛ Сервер Wargaming не ответил вовремя. Попробуйте позже.",
+            do_quote=False
         )
 
     except Exception as e:
         print("STATS ERROR:", e, flush=True)
         await update.message.reply_text(
-        f"❌ Ошибка: {e}"
-    )
+            f"❌ Ошибка: {e}",
+            do_quote=False
+        )
 
 async def top(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -1094,7 +1106,9 @@ async def cleanhistory(update: Update, context: ContextTypes.DEFAULT_TYPE):
     clean_history_duplicates()
 
     await update.message.reply_text(
-        "✅ Дубли истории удалены"
+        "✅ Дубли истории удалены",
+        do_quote=False
+    
     )
 
   
@@ -1129,14 +1143,16 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if data.get("status") != "ok" or not data.get("data"):
             await update.message.reply_text(
-                "❌ Игрок не найден"
+                "❌ Игрок не найден",
+                do_quote=False
             )
             return
 
         account_id = data["data"][0]["account_id"]
 
         await update.message.reply_text(
-            f"⏳ Обновляю историю игрока {nickname}..."
+            f"⏳ Обновляю историю игрока {nickname}...",
+            do_quote=False
         )
 
         stats_url = "https://api.wotblitz.eu/wotb/account/list/"
@@ -1182,7 +1198,8 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if stats_data.get("status") != "ok":
             await update.message.reply_text(
-                "❌ Не удалось получить статистику"
+                "❌ Не удалось получить статистику",
+                do_quote=False
             )
             return
 
@@ -1200,7 +1217,8 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
 
         await update.message.reply_text(
-            f"✅ История игрока {nickname} обновлена"
+            f"✅ История игрока {nickname} обновлена",
+            do_quote=False
         )
 
         return
@@ -1757,7 +1775,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "☑️ Закрепление сообщений\n"
             "☑️ Управление сообщениями\n\n"
             "После выдачи прав нажмите:\n"
-            "✅ Да, права выданы"
+            "✅ Да, права выданы",
+            do_quote=False
         )
 
         return
@@ -1780,7 +1799,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "🎉 Отлично!\n\n"
             "Теперь осталось привязать ваш клан.\n\n"
             "👇 Нажмите кнопку:",
-            reply_markup=reply_markup
+            reply_markup=reply_markup,
+            do_quote=False
         )
 
         return
@@ -1788,7 +1808,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if query.data == "link_wot":
 
         await query.message.reply_text(
-            "🎮 Введите ваш ник в WoT Blitz:"
+            "🎮 Введите ваш ник в WoT Blitz:",
+            do_quote=False
         )
 
         return WAIT_WOT_NICK
@@ -1852,7 +1873,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if member.status not in ["administrator", "creator"]:
                 await query.message.reply_text(
                     "❌ Только администраторы группы могут привязать клан.\n\n"
-                    "Попросите администратора выполнить настройку клана."
+                    "Попросите администратора выполнить настройку клана.",
+                    do_quote=False
                 )
                 return
 
@@ -1901,7 +1923,8 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "@Eodreid\n\n"
 
             "🙏 Спасибо за использование BlitzClanBot!\n"
-            "Желаем удачных боёв, точных выстрелов и высоких результатов! 🚀"
+            "Желаем удачных боёв, точных выстрелов и высоких результатов! 🚀",
+            do_quote=False
         )
 
         return    
@@ -1933,7 +1956,8 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if member.status not in ["administrator", "creator"]:
             await update.message.reply_text(
                 "❌ Только администраторы группы могут привязать клан.\n\n"
-                "Попросите администратора выполнить настройку клана."
+                "Попросите администратора выполнить настройку клана.",
+                do_quote=False
             )
             return
 
@@ -1942,7 +1966,8 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Использование:\n"
             "/setclan [ТЕГ]\n\n"
             "Пример:\n"
-            "/setclan [1PVS]"
+            "/setclan [1PVS]",
+            do_quote=False
         )
         return
 
@@ -1960,8 +1985,9 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     if data.get("status") != "ok" or not data.get("data"):
-        await update.message.reply_text(
-            "❌ Клан с таким тегом не найден"
+        await update.message.message.reply_text(
+            "❌ Клан с таким тегом не найден",
+            do_quote=False
         )
         return
 
@@ -1974,8 +2000,9 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     if found_clan is None:
-        await update.message.reply_text(
-            "❌ Клан с таким тегом не найден"
+        await update.message.message.reply_text(
+            "❌ Клан с таким тегом не найден",
+            do_quote=False
         )
         return
 
@@ -1991,10 +2018,11 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         clan_name
     )
 
-    await update.message.reply_text(
+    await update.message.message.reply_text(
         "🎉 Настройка завершена!\n\n"
         f"🏰 Клан успешно привязан: {clan_tag}\n\n"
         "BlitzClanBot готов к работе.",
+        do_quote=False
     )
 
     
@@ -2007,14 +2035,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if is_developer(user_id):
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "🤖 BlitzClanBot\n\n"
             "Выберите действие:",
             reply_markup=main_menu()
         )
         return
 
-    await update.message.reply_text(
+    await update.message.chat.send_message(
         "🤖 Добро пожаловать в BlitzClanBot!\n\n"
         "Я помогу следить за статистикой World of Tanks Blitz.\n\n"
         "Что умею:\n"
@@ -2108,7 +2136,7 @@ def run_bot():
 
                 CallbackQueryHandler(
                     button_handler,
-                    pattern="^(stats|history|setclan|link_wot)$"
+                    pattern="^(stats|history|setclan|link_wot|top|members|report|myclan|info)$"
                 )
 
             ],
@@ -2147,11 +2175,7 @@ def run_bot():
     )
 )
 
-    app.add_handler(
-        CallbackQueryHandler(
-            button_handler
-        )
-    )
+
 
    
     
