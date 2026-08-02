@@ -1735,26 +1735,37 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    first_battles = first[1]
-    first_damage = first[2]
+    daily_text = ""
 
-    last_battles = last[1]
-    last_damage = last[2]
+    previous = None
 
+    for row in history_7_days:
 
-    battles_diff = last_battles - first_battles
-    damage_diff = last_damage - first_damage
+        if previous is None:
+            battles_diff = 0
+            damage_diff = 0
+        else:
+            battles_diff = row[1] - previous[1]
+            damage_diff = row[2] - previous[2]
 
+        date = row[3][8:10] + "." + row[3][5:7]
+
+        daily_text += (
+            f"{date:<10}"
+            f"+{format_number(battles_diff):<10}"
+            f"+{format_number(damage_diff):<12}"
+            f"-\n"
+        )
+
+        previous = row
 
     text = (
         f"📜 Активность игрока:\n\n"
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
-        f"📅 Период: {first[3]} → {last[3]}\n\n"
-        f"⚔️ Бои: +{format_number(battles_diff)}\n"
-        f"💥 Урон: +{format_number(damage_diff)}\n"
+        f"Дата       Бои       Урон        Фраги\n"
+        f"{daily_text}"
     )
-
 
     await update.message.chat.send_message(
         text
