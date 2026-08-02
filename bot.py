@@ -1528,7 +1528,7 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not context.args:
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "Использование:\n/history ник"
         )
         return
@@ -1552,7 +1552,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = response.json()
 
     if data.get("status") != "ok" or not data.get("data"):
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "❌ Игрок не найден"
         )
         return
@@ -1662,7 +1662,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not history_data:
 
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "📭 Истории пока нет."
         )
         return
@@ -1680,7 +1680,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     history_7_days = history_data[-7:]
 
     if len(history_7_days) < 2:
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "📭 История игрока ещё не накоплена.\n\n"
             "Для отображения активности необходимо минимум две записи за разные даты.\n"
             "Попробуйте позже."
@@ -1693,7 +1693,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Если все записи относятся к одной дате
     if first[3] == last[3]:
-        await update.message.reply_text(
+        await update.message.chat.send_message(
             "📭 История игрока ещё не накоплена.\n\n"
             "На данный момент доступна только статистика за один день.\n"
             "Бот автоматически собирает историю ежедневно."
@@ -1722,7 +1722,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
-    await update.message.reply_text(
+    await update.message.chat.send_message(
         text
     )
         
