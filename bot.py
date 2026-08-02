@@ -1788,8 +1788,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if query.data == "stats":
 
-        await query.message.reply_text(
-            "📊 Введите ник игрока:"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="📊 Введите ник игрока:"
         )
 
         return WAIT_STATS_NICK
