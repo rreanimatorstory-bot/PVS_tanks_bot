@@ -1667,18 +1667,29 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     # Берём максимум 7 дней
+    # Берём максимум 7 дней
     history_7_days = history_data[-7:]
 
     if len(history_7_days) < 2:
         await update.message.reply_text(
-            "📭 Недостаточно данных для расчёта активности.\n"
-            "История игрока только начала собираться."
+            "📭 История игрока ещё не накоплена.\n\n"
+            "Для отображения активности необходимо минимум две записи за разные даты.\n"
+            "Попробуйте позже."
         )
         return
 
 
     first = history_7_days[0]
     last = history_7_days[-1]
+
+    # Если все записи относятся к одной дате
+    if first[3] == last[3]:
+        await update.message.reply_text(
+            "📭 История игрока ещё не накоплена.\n\n"
+            "На данный момент доступна только статистика за один день.\n"
+            "Бот автоматически собирает историю ежедневно."
+        )
+        return
 
 
     first_battles = first[1]
