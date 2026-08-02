@@ -1717,6 +1717,11 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     first = history_7_days[0]
     last = history_7_days[-1]
 
+    print("FIRST:", first, flush=True)
+    print("LAST:", last, flush=True)
+    print("DIFF BATTLES:", last[1] - first[1], flush=True)
+    print("DIFF DAMAGE:", last[2] - first[2], flush=True)
+
     # Если все записи относятся к одной дате
     if first[3] == last[3]:
         await update.message.chat.send_message(
