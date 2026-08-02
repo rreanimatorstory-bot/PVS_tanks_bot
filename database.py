@@ -332,8 +332,7 @@ def get_player_history(account_id):
     SELECT nickname, battles, damage, date, clan_id
     FROM history
     WHERE account_id=%s
-    ORDER BY id DESC
-    LIMIT 10
+    ORDER BY id DESC, id DESC
     """,
     (account_id,))
 
