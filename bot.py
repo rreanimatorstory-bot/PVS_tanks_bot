@@ -1691,13 +1691,20 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         history_data,
         key=lambda x: x[3]
     )
-    
+
     print("HISTORY DATA:", history_data, flush=True)
 
+    # Берём по одной записи на каждый день (самую свежую)
+    daily_history = {}
 
-    # Берём максимум 7 дней
-    # Берём максимум 7 дней
-    history_7_days = history_data[-7:]
+    for row in history_data:
+        daily_history[row[3]] = row
+
+    # Сортируем даты
+    history_7_days = sorted(
+        daily_history.values(),
+        key=lambda x: x[3]
+    )[-7:]
 
     if len(history_7_days) < 2:
         await update.message.chat.send_message(
@@ -1706,7 +1713,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Попробуйте позже."
         )
         return
-
 
     first = history_7_days[0]
     last = history_7_days[-1]
@@ -1719,7 +1725,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Бот автоматически собирает историю ежедневно."
         )
         return
-
 
     first_battles = first[1]
     first_damage = first[2]
