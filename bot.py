@@ -225,6 +225,12 @@ async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYP
 
     context.args = [nickname]
 
+    print(
+        "HISTORY REPLY TO MESSAGE:",
+        update.message.message_id,
+        flush=True
+    )
+
     await history(update, context)
 
     return ConversationHandler.END
