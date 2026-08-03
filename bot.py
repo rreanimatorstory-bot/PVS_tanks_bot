@@ -7,7 +7,7 @@ import requests
 from datetime import datetime
 
 def format_number(number):
-    return f"{number:,}".replace(",", " ")
+    return f"{number:+,}".replace(",", " ")
 
 from flask import Flask
 from threading import Thread
@@ -1812,7 +1812,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"📜 Активность игрока:\n\n"
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
-        f"Дата       Бои       Урон        Фраги\n"
+        f"{'Дата':<8}{'Бои':>8}{'Урон':>12}{'Фраги':>10}\n"
         f"{daily_text}\n"
         f"📈 Итог за период:\n"
         f"⚔️ Бои: +{format_number(total_battles)}\n"
