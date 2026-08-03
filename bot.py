@@ -1312,13 +1312,15 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         nickname = account["nickname"]
 
         player = account["statistics"]["all"]
-        print(player.keys(), flush=True)
 
-
+        print("PLAYER STAT KEYS:", player.keys(), flush=True)
+        print("PLAYER STAT DATA:", player, flush=True)
+        
         battles = player.get("battles", 0)
         damage = player.get("damage_dealt", 0)
-        frags = player.get("frags_count", 0)
+        frags = player.get("frags", 0)
 
+        print("FRAGS RESULT:", frags, flush=True)
 
         save_player_history(
             account_id,
