@@ -1481,7 +1481,11 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
                     "damage_dealt",
                     0
                 )
-
+                frags = player.get(
+                    "frags",
+                    0
+                )
+                
                 print(
                     "SAVING HISTORY:",
                     nickname,
@@ -1497,6 +1501,7 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
                     old_battles = last[1]
                     old_damage = last[2]
+                    old_frags = last[5]
 
                     if old_battles == battles and old_damage == damage:
                         save_needed = False
@@ -1509,6 +1514,7 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
                         nickname,
                         battles,
                         damage,
+                        frags,
                         clan_id
                     )
 
