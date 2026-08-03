@@ -6,8 +6,8 @@ import requests
 
 from datetime import datetime
 
-def format_number (value):
-    return f"{value:+,}".replace(",", " ")
+def format_number(number):
+    return f"{number:,}".replace(",", " ")
 
 from flask import Flask
 from threading import Thread
