@@ -1803,7 +1803,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{date:<10}"
             f"+{format_number(battles_diff):<10}"
             f"+{format_number(damage_diff):<12}"
-            f"+{format_number(frags_diff):<8}\n"
+            f"+{format_number(frags_diff):<10}\n"
         )
 
         previous = row
