@@ -2230,14 +2230,18 @@ def run_bot():
         print("RUN_BOT ERROR:", e, flush=True)
         raise
 
-print("START BOT THREAD", flush=True)
+print("START FLASK THREAD", flush=True)
 
-thread = Thread(target=run_bot, daemon=True)
-thread.start()
+flask_thread = Thread(
+    target=lambda: web.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 10000))
+    ),
+    daemon=True
+)
 
-print("Starting Flask...", flush=True)
+flask_thread.start()
 
-web.run(
-    host="0.0.0.0",
-    port=int(os.environ.get("PORT", 10000))
-)    
+print("START TELEGRAM BOT", flush=True)
+
+run_bot() 
