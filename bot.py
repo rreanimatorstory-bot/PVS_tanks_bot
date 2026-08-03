@@ -1817,8 +1817,10 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"📜 Активность игрока:\n\n"
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
+        f"<pre>"
         f"{'Дата':<8}{'Бои':>8}{'Урон':>12}{'Фраги':>10}\n"
-        f"{daily_text}\n"
+        f"{daily_text}"
+        f"</pre>\n"
         f"📈 Итог за период:\n"
         f"⚔️ Бои: {format_number(total_battles)}\n"
         f"💥 Урон: {format_number(total_damage)}\n"
@@ -1826,7 +1828,8 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.chat.send_message(
-        text=text
+        text=text,
+        parse_mode="HTML"
     )
         
 
