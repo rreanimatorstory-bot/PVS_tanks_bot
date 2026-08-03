@@ -330,7 +330,7 @@ def get_player_history(account_id):
     cur = conn.cursor()
 
     cur.execute("""
-    SELECT nickname, battles, damage, date, clan_id
+    SELECT nickname, battles, damage, date, frags, clan_id
     FROM history
     WHERE account_id=%s
     ORDER BY id DESC, id DESC
