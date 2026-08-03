@@ -112,20 +112,24 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     reply_markup = InlineKeyboardMarkup(keyboard)
 
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=(
-            "✅ BlitzClanBot добавлен в чат! 🏰\n\n"
-            "Отлично! Давайте настроим меня для работы.\n\n"
-            "Для полноценной работы мне нужны права администратора:\n\n"
-            "☑️ Удаление сообщений\n"
-            "☑️ Закрепление сообщений\n"
-            "☑️ Управление сообщениями\n\n"
-            "Без этих прав некоторые функции могут работать некорректно.\n\n"
-            "Вы уже выдали мне права администратора?"
-        ),
-        reply_markup=reply_markup
-    )  
+    try:
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text=(
+                "✅ BlitzClanBot добавлен в чат! 🏰\n\n"
+                "Отлично! Давайте настроим меня для работы.\n\n"
+                "Для полноценной работы мне нужны права администратора:\n\n"
+                "☑️ Удаление сообщений\n"
+                "☑️ Закрепление сообщений\n"
+                "☑️ Управление сообщениями\n\n"
+                "Без этих прав некоторые функции могут работать некорректно.\n\n"
+                "Вы уже выдали мне права администратора?"
+            ),
+            reply_markup=reply_markup
+        )
+
+    except Exception as e:
+        print("BOT ADDED MESSAGE ERROR:", e, flush=True)  
 
 async def receive_wot_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
