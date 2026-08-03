@@ -1782,7 +1782,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    daily_text = "```\n"
+    daily_text = "\n"
 
     previous = None
 
@@ -1800,10 +1800,10 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         date = row[3][8:10] + "." + row[3][5:7]
 
         daily_text += (
-            f"{date:<10}"
-            f"+{format_number(battles_diff):<10}"
-            f"+{format_number(damage_diff):<12}"
-            f"+{format_number(frags_diff):<10}\n"
+            f"{date:<8}"
+            f"{format_number(battles_diff):>8}"
+            f"{format_number(damage_diff):>12}"
+            f"{format_number(frags_diff):>10}\n"
         )
 
         previous = row
