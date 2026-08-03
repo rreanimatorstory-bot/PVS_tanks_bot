@@ -1481,6 +1481,9 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
                     "damage_dealt",
                     0
                 )
+
+                print("PLAYER OBJECT:", player, flush=True)
+                
                 frags = player.get(
                     "frags",
                     0
