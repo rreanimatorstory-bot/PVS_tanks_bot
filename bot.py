@@ -1733,12 +1733,18 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     print("HISTORY DATA:", history_data, flush=True)
 
     # Берём по одной записи на каждый день (самую свежую)
+
     daily_history = {}
 
     for row in history_data:
-        daily_history[row[3]] = row
+
+        date = row[3]
+
+        if date not in daily_history:
+            daily_history[date] = row
 
     # Сортируем даты
+
     history_7_days = sorted(
         daily_history.values(),
         key=lambda x: x[3]
@@ -1757,8 +1763,13 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     first = history_7_days[0]
     last = history_7_days[-1]
 
-    print("FIRST:", first, flush=True)
-    print("LAST:", last, flush=True)
+    total_battles = last[1] - first[1]
+    total_damage = last[2] - first[2]
+
+    first_frags = first[4] or 0
+    last_frags = last[4] or 0
+
+    total_frags = last_frags - first_frags
 
     
 
@@ -1802,7 +1813,11 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
         f"Дата       Бои       Урон        Фраги\n"
-        f"{daily_text}"
+        f"{daily_text}\n"
+        f"📈 Итог за период:\n"
+        f"⚔️ Бои: +{format_number(total_battles)}\n"
+        f"💥 Урон: +{format_number(total_damage)}\n"
+        f"☠️ Фраги: +{format_number(total_frags)}"
     )
 
     await update.message.chat.send_message(
