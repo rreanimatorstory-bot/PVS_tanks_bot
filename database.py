@@ -266,7 +266,7 @@ def get_dashboard_message(chat_id, dashboard):
 
     return None
 
-def save_player_history(account_id, nickname, battles, damage, clan_id):
+def save_player_history(account_id, nickname, battles, damage, frags, clan_id):
 
     print("=== NEW DATABASE.PY VERSION ===", flush=True)
     print("NEW SAVE FUNCTION VERSION", flush=True)
@@ -312,6 +312,7 @@ def save_player_history(account_id, nickname, battles, damage, clan_id):
         nickname,
         battles,
         damage,
+        frags,
         datetime.now().strftime("%Y-%m-%d"),
         clan_id
     ))

@@ -1645,6 +1645,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         battles = player.get("battles", 0)
         damage = player.get("damage_dealt", 0)
+        frags = player.get("frags", 0)
+
+        print("PLAYER STATS:", battles, damage, frags, flush=True)
 
         last_history = get_player_history(account_id)
 
