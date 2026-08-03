@@ -305,7 +305,7 @@ def save_player_history(account_id, nickname, battles, damage, frags, clan_id):
     cur.execute("""
     INSERT INTO history
     (account_id, nickname, battles, damage, frags, date, clan_id)
-    VALUES (%s, %s, %s, %s, %s, %s)
+    VALUES (%s, %s,%s, %s, %s, %s, %s)
     """,
     (
         account_id,
