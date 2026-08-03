@@ -6,8 +6,8 @@ import requests
 
 from datetime import datetime
 
-def format_number(number):
-    return f"{number:,}".replace(",", " ")
+def format_number (value):
+    return f"{value:+,}".replace(",", " ")
 
 from flask import Flask
 from threading import Thread
@@ -1801,9 +1801,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         daily_text += (
             f"{date:<8}"
-            f"{format_number(battles_diff):>6}"
-            f"{format_number(damage_diff):>10}"
-            f"{format_number(frags_diff):>8}\n"
+            f"{format_number(battles_diff):>8}"
+            f"{format_number(damage_diff):>12}"
+            f"{format_number(frags_diff):>10}\n"
         )
 
         previous = row
