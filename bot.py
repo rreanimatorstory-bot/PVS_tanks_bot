@@ -1483,7 +1483,7 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
                 )
 
                 print("PLAYER OBJECT:", player, flush=True)
-                
+
                 frags = player.get(
                     "frags",
                     0
@@ -1764,9 +1764,11 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if previous is None:
             battles_diff = 0
             damage_diff = 0
+            frags_diff = 0
         else:
             battles_diff = row[1] - previous[1]
             damage_diff = row[2] - previous[2]
+            frags_diff = row[4] - previous[4]
 
         date = row[3][8:10] + "." + row[3][5:7]
 
@@ -1774,7 +1776,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{date:<10}"
             f"+{format_number(battles_diff):<10}"
             f"+{format_number(damage_diff):<12}"
-            f"+{format_number(row[4])}\n"
+            f"+{format_number(frags_diff)}\n"
         )
 
         previous = row
