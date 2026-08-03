@@ -1508,9 +1508,13 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
                     old_battles = last[1]
                     old_damage = last[2]
-                    old_frags = last[5]
+                    old_frags = last[4]
 
-                    if old_battles == battles and old_damage == damage:
+                    if (
+                        old_battles == battles 
+                        and old_damage == damage
+                        and (old_frags or 0) == (frags or 0)
+                    ):
                         save_needed = False
 
 
@@ -1675,16 +1679,24 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         if last_history:
 
-            last = max(last_history, key=lambda x: x[3])
+            last = max(
+                last_history, 
+                key=lambda x: (x[3], x[1])
+            )
 
             old_battles = last[1]
             old_damage = last[2]
+            old_frags = last[4]
 
-            if old_battles == battles and old_damage == damage:
+            if (
+                old_battles == battles
+                and old_damage == damage
+                and (old_frags or 0) == (frags or 0)
+
+            ):
                 save_needed = False
 
-
-        if save_needed:
+        if save_needed:        
 
             save_player_history(
                 account_id,
@@ -1772,7 +1784,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             battles_diff = row[1] - previous[1]
             damage_diff = row[2] - previous[2]
-            frags_diff = row[4] - previous[4]
+            frags_diff = (row[4] or 0) - (previous[4] or 0)
 
         date = row[3][8:10] + "." + row[3][5:7]
 

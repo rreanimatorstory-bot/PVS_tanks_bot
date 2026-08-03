@@ -278,10 +278,10 @@ def save_player_history(account_id, nickname, battles, damage, frags, clan_id):
 
     # Проверяем последнюю запись
     cur.execute("""
-    SELECT battles, damage, date
+    SELECT battles, damage, frags, date
     FROM history
     WHERE account_id=%s
-    ORDER BY id DESC, id DESC
+    ORDER BY id DESC
     LIMIT 1
     """,
     (account_id,))
@@ -294,9 +294,14 @@ def save_player_history(account_id, nickname, battles, damage, frags, clan_id):
     
 
     if last:
-        last_battles, last_damage, _ = last
+        last_battles, last_damage, last_frags, _ = last
 
-        if int(last_battles) == int(battles) and int(last_damage) == int(damage):
+        if (
+            int(last_battles or 0) == int(battles or 0)
+            and int(last_damage or 0) == int(damage or 0)
+            and int(last_frags or 0) == int(frags or 0)
+        ):
+            print("DUPLICATE HISTORY RECORD, SKIPPING SAVE", flush=True)
             cur.close()
             conn.close()
             return
@@ -317,8 +322,6 @@ def save_player_history(account_id, nickname, battles, damage, frags, clan_id):
         clan_id
     ))
 
-    
-
     conn.commit()
 
     cur.close()
@@ -333,7 +336,7 @@ def get_player_history(account_id):
     SELECT nickname, battles, damage, date, frags, clan_id
     FROM history
     WHERE account_id=%s
-    ORDER BY id DESC, id DESC
+    ORDER BY id DESC
     """,
     (account_id,))
 
