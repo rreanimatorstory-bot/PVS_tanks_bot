@@ -1782,7 +1782,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    daily_text = "```\n"
+    daily_text = ""
 
     previous = None
 
@@ -1808,8 +1808,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
 
         previous = row
-        
-    daily_text += "```\n"    
+           
 
         
         
@@ -1818,8 +1817,10 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"📜 Активность игрока:\n\n"
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
+        f"```\n"
         f"{'Дата':<8}{'Бои':>8}{'Урон':>12}{'Фраги':>10}\n"
-        f"{daily_text}\n"
+        f"{daily_text}"
+        f"```\n\n"
         f"📈 Итог за период:\n"
         f"⚔️ Бои: {format_number(total_battles)}\n"
         f"💥 Урон: {format_number(total_damage)}\n"
