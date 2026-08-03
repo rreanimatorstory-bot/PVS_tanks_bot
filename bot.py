@@ -2017,7 +2017,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     if data.get("status") != "ok" or not data.get("data"):
-        await update.message.message.reply_text(
+        await update.message.reply_text(
             "❌ Клан с таким тегом не найден",
             do_quote=False
         )
@@ -2032,7 +2032,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
     if found_clan is None:
-        await update.message.message.reply_text(
+        await update.message.reply_text(
             "❌ Клан с таким тегом не найден",
             do_quote=False
         )
@@ -2050,7 +2050,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
         clan_name
     )
 
-    await update.message.message.reply_text(
+    await update.message.reply_text(
         "🎉 Настройка завершена!\n\n"
         f"🏰 Клан успешно привязан: {clan_tag}\n\n"
         "BlitzClanBot готов к работе.",
@@ -2205,7 +2205,15 @@ def run_bot():
                     ]
                 },
 
-                fallbacks=[]
+                fallbacks=[
+                    CommandHandler("start", start),
+                    CommandHandler("menu", menu),
+                    CommandHandler("stats", stats),
+                    CommandHandler("history", history),
+                    CommandHandler("myclan", myclan),
+                    CommandHandler("setclan", setclan),
+
+                ]    
             )
         )
 
