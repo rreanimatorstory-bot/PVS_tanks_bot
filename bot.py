@@ -1794,7 +1794,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
     await update.message.chat.send_message(
-        text
+        text=text
     )
         
 
