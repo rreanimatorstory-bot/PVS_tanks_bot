@@ -1782,7 +1782,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    daily_text = "\n"
+    daily_text = "```\n"
 
     previous = None
 
@@ -1805,8 +1805,14 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{format_number(damage_diff):>12}"
             f"{format_number(frags_diff):>10}\n"
         )
+        
 
         previous = row
+        
+    daily_text += "```\n"    
+
+        
+        
 
     text = (
         f"📜 Активность игрока:\n\n"
