@@ -1818,7 +1818,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
         f"<pre>"
-        f"{'Дата':<8}{'Бои':>8}{'Урон':>12}{'Фраги':>10}\n"
+        f"{'Дата':<6}{'Бои':>6}{'Урон':>8}{'Фраги':>8}\n"
         f"{daily_text}"
         f"</pre>\n"
         f"📈 Итог за период:\n"
