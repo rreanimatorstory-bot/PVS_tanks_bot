@@ -1207,12 +1207,14 @@ async def update_history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         battles = player.get("battles", 0)
         damage = player.get("damage_dealt", 0)
+        frags = player.get("frags", 0)
 
         save_player_history(
             account_id,
             nickname,
             battles,
             damage,
+            frags,
             None
         )
 
@@ -1676,6 +1678,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 account["nickname"],
                 battles,
                 damage,
+                frags,
                 account.get("clan_id")
             )
 
