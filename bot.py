@@ -2123,119 +2123,121 @@ def can_use_bot(update):
     
 def run_bot():
 
-    print("RUN_BOT STARTED")
+    try:
+        print("RUN_BOT STARTED", flush=True)
 
-    print("CREATING TELEGRAM APP")
+        app = (
+            Application.builder()
+            .token(BOT_TOKEN)
+            .build()
+        )
 
-    
+        app.post_init = set_commands
 
-    app = (
-        Application.builder()
-        .token(BOT_TOKEN)
-        .build()
-    )
-    app.post_init = set_commands
+        print("TELEGRAM APP CREATED", flush=True)
 
-    print("TELEGRAM APP CREATED", flush=True)
 
-    app.job_queue.run_repeating(
-        auto_update_history,
-        interval=86400,
-        first=30
-    )
+        app.job_queue.run_repeating(
+            auto_update_history,
+            interval=86400,
+            first=30
+        )
 
-    print("AUTO UPDATE SCHEDULER ENABLED", flush=True)
+        print("AUTO UPDATE SCHEDULER ENABLED", flush=True)
 
-    app.add_handler(CommandHandler("start", start))
 
-    app.add_handler(
+        app.add_handler(CommandHandler("start", start))
+
+        app.add_handler(
             ChatMemberHandler(
                 bot_added_to_chat,
                 ChatMemberHandler.MY_CHAT_MEMBER
             )
         )
-    
-    app.add_handler(CommandHandler("setclan", setclan))
-    app.add_handler(CommandHandler("menu", menu))
-    app.add_handler(CommandHandler("myclan", myclan))
-    app.add_handler(CommandHandler("stats", stats))
-    app.add_handler(CommandHandler("history", history))
-    app.add_handler(CommandHandler("update", update_history))
-    print("UPDATE HANDLER REGISTERED", flush=True)
-    app.add_handler(
-        ConversationHandler(
-            entry_points=[
 
-                CallbackQueryHandler(
-                    button_handler,
-                    pattern="^(stats|history|setclan|link_wot|top|members|report|myclan|info)$"
-                )
-
-            ],
-        per_message=False,
-
-        states={
-            WAIT_STATS_NICK: [
-                MessageHandler(
-                    filters.TEXT & ~filters.COMMAND,
-                    receive_stats_nick
-                )
-            ],
-
-            WAIT_WOT_NICK: [
-                MessageHandler(
-                    filters.TEXT & ~filters.COMMAND,
-                    receive_wot_nick
-                )
-            ],
-
-            WAIT_HISTORY_NICK: [
-                MessageHandler(
-                    filters.TEXT & ~filters.COMMAND,
-                    receive_history_nick
-                )
-           ],
-
-           WAIT_CLAN_TAG: [
-                MessageHandler(
-                    filters.TEXT & ~filters.COMMAND,
-                    receive_clan_tag
-                )
-            ]
-        },
-        fallbacks=[]
-    )
-)
+        app.add_handler(CommandHandler("setclan", setclan))
+        app.add_handler(CommandHandler("menu", menu))
+        app.add_handler(CommandHandler("myclan", myclan))
+        app.add_handler(CommandHandler("stats", stats))
+        app.add_handler(CommandHandler("history", history))
+        app.add_handler(CommandHandler("update", update_history))
 
 
-
-   
-    
-    app.add_handler(CommandHandler("top", top))
-    app.add_handler(CommandHandler("clanreport", report))
-    app.add_handler(CommandHandler("members", members))
-    app.add_handler(CommandHandler("cleanhistory", cleanhistory))
-    
-
-        
-    print("BOT STARTED")
-    print("STARTING POLLING")
-    print("STARTING TELEGRAM POLLING", flush=True)
-    
-    app.run_polling(
-        drop_pending_updates=True,
-        stop_signals=None
-    ) 
+        print("UPDATE HANDLER REGISTERED", flush=True)
 
 
-print("START BOT THREAD")
+        app.add_handler(
+            ConversationHandler(
+                entry_points=[
+                    CallbackQueryHandler(
+                        button_handler,
+                        pattern="^(stats|history|setclan|link_wot|top|members|report|myclan|info)$"
+                    )
+                ],
+
+                states={
+                    WAIT_STATS_NICK: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            receive_stats_nick
+                        )
+                    ],
+
+                    WAIT_WOT_NICK: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            receive_wot_nick
+                        )
+                    ],
+
+                    WAIT_HISTORY_NICK: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            receive_history_nick
+                        )
+                    ],
+
+                    WAIT_CLAN_TAG: [
+                        MessageHandler(
+                            filters.TEXT & ~filters.COMMAND,
+                            receive_clan_tag
+                        )
+                    ]
+                },
+
+                fallbacks=[]
+            )
+        )
+
+
+        app.add_handler(CommandHandler("top", top))
+        app.add_handler(CommandHandler("clanreport", report))
+        app.add_handler(CommandHandler("members", members))
+        app.add_handler(CommandHandler("cleanhistory", cleanhistory))
+
+
+        print("BOT STARTED", flush=True)
+        print("STARTING TELEGRAM POLLING", flush=True)
+
+
+        app.run_polling(
+            drop_pending_updates=True,
+            stop_signals=None
+        )
+
+
+    except Exception as e:
+        print("RUN_BOT ERROR:", e, flush=True)
+        raise
+
+print("START BOT THREAD", flush=True)
 
 thread = Thread(target=run_bot, daemon=True)
 thread.start()
 
-print("Starting Flask...")
+print("Starting Flask...", flush=True)
 
 web.run(
     host="0.0.0.0",
     port=int(os.environ.get("PORT", 10000))
-)
+)    
