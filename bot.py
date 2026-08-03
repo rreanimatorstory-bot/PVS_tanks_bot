@@ -1801,7 +1801,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         daily_text += (
             f"{date:<6}"
-            f"{format_number(battles_diff):>6}"
+            f"{format_number(battles_diff):>5}"
             f"{format_number(damage_diff):>8}"
             f"{format_number(frags_diff):>8}\n"
         )
