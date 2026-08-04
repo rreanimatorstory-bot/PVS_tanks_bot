@@ -2167,7 +2167,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👥 Состав и активность игроков\n\n"
         "Для начала необходимо добавить меня в групповой чат.\n\n"
         "👇 Нажмите кнопку ниже.",
-        reply_markup=user_menu()
+        reply_markup=main_menu(update.effective_chat.type)
     )
 
 async def set_commands(app):
