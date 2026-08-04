@@ -10,7 +10,7 @@ def format_number(number):
     return f"{number:+,}".replace(",", " ")
 
 def format_number_plain(number):
-    return f"{number:,}".replace(",", " ")
+    return f"{number:,}".replace(",", "")
 
 from flask import Flask
 from threading import Thread
@@ -1823,9 +1823,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         daily_text += (
             f"{date:<6}"
-            f"{format_number_plain(battles_diff):>3}"
-            f"{format_number_plain(damage_diff):>7}"
-            f"{format_number_plain(frags_diff):>6}\n"
+            f"{format_number_plain(battles_diff):>4}"
+            f"{format_number_plain(damage_diff):>8}"
+            f"{format_number_plain(frags_diff):>7}\n"
         )
 
         previous = row
