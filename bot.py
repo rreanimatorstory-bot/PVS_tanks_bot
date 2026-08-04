@@ -1824,8 +1824,8 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         daily_text += (
             f"{date:<6}"
             f"{format_number_plain(battles_diff):>5}"
-            f"{format_number_plain(damage_diff):>10}"
-            f"{format_number_plain(frags_diff):>9}\n"
+            f"{format_number_plain(damage_diff):>9}"
+            f"{format_number_plain(frags_diff):>10}\n"
         )
 
         previous = row
