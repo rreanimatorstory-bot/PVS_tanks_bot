@@ -239,21 +239,15 @@ async def receive_clan_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("🔥 RECEIVE HISTORY NICK:", update.message.text, flush=True)
+    await update.message.reply_text(
+        "🔎 Проверяю историю..."
+    )
 
     nickname = update.message.text.strip()
 
     context.args = [nickname]
 
-    print(
-        "HISTORY REPLY TO MESSAGE:",
-        update.message.message_id,
-        flush=True
-    )
-
     await history(update, context)
-
-    await update.message.reply_text("✅ HISTORY FINISHED")
 
     return ConversationHandler.END
     
