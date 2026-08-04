@@ -253,6 +253,8 @@ async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYP
 
     await history(update, context)
 
+    await update.message.reply_text("✅ HISTORY FINISHED")
+
     return ConversationHandler.END
     
 
@@ -1844,7 +1846,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
         f"<pre>"
-        f"{'Дата':<6}{'Бои':>4}{'Урон':>8}{'Фраги':>7я}\n"
+        f"{'Дата':<6}{'Бои':>4}{'Урон':>8}{'Фраги':>7}\n"
         f"{daily_text}"
         f"</pre>\n"
         f"📈 Итог за период:\n"
