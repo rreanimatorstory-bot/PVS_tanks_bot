@@ -9,6 +9,9 @@ from datetime import datetime
 def format_number(number):
     return f"{number:+,}".replace(",", " ")
 
+def format_number_plain(number):
+    return f"{number:,}".replace(",", " ")
+
 from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
