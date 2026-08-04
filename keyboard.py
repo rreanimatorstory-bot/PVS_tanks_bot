@@ -15,14 +15,14 @@ def main_menu():
         ],
         [
             InlineKeyboardButton("📊 Статистика игрока", callback_data="stats"),
-            InlineKeyboardButton("📜 История игрока", callback_data="history")
+            InlineKeyboardButton("👥 Состав клана", callback_data="members")
         ],
         [
-            InlineKeyboardButton("👥 Состав клана", callback_data="members"),
-            InlineKeyboardButton("🏆 ТОП игроков", callback_data="top")
+            InlineKeyboardButton("📜 История игрока", callback_data="history"),
+            InlineKeyboardButton("📈 Отчёт клана", callback_data="report")
         ],
         [
-            InlineKeyboardButton("📈 Отчёт клана", callback_data="report"),
+            InlineKeyboardButton("🏆 ТОП игроков", callback_data="top"),
             InlineKeyboardButton("🏰 Мой клан", callback_data="myclan")
         ],
         [
