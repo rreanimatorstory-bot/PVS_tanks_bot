@@ -1577,11 +1577,15 @@ async def auto_update_history(context: ContextTypes.DEFAULT_TYPE):
 
 async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    thread_id = update.message.message_thread_id
+
     print("HISTORY COMMAND CALLED:", update.message.text, flush=True)
 
     if not context.args:
-        await update.message.chat.send_message(
-            "Использование:\n/history ник"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text="Использование:\n/history ник"
         )
         return
 
@@ -1604,8 +1608,10 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     data = response.json()
 
     if data.get("status") != "ok" or not data.get("data"):
-        await update.message.chat.send_message(
-            "❌ Игрок не найден"
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text="❌ Игрок не найден"
         )
         return
 
@@ -1726,8 +1732,10 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not history_data:
 
-        await update.message.chat.send_message(
-            "📭 Истории пока нет."
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text="📭 Истории пока нет."
         )
         return
 
@@ -1759,14 +1767,16 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )[-7:]
 
     if len(history_7_days) < 2:
-        await update.message.chat.send_message(
-            "📭 История игрока ещё не накоплена.\n\n"
-            "Для отображения активности необходимо минимум две записи за разные даты.\n"
-            "Попробуйте позже."
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text=(
+                "📭 История игрока ещё не накоплена.\n\n"
+                "На данный момент доступна только статистика за один день.\n"
+                "Бот автоматически собирает историю ежедневно."
+            )
         )
         return
-    
-    
 
     first = history_7_days[0]
     last = history_7_days[-1]
@@ -1779,14 +1789,16 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     total_frags = last_frags - first_frags
 
-    
-
     # Если все записи относятся к одной дате
     if first[3] == last[3]:
-        await update.message.chat.send_message(
-            "📭 История игрока ещё не накоплена.\n\n"
-            "На данный момент доступна только статистика за один день.\n"
-            "Бот автоматически собирает историю ежедневно."
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text=(
+                "📭 История игрока ещё не накоплена.\n\n"
+                "На данный момент доступна только статистика за один день.\n"
+                "Бот автоматически собирает историю ежедневно."
+            )
         )
         return
 
@@ -1795,7 +1807,6 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
     previous = None
 
     for row in history_7_days:
-
         if previous is None:
             battles_diff = 0
             damage_diff = 0
@@ -1813,13 +1824,8 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"{format_number(damage_diff):>10}"
             f"{format_number(frags_diff):>9}\n"
         )
-        
 
         previous = row
-           
-
-        
-        
 
     text = (
         f"📜 Активность игрока:\n\n"
@@ -1835,7 +1841,9 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"☠️ Фраги: {format_number(total_frags)}"
     )
 
-    await update.message.chat.send_message(
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        message_thread_id=thread_id,
         text=text,
         parse_mode="HTML"
     )
