@@ -258,6 +258,14 @@ async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYP
 
 async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
+    thread_id = None
+
+    if update.message:
+        thread_id = update.message.message_thread_id
+
+    elif update.callback_query:
+        thread_id = update.callback_query.message.message_thread_id
+
     
 
     clan = get_clan(update.effective_chat.id)
@@ -266,7 +274,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if clan is None:
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
-            message_thread_id=update.callback_query.message.message_thread_id,
+            message_thread_id=thread_id,
             text=(
                 "🏰 Клан ещё не привязан.\n\n"
                 "Чтобы настроить функции клана:\n"
@@ -284,7 +292,7 @@ async def myclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        message_thread_id=update.callback_query.message.message_thread_id,
+        message_thread_id=thread_id,
         text=(
             f"🏰 Текущий клан\n\n"
             f"Название: {clan_name}\n"
@@ -2068,6 +2076,13 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
     chat_id = update.effective_chat.id
 
     user_id = update.effective_user.id
+
+    if update.effective_chat.type == "private":
+        await update.message.reply_text(
+            "❌ Привязка клана доступна только в групповом чате.\n\n"
+            "Добавьте бота в группу и выполните настройку там."
+        )
+        return
 
     if not is_developer(user_id):
 
