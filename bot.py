@@ -892,10 +892,10 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("🔥🔥🔥 MEMBERS FUNCTION ENTERED 🔥🔥🔥", flush=True)
 
-    print("🚀🚀🚀 MEMBERS TEST 777 🚀🚀🚀", flush=True)
-    print("🔥🔥🔥 I AM HERE MEMBERS BUTTON 🔥🔥🔥", flush=True)
-
-    print("🔥🔥🔥 NEW MEMBERS CODE STARTED 🔥🔥🔥", flush=True)
+    print("CHAT ID:", update.effective_chat.id, flush=True)
+    print("IS TOPIC MESSAGE:", update.effective_message.is_topic_message, flush=True)
+    print("THREAD ID:", update.effective_message.message_thread_id, flush=True)
+    print("MESSAGE ID:", update.effective_message.message_id, flush=True)
 
     
 
