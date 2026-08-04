@@ -66,28 +66,37 @@ DEVELOPER_ID = 356966584
 async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
+    thread_id = update.message.message_thread_id
 
     if is_developer(user_id):
-        await update.message.chat.send_message(
-            "🤖 BlitzClanBot\n\n"
-            "Выберите действие:",
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            message_thread_id=thread_id,
+            text=(
+                "🤖 BlitzClanBot\n\n"
+                "Выберите действие:"
+            ),
             reply_markup=main_menu()
         )
         return
 
-    await update.message.chat.send_message(
-        "🤖 Добро пожаловать в BlitzClanBot!\n\n"
-        "Я помогу следить за статистикой World of Tanks Blitz.\n\n"
-        "Что умею:\n"
-        "📊 Статистика игроков\n"
-        "🏆 Рейтинг участников\n"
-        "📈 Отчёты клана\n"
-        "👥 Состав и активность игроков\n\n"
-        "🚀 Вы можете проверить статистику игроков прямо сейчас.\n\n"
-        "Для работы с функциями клана добавьте меня в групповой чат "
-        "и выполните настройку клана.\n\n"
-        "Выберите нужный раздел в меню ниже 👇\n\n"
-        "👨‍💻 Разработчик: @Eodreid",
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        message_thread_id=thread_id,
+        text=(
+            "🤖 Добро пожаловать в BlitzClanBot!\n\n"
+            "Я помогу следить за статистикой World of Tanks Blitz.\n\n"
+            "Что умею:\n"
+            "📊 Статистика игроков\n"
+            "🏆 Рейтинг участников\n"
+            "📈 Отчёты клана\n"
+            "👥 Состав и активность игроков\n\n"
+            "🚀 Вы можете проверить статистику игроков прямо сейчас.\n\n"
+            "Для работы с функциями клана добавьте меня в групповой чат "
+            "и выполните настройку клана.\n\n"
+            "Выберите нужный раздел в меню ниже 👇\n\n"
+            "👨‍💻 Разработчик: @Eodreid"
+        ),
         reply_markup=main_menu()
     )
 
