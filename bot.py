@@ -45,7 +45,7 @@ from database import (
     test_history_clan
 )
 
-from keyboard import main_menu
+from keyboard import main_menu, user_menu
 
 load_dotenv()
 
@@ -1835,7 +1835,7 @@ async def history(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👤 {nickname}\n"
         f"🏰 Клан: {clan_name}\n\n"
         f"<pre>"
-        f"{'Дата':<6}{'Бои':>4}{'Урон':>8}{'Фраги':>7}\n"
+        f"{'Дата':<6}{'Бои':>4}{'Урон':>8}{'Фраги':>7я}\n"
         f"{daily_text}"
         f"</pre>\n"
         f"📈 Итог за период:\n"
@@ -2167,7 +2167,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👥 Состав и активность игроков\n\n"
         "Для начала необходимо добавить меня в групповой чат.\n\n"
         "👇 Нажмите кнопку ниже.",
-        reply_markup=main_menu(update.effective_chat.type)
+        reply_markup=user_menu()
     )
 
 async def set_commands(app):

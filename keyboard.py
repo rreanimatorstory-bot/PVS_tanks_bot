@@ -44,12 +44,6 @@ def user_menu():
     keyboard = [
         [
             InlineKeyboardButton(
-                "🎮 Привязать WoT ник",
-                callback_data="link_wot"
-            )
-        ],
-        [
-            InlineKeyboardButton(
                 "📊 Статистика игрока",
                 callback_data="stats"
             ),
@@ -60,18 +54,8 @@ def user_menu():
         ],
         [
             InlineKeyboardButton(
-                "👥 Состав клана",
-                callback_data="members"
-            ),
-            InlineKeyboardButton(
-                "🏆 ТОП игроков",
-                callback_data="top"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                "📈 Отчёт клана",
-                callback_data="report"
+                "ℹ️ Информация",
+                callback_data="info"
             )
         ]
     ]
