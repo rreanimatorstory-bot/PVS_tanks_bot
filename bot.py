@@ -239,8 +239,9 @@ async def receive_clan_tag(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def receive_history_nick(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    await update.message.reply_text(
-        "🔎 Проверяю историю..."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="🔎 Проверяю историю..."
     )
 
     nickname = update.message.text.strip()
