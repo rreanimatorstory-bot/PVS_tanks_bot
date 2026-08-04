@@ -1923,6 +1923,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=query.message.message_thread_id,
             text="📊 Введите ник игрока:"
         )
 
@@ -1933,12 +1934,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await context.bot.send_message(
             chat_id=update.effective_chat.id,
+            message_thread_id=query.message.message_thread_id,
             text="📜 Введите ник игрока для истории:"
         )
 
         return WAIT_HISTORY_NICK
 
-        return WAIT_HISTORY_NICK
+        
 
 
     elif query.data == "members":
@@ -1985,13 +1987,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 return
 
         await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=(
-            "🏰 Введите тег вашего клана.\n\n"
-            "Например: [1PVS]\n\n"
-            "⚠️ Введите только тег клана, без названия."
+            chat_id=update.effective_chat.id,
+            message_thread_id=query.message.message_thread_id,
+            text=(
+                "🏰 Введите тег вашего клана.\n\n"
+                "Например: [1PVS]\n\n"
+                "⚠️ Введите только тег клана, без названия."
+            )
         )
-    )
 
         return WAIT_CLAN_TAG
 
