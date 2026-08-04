@@ -76,7 +76,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "🤖 BlitzClanBot\n\n"
                 "Выберите действие:"
             ),
-            reply_markup=main_menu()
+            reply_markup=main_menu(update.effective_chat.type)
         )
         return
 
@@ -97,7 +97,7 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "Выберите нужный раздел в меню ниже 👇\n\n"
             "👨‍💻 Разработчик: @Eodreid"
         ),
-        reply_markup=main_menu()
+        reply_markup=main_menu(update.effective_chat.type)
     )
 
 async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -2150,7 +2150,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.chat.send_message(
             "🤖 BlitzClanBot\n\n"
             "Выберите действие:",
-            reply_markup=main_menu()
+            reply_markup=main_menu(update.effective_chat.type)
         )
         return
 
@@ -2164,7 +2164,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "👥 Состав и активность игроков\n\n"
         "Для начала необходимо добавить меня в групповой чат.\n\n"
         "👇 Нажмите кнопку ниже.",
-        reply_markup=main_menu()
+        reply_markup=main_menu(update.effective_chat.type)
     )
 
 async def set_commands(app):

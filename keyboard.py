@@ -1,15 +1,20 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def main_menu():
+def main_menu(chat_type="private"):
 
-    keyboard = [
-        [
-            InlineKeyboardButton(
-                "➕ Добавить бота в чат",
-                url="https://t.me/PVS_tanks_bot?startgroup=true"
-            )
-        ],
+    keyboard = []
+
+    if chat_type == "private":
+        keyboard.append(
+            [
+                InlineKeyboardButton(
+                    "➕ Добавить бота в чат",
+                    url="https://t.me/PVS_tanks_bot?startgroup=true"
+                )
+            ]
+        )
+    keyboard.extend([    
         [
             InlineKeyboardButton("🏰 Привязать клан", callback_data="setclan"),
         ],
@@ -28,7 +33,7 @@ def main_menu():
         [
             InlineKeyboardButton("ℹ️ Информация", callback_data="info")
         ]
-    ]
+    ])
 
     return InlineKeyboardMarkup(keyboard)
 
