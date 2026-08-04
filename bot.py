@@ -2075,18 +2075,20 @@ def home():
     
 async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
-    print("🔥 SETCLAN CALLED", flush=True)
+    chat_type = update.effective_chat.type
 
+    if chat_type == "private" and not is_developer(update.effective_user.id):
+        await update.message.reply_text(
+            "❌ Привязка клана доступна только в групповых чатах.\n\n"
+            "Добавьте бота в группу и выполните настройку там.",
+            do_quote=False
+        )
+        return
+
+    
     chat_id = update.effective_chat.id
 
     user_id = update.effective_user.id
-
-    if update.effective_chat.type == "private":
-        await update.message.reply_text(
-            "❌ Привязка клана доступна только в групповом чате.\n\n"
-            "Добавьте бота в группу и выполните настройку там."
-        )
-        return
 
     if not is_developer(user_id):
 
