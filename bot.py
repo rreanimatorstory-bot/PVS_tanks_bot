@@ -1948,6 +1948,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "members":
 
+        if not can_use_bot(update):
+            await query.message.reply_text(
+                "🏰 Функции клана доступны после добавления бота в групповой чат и настройки клана.",
+                do_quote=False
+            )
+            return
+
         await members(update, context)
         return
 
