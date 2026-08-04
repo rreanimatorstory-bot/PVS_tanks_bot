@@ -1946,11 +1946,13 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif query.data == "members":
 
         await members(update, context)
+        return
 
 
     elif query.data == "top":
 
         await top(update, context)
+        return
 
 
       
@@ -1959,6 +1961,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         print("🔥 REPORT BUTTON PRESSED", flush=True)
 
         await report(update, context)
+        return
 
 
     elif query.data == "myclan":
