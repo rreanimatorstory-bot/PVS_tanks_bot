@@ -1990,6 +1990,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     elif query.data == "setclan":
 
+        if update.effective_chat.type == "private":
+            await query.message.reply_text(
+                "❌ Привязка клана доступна только в групповом чате.\n\n"
+                "Добавьте бота в группу и выполните настройку там.",
+                do_quote=False
+            )
+            return
+
         if is_developer(user_id):
             pass
 
