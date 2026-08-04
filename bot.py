@@ -1090,10 +1090,8 @@ async def members(update: Update, context: ContextTypes.DEFAULT_TYPE):
         crown = "👑 " if player["leader"] else ""
     
         text += (
-            f"{i}. {crown}{player['nickname']} "
-            f"⚔️ {player['battles']} "
-            f"🏆 {player['winrate']}% "
-            f"💥 {player['avg_damage']}\n"
+            f"{i}. {crown}{player['nickname']}\n"
+            f"⚔️ {player['battles']} боёв | 🏆 {player['winrate']}% | 💥 {player['avg_damage']} С/У\n\n"
         )  
    
 
