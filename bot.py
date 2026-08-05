@@ -2196,6 +2196,7 @@ async def setclan(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     user_id = update.effective_user.id
+    print("START USER ID:", user_id, flush=True)
 
     if update.effective_chat.type != "private":
         return
