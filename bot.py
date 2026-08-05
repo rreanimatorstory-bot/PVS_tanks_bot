@@ -103,6 +103,16 @@ async def menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup=main_menu(update.effective_chat.type)
     )
 
+async def cancel(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    await update.message.reply_text(
+        "❌ Текущая операция отменена.\n\n"
+        "Для открытия меню используйте /menu",
+        do_quote=False
+    )
+
+    return ConversationHandler.END    
+
 async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("🔥 BOT ADDED TO CHAT EVENT", flush=True)
@@ -2325,6 +2335,7 @@ def run_bot():
                     CommandHandler("history", history),
                     CommandHandler("myclan", myclan),
                     CommandHandler("setclan", setclan),
+                    CommandHandler("cancel", cancel),
 
                 ]    
             )
