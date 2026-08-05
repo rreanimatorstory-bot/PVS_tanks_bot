@@ -16,7 +16,7 @@ from flask import Flask
 from threading import Thread
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram import BotCommand
+from telegram import BotCommand, BotCommandScopeAllGroupChats
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -2224,6 +2224,11 @@ async def set_commands(app):
     ]
 
     await app.bot.set_my_commands(commands)
+
+    await app.bot.set_my_commands(
+        commands,
+        scope=BotCommandScopeAllGroupChats()
+    )
 
 def is_developer(user_id):
     return user_id == DEVELOPER_ID 
