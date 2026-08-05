@@ -45,7 +45,7 @@ from database import (
     test_history_clan
 )
 
-from keyboard import main_menu, user_menu
+from bot_keyboard import main_menu, user_menu
 
 load_dotenv()
 
