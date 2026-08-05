@@ -2220,6 +2220,7 @@ async def set_commands(app):
         BotCommand("top", "🏆 Топ игроков клана"),
         BotCommand("update", "🔄 Обновить историю"),
         BotCommand("menu", "📋 Меню бота"),
+        BotCommand("cancel", "❌ Отменить текущую операцию"),
     ]
 
     await app.bot.set_my_commands(commands)
