@@ -534,10 +534,17 @@ def get_user_stats():
     cur.execute("""
         SELECT
             COUNT(*) AS total_users,
+
             COUNT(wot_account_id) AS wot_users,
+
             COUNT(*) FILTER (
                 WHERE last_seen >= CURRENT_DATE
-            ) AS active_today
+            ) AS active_today,
+
+            COUNT(*) FILTER (
+                WHERE first_seen >= CURRENT_DATE
+            ) AS new_today
+
         FROM users
     """)
 

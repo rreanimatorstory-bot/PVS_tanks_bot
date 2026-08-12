@@ -2302,7 +2302,7 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     users_list = get_all_users()
-    total_users, wot_users, active_today = get_user_stats()
+    total_users, wot_users, active_today, new_today = get_user_stats()
 
     if not users_list:
         await update.message.reply_text(
@@ -2314,8 +2314,9 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = (
         f"👥 Пользователи бота\n\n"
         f"Всего пользователей: {total_users}\n"
-        f"🎮 Привязали WoT: {wot_users}\n"
-        f"🟢 Активны сегодня: {active_today}\n\n"
+        f"🎮 С WoT-аккаунтом: {wot_users}\n"
+        f"🟢 Активны сегодня: {active_today}\n"
+        f"📅 Новые сегодня: {new_today}\n\n"
     )
 
     for index, user in enumerate(users_list, start=1):
