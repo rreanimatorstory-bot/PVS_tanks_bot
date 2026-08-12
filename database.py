@@ -82,18 +82,71 @@ def init_db():
     )
     """)
     
-    
-
-    
-
-    
-
     conn.commit()
 
     cur.close()
     conn.close()
 
     print("POSTGRES DB READY")
+
+
+def save_bot_chat(chat_id, chat_title, chat_type):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        INSERT INTO bot_chats
+        (
+            chat_id,
+            chat_title,
+            chat_type,
+            first_seen,
+            last_seen
+        )
+        VALUES (%s, %s, %s, %s, %s)
+
+        ON CONFLICT (chat_id)
+        DO UPDATE SET
+            chat_title = EXCLUDED.chat_title,
+            chat_type = EXCLUDED.chat_type,
+            last_seen = EXCLUDED.last_seen
+    """,
+    (
+        chat_id,
+        chat_title,
+        chat_type,
+        datetime.now(),
+        datetime.now()
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+def get_all_bot_chats():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            chat_id,
+            chat_title,
+            chat_type,
+            first_seen,
+            last_seen
+        FROM bot_chats
+        ORDER BY last_seen DESC
+    """)
+
+    result = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return result
 
 def add_clan_id_to_history():
     conn = get_connection()

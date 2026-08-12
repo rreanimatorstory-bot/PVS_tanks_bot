@@ -45,6 +45,8 @@ from database import (
     get_user,
     get_all_users,
     get_user_stats,
+    save_bot_chat,
+    get_all_bot_chats,
     test_history_clan
 )
 
@@ -2293,6 +2295,15 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
         telegram_first_name=user.first_name
     )
 
+    chat = update.effective_chat
+
+    if chat and chat.type in ("group", "supergroup"):
+        save_bot_chat(
+            chat_id=chat.id,
+            chat_title=chat.title,
+            chat_type=chat.type
+        )
+
 
 async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
@@ -2346,6 +2357,59 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
         text,
         do_quote=False
     )
+
+
+async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_id = update.effective_user.id
+
+    if not is_developer(user_id):
+        return
+
+    chats_list = get_all_bot_chats()
+
+    if not chats_list:
+        await update.message.reply_text(
+            "🏰 Чатов пока нет.",
+            do_quote=False
+        )
+        return
+
+    text = (
+        f"🏰 Чаты бота\n\n"
+        f"Всего чатов: {len(chats_list)}\n\n"
+    )
+
+    for index, chat in enumerate(chats_list, start=1):
+
+        (
+            chat_id,
+            chat_title,
+            chat_type,
+            first_seen,
+            last_seen
+        ) = chat
+
+        if chat_type == "supergroup":
+            type_name = "Супергруппа"
+        elif chat_type == "group":
+            type_name = "Группа"
+        else:
+            type_name = chat_type
+
+        text += (
+            f"{index}. {chat_title or 'Без названия'}\n"
+            f"💬 {type_name}\n"
+            f"🆔 {chat_id}\n"
+            f"🟢 Последняя активность: "
+            f"{last_seen.strftime('%d.%m.%Y %H:%M') if last_seen else '—'}\n\n"
+        )
+
+    await update.message.reply_text(
+        text,
+        do_quote=False
+    )
+
 
 
     
@@ -2457,6 +2521,7 @@ def run_bot():
         app.add_handler(CommandHandler("clanreport", report))
         app.add_handler(CommandHandler("members", members))
         app.add_handler(CommandHandler("cleanhistory", cleanhistory))
+        app.add_handler(CommandHandler("chats", chats))
 
 
         print("BOT STARTED", flush=True)
