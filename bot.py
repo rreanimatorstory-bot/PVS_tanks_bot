@@ -135,6 +135,15 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
        new_status not in ("member", "administrator"):
         return
 
+    # Сохраняем чат, в который бот действительно добавили
+    chat = update.effective_chat
+
+    save_bot_chat(
+        chat_id=chat.id,
+        chat_title=chat.title,
+        chat_type=chat.type
+    )
+
     keyboard = [
         [
             InlineKeyboardButton(
