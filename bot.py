@@ -43,6 +43,7 @@ from database import (
     clean_history_duplicates,
     save_user,
     get_user,
+    get_all_users,
     test_history_clan
 )
 
@@ -2292,6 +2293,54 @@ async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_id = update.effective_user.id
+
+    if not is_developer(user_id):
+        return
+
+    users_list = get_all_users()
+
+    if not users_list:
+        await update.message.reply_text(
+            "👥 Пользователей пока нет.",
+            do_quote=False
+        )
+        return
+
+    text = f"👥 Пользователи бота\n\n"
+    text += f"Всего: {len(users_list)}\n\n"
+
+    for index, user in enumerate(users_list, start=1):
+
+        (
+            telegram_id,
+            telegram_username,
+            telegram_first_name,
+            wot_nickname,
+            wot_account_id,
+            first_seen,
+            last_seen
+        ) = user
+
+        username = f"@{telegram_username}" if telegram_username else "—"
+        wot = wot_nickname if wot_nickname else "—"
+
+        text += (
+            f"{index}. {username}\n"
+            f"👤 {telegram_first_name or '—'}\n"
+            f"🎮 {wot}\n"
+            f"🟢 Последний визит: "
+            f"{last_seen.strftime('%d.%m.%Y %H:%M') if last_seen else '—'}\n\n"
+        )
+
+    await update.message.reply_text(
+        text,
+        do_quote=False
+    )
+
+
     
 def run_bot():
 
@@ -2324,6 +2373,7 @@ def run_bot():
 
 
         app.add_handler(CommandHandler("start", start))
+        app.add_handler(CommandHandler("users", users))
 
         app.add_handler(
             ChatMemberHandler(
