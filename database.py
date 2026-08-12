@@ -41,6 +41,16 @@ def init_db():
     """) 
 
     cur.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            telegram_id BIGINT PRIMARY KEY,
+            telegram_username TEXT,
+            telegram_first_name TEXT,
+            wot_nickname TEXT,
+            wot_account_id BIGINT
+        )
+        """)
+
+    cur.execute("""
     ALTER TABLE users
     ADD COLUMN IF NOT EXISTS first_seen TIMESTAMP,
     ADD COLUMN IF NOT EXISTS last_seen TIMESTAMP
@@ -72,25 +82,9 @@ def init_db():
     )
     """)
     
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        telegram_id BIGINT PRIMARY KEY,
-        telegram_username TEXT,
-        telegram_first_name TEXT,
-        wot_nickname TEXT,
-        wot_account_id BIGINT
-    )
-    """)
+    
 
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        telegram_id BIGINT PRIMARY KEY,
-        telegram_username TEXT,
-        telegram_first_name TEXT,
-        wot_nickname TEXT,
-        wot_account_id BIGINT
-    )
-    """)
+    
 
     
 
@@ -500,6 +494,32 @@ def get_user(telegram_id):
     (telegram_id,))
 
     result = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return result
+
+
+def get_all_users():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+    SELECT
+        telegram_id,
+        telegram_username,
+        telegram_first_name,
+        wot_nickname,
+        wot_account_id,
+        first_seen,
+        last_seen
+    FROM users
+    ORDER BY last_seen DESC
+    """)
+
+    result = cur.fetchall()
 
     cur.close()
     conn.close()
