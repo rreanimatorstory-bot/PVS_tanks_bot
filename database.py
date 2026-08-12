@@ -38,7 +38,23 @@ def init_db():
         date TEXT,
         clan_id BIGINT
     )
-    """)    
+    """) 
+
+    cur.execute("""
+    ALTER TABLE users
+    ADD COLUMN IF NOT EXISTS first_seen TIMESTAMP,
+    ADD COLUMN IF NOT EXISTS last_seen TIMESTAMP
+    """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS bot_chats (
+        chat_id BIGINT PRIMARY KEY,
+        chat_title TEXT,
+        chat_type TEXT,
+        first_seen TIMESTAMP,
+        last_seen TIMESTAMP
+    )
+    """)   
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS bot_settings (
@@ -416,8 +432,8 @@ def save_user(
     telegram_id,
     telegram_username,
     telegram_first_name,
-    wot_nickname,
-    wot_account_id
+    wot_nickname=None,
+    wot_account_id=None
 ):
 
     conn = get_connection()
@@ -430,23 +446,34 @@ def save_user(
         telegram_username,
         telegram_first_name,
         wot_nickname,
-        wot_account_id
+        wot_account_id,
+        first_seen,
+        last_seen
     )
-    VALUES (%s,%s,%s,%s,%s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
 
     ON CONFLICT (telegram_id)
     DO UPDATE SET
         telegram_username = EXCLUDED.telegram_username,
         telegram_first_name = EXCLUDED.telegram_first_name,
-        wot_nickname = EXCLUDED.wot_nickname,
-        wot_account_id = EXCLUDED.wot_account_id
+        wot_nickname = COALESCE(
+            EXCLUDED.wot_nickname,
+            users.wot_nickname
+        ),
+        wot_account_id = COALESCE(
+            EXCLUDED.wot_account_id,
+            users.wot_account_id
+        ),
+        last_seen = EXCLUDED.last_seen
     """,
     (
         telegram_id,
         telegram_username,
         telegram_first_name,
         wot_nickname,
-        wot_account_id
+        wot_account_id,
+        datetime.now(),
+        datetime.now()
     ))
 
     conn.commit()

@@ -26,6 +26,7 @@ from telegram.ext import (
     ContextTypes,
     filters,
     ChatMemberHandler,
+    TypeHandler,
 )
 
 
@@ -2258,7 +2259,24 @@ def can_use_bot(update):
         return True
 
     # В личке обычным пользователям нельзя
-    return False   
+    return False  
+
+
+async def track_user(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+
+    if not user:
+        return
+
+    # Не сохраняем самого бота
+    if user.is_bot:
+        return
+
+    save_user(
+        telegram_id=user.id,
+        telegram_username=user.username,
+        telegram_first_name=user.first_name
+    )
 
 
     
@@ -2272,6 +2290,11 @@ def run_bot():
             .token(BOT_TOKEN)
             .build()
         )
+
+        app.add_handler(
+        TypeHandler(Update, track_user),
+        group=-1
+    )
 
         app.post_init = set_commands
 
@@ -2312,7 +2335,7 @@ def run_bot():
                 entry_points=[
                     CallbackQueryHandler(
                         button_handler,
-                        pattern="^(stats|history|setclan|link_wot|top|members|report|myclan|info)$"
+                        pattern="^(stats|history|setclan|link_wot|top|members|report|myclan|info|admin_rights_yes|admin_rights_no)$"
                     )
                 ],
 
