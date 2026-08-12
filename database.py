@@ -57,14 +57,20 @@ def init_db():
     """)
 
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS bot_chats (
+        CREATE TABLE IF NOT EXISTS bot_chats (
         chat_id BIGINT PRIMARY KEY,
         chat_title TEXT,
+        chat_username TEXT,
         chat_type TEXT,
         first_seen TIMESTAMP,
         last_seen TIMESTAMP
     )
-    """)   
+    """) 
+
+    cur.execute("""
+    ALTER TABLE bot_chats
+    ADD COLUMN IF NOT EXISTS chat_username TEXT
+    """)  
 
     cur.execute("""
     CREATE TABLE IF NOT EXISTS bot_settings (
@@ -90,7 +96,7 @@ def init_db():
     print("POSTGRES DB READY")
 
 
-def save_bot_chat(chat_id, chat_title, chat_type):
+def save_bot_chat(chat_id, chat_title, chat_username, chat_type):
 
     conn = get_connection()
     cur = conn.cursor()
@@ -100,21 +106,24 @@ def save_bot_chat(chat_id, chat_title, chat_type):
         (
             chat_id,
             chat_title,
+            chat_username,
             chat_type,
             first_seen,
             last_seen
         )
-        VALUES (%s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s)
 
         ON CONFLICT (chat_id)
         DO UPDATE SET
             chat_title = EXCLUDED.chat_title,
+            chat_username = EXCLUDED.chat_username,
             chat_type = EXCLUDED.chat_type,
             last_seen = EXCLUDED.last_seen
     """,
     (
         chat_id,
         chat_title,
+        chat_username,
         chat_type,
         datetime.now(),
         datetime.now()
@@ -134,6 +143,7 @@ def get_all_bot_chats():
         SELECT
             chat_id,
             chat_title,
+            chat_username,
             chat_type,
             first_seen,
             last_seen

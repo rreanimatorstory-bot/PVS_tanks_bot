@@ -141,6 +141,7 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     save_bot_chat(
         chat_id=chat.id,
         chat_title=chat.title,
+        chat_username=chat.username,
         chat_type=chat.type
     )
 
@@ -2394,6 +2395,7 @@ async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         (
             chat_id,
             chat_title,
+            chat_username,
             chat_type,
             first_seen,
             last_seen
@@ -2406,17 +2408,24 @@ async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             type_name = chat_type
 
+
+        if chat_username:
+            chat_link = f"https://t.me/{chat_username}"
+            chat_name = f'<a href="{chat_link}">{chat_title or "Без названия"}</a>'
+        else:
+            chat_name = chat_title or "Без названия"
+
         text += (
-            f"{index}. {chat_title or 'Без названия'}\n"
+            f"{index}. {chat_name}\n"
             f"💬 {type_name}\n"
-            f"🆔 {chat_id}\n"
             f"🟢 Последняя активность: "
             f"{last_seen.strftime('%d.%m.%Y %H:%M') if last_seen else '—'}\n\n"
         )
 
     await update.message.reply_text(
         text,
-        do_quote=False
+        do_quote=False,
+        parse_mode="HTML"
     )
 
 
