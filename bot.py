@@ -118,6 +118,19 @@ async def bot_added_to_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     print("🔥 BOT ADDED TO CHAT EVENT", flush=True)
 
+    old_status = update.my_chat_member.old_chat_member.status
+    new_status = update.my_chat_member.new_chat_member.status
+
+    print(
+        f"BOT STATUS: {old_status} -> {new_status}",
+        flush=True
+    )
+
+    # Показываем сообщение только когда бот действительно вошёл в чат
+    if old_status not in ("left", "kicked") or \
+       new_status not in ("member", "administrator"):
+        return
+
     keyboard = [
         [
             InlineKeyboardButton(
@@ -2292,9 +2305,9 @@ def run_bot():
         )
 
         app.add_handler(
-        TypeHandler(Update, track_user),
-        group=-1
-    )
+            TypeHandler(Update, track_user),
+            group=-1
+        )
 
         app.post_init = set_commands
 
