@@ -526,6 +526,28 @@ def get_all_users():
 
     return result
 
+def get_user_stats():
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT
+            COUNT(*) AS total_users,
+            COUNT(wot_account_id) AS wot_users,
+            COUNT(*) FILTER (
+                WHERE last_seen >= CURRENT_DATE
+            ) AS active_today
+        FROM users
+    """)
+
+    result = cur.fetchone()
+
+    cur.close()
+    conn.close()
+
+    return result
+
 def test_history_clan(account_id):
 
     conn = get_connection()

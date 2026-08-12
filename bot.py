@@ -44,6 +44,7 @@ from database import (
     save_user,
     get_user,
     get_all_users,
+    get_user_stats,
     test_history_clan
 )
 
@@ -2301,6 +2302,7 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     users_list = get_all_users()
+    total_users, wot_users, active_today = get_user_stats()
 
     if not users_list:
         await update.message.reply_text(
@@ -2309,8 +2311,12 @@ async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         return
 
-    text = f"👥 Пользователи бота\n\n"
-    text += f"Всего: {len(users_list)}\n\n"
+    text = (
+        f"👥 Пользователи бота\n\n"
+        f"Всего пользователей: {total_users}\n"
+        f"🎮 Привязали WoT: {wot_users}\n"
+        f"🟢 Активны сегодня: {active_today}\n\n"
+    )
 
     for index, user in enumerate(users_list, start=1):
 
