@@ -2486,6 +2486,64 @@ async def sync_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         do_quote=False
     )
 
+async def sync_chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_id = update.effective_user.id
+
+    if not is_developer(user_id):
+        return
+
+    chat = update.effective_chat
+
+    if not chat or chat.type not in ("group", "supergroup"):
+        await update.message.reply_text(
+            "❌ Эту команду нужно использовать в группе.",
+            do_quote=False
+        )
+        return
+
+    try:
+        telegram_chat = await context.bot.get_chat(
+            chat.id
+        )
+
+        save_bot_chat(
+            chat_id=telegram_chat.id,
+            chat_title=telegram_chat.title,
+            chat_username=telegram_chat.username,
+            chat_type=telegram_chat.type
+        )
+
+        await update.message.reply_text(
+            (
+                "✅ Чат синхронизирован.\n\n"
+                f"🏰 {telegram_chat.title or 'Без названия'}\n"
+                f"💬 {telegram_chat.type}\n"
+                f"🔗 @{telegram_chat.username}"
+                if telegram_chat.username
+                else
+                (
+                    "✅ Чат синхронизирован.\n\n"
+                    f"🏰 {telegram_chat.title or 'Без названия'}\n"
+                    f"💬 {telegram_chat.type}\n"
+                    "🔒 Приватный чат"
+                )
+            ),
+            do_quote=False
+        )
+
+    except Exception as e:
+
+        print(
+            f"SYNC CURRENT CHAT ERROR: {e}",
+            flush=True
+        )
+
+        await update.message.reply_text(
+            "❌ Не удалось синхронизировать этот чат.",
+            do_quote=False
+        )
+
 
 
     
@@ -2600,6 +2658,9 @@ def run_bot():
         app.add_handler(CommandHandler("chats", chats))
         app.add_handler(
             CommandHandler("sync_chats", sync_chats)
+        )
+        app.add_handler(
+            CommandHandler("sync_chat", sync_chat)
         )
 
 
