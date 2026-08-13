@@ -158,6 +158,58 @@ def get_all_bot_chats():
 
     return result
 
+def update_bot_chat(
+    chat_id,
+    chat_title,
+    chat_username,
+    chat_type
+):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE bot_chats
+        SET
+            chat_title = %s,
+            chat_username = %s,
+            chat_type = %s,
+            last_seen = %s
+        WHERE chat_id = %s
+    """,
+    (
+        chat_title,
+        chat_username,
+        chat_type,
+        datetime.now(),
+        chat_id
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+def update_bot_chat_username(chat_id, chat_username):
+
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        UPDATE bot_chats
+        SET chat_username = %s
+        WHERE chat_id = %s
+    """,
+    (
+        chat_username,
+        chat_id
+    ))
+
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
 def add_clan_id_to_history():
     conn = get_connection()
     cur = conn.cursor()

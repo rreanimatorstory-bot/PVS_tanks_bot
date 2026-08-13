@@ -47,6 +47,8 @@ from database import (
     get_user_stats,
     save_bot_chat,
     get_all_bot_chats,
+    update_bot_chat_username,
+    update_bot_chat,
     test_history_clan
 )
 
@@ -2428,6 +2430,61 @@ async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode="HTML"
     )
 
+async def sync_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+
+    user_id = update.effective_user.id
+
+    if not is_developer(user_id):
+        return
+
+    chats_list = get_all_bot_chats()
+
+    if not chats_list:
+        await update.message.reply_text(
+            "🏰 Чатов для синхронизации нет.",
+            do_quote=False
+        )
+        return
+
+    updated = 0
+    failed = 0
+
+    for chat in chats_list:
+
+        chat_id = chat[0]
+
+        try:
+            telegram_chat = await context.bot.get_chat(
+                chat_id=chat_id
+            )
+
+            update_bot_chat(
+                chat_id=telegram_chat.id,
+                chat_title=telegram_chat.title,
+                chat_username=telegram_chat.username,
+                chat_type=telegram_chat.type
+            )
+
+            updated += 1
+
+        except Exception as e:
+
+            print(
+                f"SYNC CHAT ERROR {chat_id}: {e}",
+                flush=True
+            )
+
+            failed += 1
+
+    await update.message.reply_text(
+        (
+            "🔄 Синхронизация чатов завершена.\n\n"
+            f"✅ Обновлено: {updated}\n"
+            f"❌ Ошибок: {failed}"
+        ),
+        do_quote=False
+    )
+
 
 
     
@@ -2540,6 +2597,9 @@ def run_bot():
         app.add_handler(CommandHandler("members", members))
         app.add_handler(CommandHandler("cleanhistory", cleanhistory))
         app.add_handler(CommandHandler("chats", chats))
+        app.add_handler(
+            CommandHandler("sync_chats", sync_chats)
+        )
 
 
         print("BOT STARTED", flush=True)
