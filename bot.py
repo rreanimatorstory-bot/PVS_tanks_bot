@@ -2427,7 +2427,8 @@ async def chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         text,
         do_quote=False,
-        parse_mode="HTML"
+        parse_mode="HTML",
+        disable_web_page_preview=True
     )
 
 async def sync_chats(update: Update, context: ContextTypes.DEFAULT_TYPE):
